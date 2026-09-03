@@ -1,0 +1,131 @@
+name: Release
+
+# Build every plugin in the monorepo and publish them on a single GitHub
+# release tag (defaults to today's date, YYYY-MM-DD). Each plugin ships as its
+# own "<slug>-<version>.zip" asset on that one tag, matching what the plugins'
+# in-app update checkers expect (they query releases/latest and pick their own
+# slug asset by filename).
+#
+# Prerequisites:
+#   - All submodule repos (spill-the-ink/wp-seo, spill-the-ink/post-calendar)
+#     must be under the same account as this repo so the default GITHUB_TOKEN
+#     can clone them. No extra secrets needed.
+#   - The submodule pointers (gitlinks) committed at plugins/ must be bumped to
+#     the desired release commit before triggering this workflow.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_date:
+        description: 'Release tag. Leave empty to use today (YYYY-MM-DD).'
+        required: false
+        type: string
+      create_draft:
+        description: 'Create a draft release for review instead of publishing immediately.'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      release_tag: ${{ steps.resolve-tag.outputs.release_tag }}
+    steps:
+      - name: Checkout monorepo with private submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+          token: ${{ github.token }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Resolve release tag (input or today's date)
+        id: resolve-tag
+        run: |
+          tag="${{ inputs.release_date }}"
+          if [ -z "$tag" ]; then
+            tag="$(TZ=UTC date +%Y-%m-%d)"
+          fi
+          echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Guard against clobbering an existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${{ steps.resolve-tag.outputs.release_tag }}"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "::error::Release tag '$tag' already exists. Pass a different release_date or delete the existing release first."
+            exit 1
+          fi
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install wp-calendar dependencies (yarn)
+        working-directory: plugins/wp-calendar
+        run: yarn install --frozen-lockfile
+
+      - name: Build and package all plugins
+        run: npm run release
+        env:
+          RELEASE_TAG: ${{ steps.resolve-tag.outputs.release_tag }}
+
+      - name: Smoke-test produced zips
+        run: |
+          cd .release/${{ steps.resolve-tag.outputs.release_tag }}
+          for zip in *.zip; do
+            unzip -t "$zip" >/dev/null
+            echo "OK: $zip"
+          done
+          ls -1 *.zip
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-zips
+          path: .release/${{ steps.resolve-tag.outputs.release_tag }}
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-zips
+          path: .release/incoming
+
+      - name: Create GitHub release with all plugin zips
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.build.outputs.release_tag }}
+          target_commitish: main
+          name: ${{ needs.build.outputs.release_tag }}
+          body: |
+            Release ${{ needs.build.outputs.release_tag }} — all plugins built from the monorepo.
+
+            Plugin zips attached on this single tag:
+            - post-calendar (from `plugins/wp-calendar`)
+            - wp-seo (from `plugins/wp-seo`)
+
+            Each plugin's update checker matches its own `<slug>-<version>.zip` asset.
+          draft: ${{ inputs.create_draft }}
+          files: .release/incoming/*.zip

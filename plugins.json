@@ -1,0 +1,29 @@
+{
+	"plugins": [
+		{
+			"dir": "wp-calendar",
+			"slug": "post-calendar",
+			"usesSharedPhp": false,
+			"include": [
+				"post-calendar.php",
+				"uninstall.php",
+				"README.md",
+				"includes",
+				"dist",
+				"languages"
+			]
+		},
+		{
+			"dir": "wp-seo",
+			"slug": "wp-seo",
+			"usesSharedPhp": true,
+			"include": [
+				"wp-seo.php",
+				"uninstall.php",
+				"assets",
+				"includes",
+				"dist"
+			]
+		}
+	]
+}

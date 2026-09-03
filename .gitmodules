@@ -1,0 +1,8 @@
+[submodule "plugins/wp-seo"]
+	path = plugins/wp-seo
+	url = https://github.com/spill-the-ink/wp-seo.git
+	branch = main
+[submodule "plugins/wp-calendar"]
+	path = plugins/wp-calendar
+	url = https://github.com/spill-the-ink/post-calendar.git
+	branch = dev
