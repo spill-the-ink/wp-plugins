@@ -1,23 +1,10 @@
 name: Release
 
-# Build every plugin in the monorepo and publish them on a single GitHub
-# release tag (defaults to today's date, YYYY-MM-DD). Each plugin ships as its
-# own "<slug>-<version>.zip" asset on that one tag, matching what the plugins'
-# in-app update checkers expect (they query releases/latest and pick their own
-# slug asset by filename).
-#
-# Prerequisites:
-#   - All submodule repos (spill-the-ink/wp-seo, spill-the-ink/post-calendar)
-#     must be under the same account as this repo so the default GITHUB_TOKEN
-#     can clone them. No extra secrets needed.
-#   - The submodule pointers (gitlinks) committed at plugins/ must be bumped to
-#     the desired release commit before triggering this workflow.
-
 on:
   workflow_dispatch:
     inputs:
       release_date:
-        description: 'Release tag. Leave empty to use today (YYYY-MM-DD).'
+        description: 'Release tag.'
         required: false
         type: string
       create_draft:
@@ -40,7 +27,7 @@ jobs:
         with:
           submodules: recursive
           persist-credentials: false
-          token: ${{ github.token }}
+          token: ${{ secrets.SUBMODULE_TOKEN }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -120,12 +107,10 @@ jobs:
           target_commitish: main
           name: ${{ needs.build.outputs.release_tag }}
           body: |
-            Release ${{ needs.build.outputs.release_tag }} — all plugins built from the monorepo.
+            Release ${{ needs.build.outputs.release_tag }}.
 
             Plugin zips attached on this single tag:
             - post-calendar (from `plugins/wp-calendar`)
             - wp-seo (from `plugins/wp-seo`)
-
-            Each plugin's update checker matches its own `<slug>-<version>.zip` asset.
           draft: ${{ inputs.create_draft }}
           files: .release/incoming/*.zip
