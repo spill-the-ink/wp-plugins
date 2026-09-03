@@ -108,9 +108,5 @@ jobs:
           name: ${{ needs.build.outputs.release_tag }}
           body: |
             Release ${{ needs.build.outputs.release_tag }}.
-
-            Plugin zips attached on this single tag:
-            - post-calendar (from `plugins/wp-calendar`)
-            - wp-seo (from `plugins/wp-seo`)
           draft: ${{ inputs.create_draft }}
           files: .release/incoming/*.zip
