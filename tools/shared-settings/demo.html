@@ -90,30 +90,30 @@
 <body>
 
   <!-- Simulated WordPress .wrap container -->
-  <div class="wrap ss-admin-wrapper ss-admin-settings-page">
+  <div class="wrap wp-polyfill-admin-wrapper wp-polyfill-admin-settings-page">
 
     <!-- Header -->
-    <div class="ss-settings-header">
-      <div class="ss-settings-heading">
-        <div class="ss-settings-title-row">
+    <div class="wp-polyfill-settings-header">
+      <div class="wp-polyfill-settings-heading">
+        <div class="wp-polyfill-settings-title-row">
           <h1 class="title">WordPress Manifest</h1>
         </div>
       </div>
     </div>
 
     <!-- Search -->
-    <div class="ss-settings-tab-search">
-      <label class="screen-reader-text" for="ss-settings-tab-filter">Search settings</label>
+    <div class="wp-polyfill-settings-tab-search">
+      <label class="screen-reader-text" for="wp-polyfill-settings-tab-filter">Search settings</label>
       <span class="dashicons dashicons-search" aria-hidden="true"></span>
-      <input type="search" id="ss-settings-tab-filter" placeholder="Search settings..." autocomplete="off">
-      <button type="button" class="ss-settings-search-clear" aria-label="Clear search" hidden>
+      <input type="search" id="wp-polyfill-settings-tab-filter" placeholder="Search settings..." autocomplete="off">
+      <button type="button" class="wp-polyfill-settings-search-clear" aria-label="Clear search" hidden>
         <span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
       </button>
     </div>
-    <p class="ss-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>
+    <p class="wp-polyfill-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>
 
     <!-- Tabs -->
-    <ul id="ss-settings-tabs-wrapper" class="nav-tab-wrapper">
+    <ul id="wp-polyfill-settings-tabs-wrapper" class="nav-tab-wrapper">
       <li><a href="#identity" class="nav-tab nav-tab-active" aria-current="true" data-tab-id="identity">Site Identity</a></li>
       <li><a href="#indexing" class="nav-tab" data-tab-id="indexing">Indexing</a></li>
       <li><a href="#social" class="nav-tab" data-tab-id="social">Social &amp; Sharing</a></li>
@@ -123,14 +123,14 @@
     </ul>
 
     <!-- Settings Form -->
-    <form id="wpm-settings" class="ss-admin-wrapper" method="post" autocomplete="off">
+    <form id="wpm-settings" class="wp-polyfill-admin-wrapper" method="post" autocomplete="off">
 
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Site Identity                              -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="identity" class="ss-settings-table active" role="presentation">
+      <table id="identity" class="wp-polyfill-settings-table active" role="presentation">
         <tbody>
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Site defaults"><span>Site defaults</span></th>
           </tr>
           <tr>
@@ -143,7 +143,7 @@
             </td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Canonical domain"><span>Canonical domain</span></th>
           </tr>
           <tr>
@@ -156,7 +156,7 @@
             </td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Fallback media"><span>Fallback media</span></th>
           </tr>
           <tr>
@@ -166,8 +166,8 @@
             </th>
             <td>
               <input type="hidden" id="wpm-settings-default_og_image" name="wp_manifest_settings[default_og_image]" value="42">
-              <div class="ss-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E200 × 120%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
-              <button type="button" class="button ss-pick-media" data-target="wpm-settings-default_og_image">Select media</button>
+              <div class="wp-polyfill-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E200 × 120%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
+              <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-default_og_image">Select media</button>
               <p class="description">Attachment ID of the fallback or override image.</p>
             </td>
           </tr>
@@ -178,12 +178,12 @@
             </th>
             <td>
               <input type="hidden" id="wpm-settings-org_logo" name="wp_manifest_settings[org_logo]" value="42">
-              <div class="ss-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3ELogo%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
-              <button type="button" class="button ss-pick-media" data-target="wpm-settings-org_logo">Select media</button>
+              <div class="wp-polyfill-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3ELogo%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
+              <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-org_logo">Select media</button>
             </td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Social profiles"><span>Social profiles</span></th>
           </tr>
           <tr>
@@ -196,12 +196,12 @@
             </td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Core settings"><span>Core settings</span></th>
           </tr>
-          <tr class="ss-panel-row">
+          <tr class="wp-polyfill-panel-row">
             <td colspan="2">
-              <div class="ss-settings-panel">
+              <div class="wp-polyfill-settings-panel">
                 <div class="wpm-core-check">
                   <h2>Settings to review</h2>
                   <p>Settings that affect the metadata rendered by this plugin:</p>
@@ -223,31 +223,31 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Indexing                                   -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="indexing" class="ss-settings-table" role="presentation">
+      <table id="indexing" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
           <tr>
             <th><label for="wpm-settings-noindex_categories">Category archives</label><p class="description">Category archives — noindex</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_categories" name="wp_manifest_settings[noindex_categories]" value="1"><label for="wpm-settings-noindex_categories">Category archives</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_categories" name="wp_manifest_settings[noindex_categories]" value="1"><label for="wpm-settings-noindex_categories">Category archives</label></div></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-noindex_tags">Tag archives</label><p class="description">Tag archives — noindex</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_tags" name="wp_manifest_settings[noindex_tags]" value="1"><label for="wpm-settings-noindex_tags">Tag archives</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_tags" name="wp_manifest_settings[noindex_tags]" value="1"><label for="wpm-settings-noindex_tags">Tag archives</label></div></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-noindex_authors">Author archives</label><p class="description">Author archives — noindex</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_authors" name="wp_manifest_settings[noindex_authors]" value="1" checked><label for="wpm-settings-noindex_authors">Author archives</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_authors" name="wp_manifest_settings[noindex_authors]" value="1" checked><label for="wpm-settings-noindex_authors">Author archives</label></div></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-noindex_dates">Date archives</label><p class="description">Date archives — noindex</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_dates" name="wp_manifest_settings[noindex_dates]" value="1" checked><label for="wpm-settings-noindex_dates">Date archives</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_dates" name="wp_manifest_settings[noindex_dates]" value="1" checked><label for="wpm-settings-noindex_dates">Date archives</label></div></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-noindex_search">Search result pages</label><p class="description">Search result pages — noindex</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_search" name="wp_manifest_settings[noindex_search]" value="1" checked><label for="wpm-settings-noindex_search">Search result pages</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_search" name="wp_manifest_settings[noindex_search]" value="1" checked><label for="wpm-settings-noindex_search">Search result pages</label></div></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-noindex_paged">Paginated archive pages</label><p class="description">Paginated archive pages — noindex</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_paged" name="wp_manifest_settings[noindex_paged]" value="1" checked><label for="wpm-settings-noindex_paged">Paginated archive pages</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_paged" name="wp_manifest_settings[noindex_paged]" value="1" checked><label for="wpm-settings-noindex_paged">Paginated archive pages</label></div></td>
           </tr>
         </tbody>
       </table>
@@ -255,11 +255,11 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Social &amp; Sharing                       -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="social" class="ss-settings-table" role="presentation">
+      <table id="social" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
-          <tr class="ss-panel-row">
+          <tr class="wp-polyfill-panel-row">
             <td colspan="2">
-              <div class="ss-settings-panel">
+              <div class="wp-polyfill-settings-panel">
                 <div class="wpm-og-preview" data-wpm-og-preview="1">
                   <p class="wpm-og-preview__heading">Shared link preview</p>
                   <div class="wpm-og-preview__card">
@@ -281,28 +281,28 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: AI &amp; Crawlers                          -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="ai" class="ss-settings-table" role="presentation">
+      <table id="ai" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="AI crawler policy"><span>AI crawler policy</span></th>
           </tr>
           <tr>
             <th><label>Block these crawlers</label></th>
             <td>
-              <div class="ss-checkbox-group">
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-gptbot" name="wp_manifest_settings[block_ai_bots][]" value="gptbot" checked><label for="wpm-settings-block_ai_bots-gptbot">GPTBot</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-chatgpt-user" name="wp_manifest_settings[block_ai_bots][]" value="chatgpt-user"><label for="wpm-settings-block_ai_bots-chatgpt-user">ChatGPT-User</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-oai-searchbot" name="wp_manifest_settings[block_ai_bots][]" value="oai-searchbot"><label for="wpm-settings-block_ai_bots-oai-searchbot">OAI-SearchBot</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-claudebot" name="wp_manifest_settings[block_ai_bots][]" value="claudebot" checked><label for="wpm-settings-block_ai_bots-claudebot">ClaudeBot</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-claude-web" name="wp_manifest_settings[block_ai_bots][]" value="claude-web"><label for="wpm-settings-block_ai_bots-claude-web">Claude-Web</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-perplexitybot" name="wp_manifest_settings[block_ai_bots][]" value="perplexitybot"><label for="wpm-settings-block_ai_bots-perplexitybot">PerplexityBot</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-bytespider" name="wp_manifest_settings[block_ai_bots][]" value="bytespider"><label for="wpm-settings-block_ai_bots-bytespider">Bytespider</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-google-extended" name="wp_manifest_settings[block_ai_bots][]" value="google-extended"><label for="wpm-settings-block_ai_bots-google-extended">Google-Extended</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-ccbot" name="wp_manifest_settings[block_ai_bots][]" value="ccbot" checked><label for="wpm-settings-block_ai_bots-ccbot">CCBot</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-anthropic-ai" name="wp_manifest_settings[block_ai_bots][]" value="anthropic-ai"><label for="wpm-settings-block_ai_bots-anthropic-ai">anthropic-ai</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-meta-externalagent" name="wp_manifest_settings[block_ai_bots][]" value="meta-externalagent"><label for="wpm-settings-block_ai_bots-meta-externalagent">Meta-ExternalAgent</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-amazonbot" name="wp_manifest_settings[block_ai_bots][]" value="amazonbot"><label for="wpm-settings-block_ai_bots-amazonbot">Amazonbot</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-cohere-ai" name="wp_manifest_settings[block_ai_bots][]" value="cohere-ai"><label for="wpm-settings-block_ai_bots-cohere-ai">cohere-ai</label></div>
+              <div class="wp-polyfill-checkbox-group">
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-gptbot" name="wp_manifest_settings[block_ai_bots][]" value="gptbot" checked><label for="wpm-settings-block_ai_bots-gptbot">GPTBot</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-chatgpt-user" name="wp_manifest_settings[block_ai_bots][]" value="chatgpt-user"><label for="wpm-settings-block_ai_bots-chatgpt-user">ChatGPT-User</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-oai-searchbot" name="wp_manifest_settings[block_ai_bots][]" value="oai-searchbot"><label for="wpm-settings-block_ai_bots-oai-searchbot">OAI-SearchBot</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-claudebot" name="wp_manifest_settings[block_ai_bots][]" value="claudebot" checked><label for="wpm-settings-block_ai_bots-claudebot">ClaudeBot</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-claude-web" name="wp_manifest_settings[block_ai_bots][]" value="claude-web"><label for="wpm-settings-block_ai_bots-claude-web">Claude-Web</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-perplexitybot" name="wp_manifest_settings[block_ai_bots][]" value="perplexitybot"><label for="wpm-settings-block_ai_bots-perplexitybot">PerplexityBot</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-bytespider" name="wp_manifest_settings[block_ai_bots][]" value="bytespider"><label for="wpm-settings-block_ai_bots-bytespider">Bytespider</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-google-extended" name="wp_manifest_settings[block_ai_bots][]" value="google-extended"><label for="wpm-settings-block_ai_bots-google-extended">Google-Extended</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-ccbot" name="wp_manifest_settings[block_ai_bots][]" value="ccbot" checked><label for="wpm-settings-block_ai_bots-ccbot">CCBot</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-anthropic-ai" name="wp_manifest_settings[block_ai_bots][]" value="anthropic-ai"><label for="wpm-settings-block_ai_bots-anthropic-ai">anthropic-ai</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-meta-externalagent" name="wp_manifest_settings[block_ai_bots][]" value="meta-externalagent"><label for="wpm-settings-block_ai_bots-meta-externalagent">Meta-ExternalAgent</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-amazonbot" name="wp_manifest_settings[block_ai_bots][]" value="amazonbot"><label for="wpm-settings-block_ai_bots-amazonbot">Amazonbot</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-cohere-ai" name="wp_manifest_settings[block_ai_bots][]" value="cohere-ai"><label for="wpm-settings-block_ai_bots-cohere-ai">cohere-ai</label></div>
               </div>
             </td>
           </tr>
@@ -316,12 +316,12 @@
             </td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="llms.txt"><span>llms.txt</span></th>
           </tr>
           <tr>
             <th><label for="wpm-settings-llms_enabled">Enable llms.txt</label><p class="description">Serve llms.txt at /llms.txt</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-llms_enabled" name="wp_manifest_settings[llms_enabled]" value="1" checked><label for="wpm-settings-llms_enabled">Enable llms.txt</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-llms_enabled" name="wp_manifest_settings[llms_enabled]" value="1" checked><label for="wpm-settings-llms_enabled">Enable llms.txt</label></div></td>
           </tr>
           <tr data-settings-show-if="#wpm-settings-llms_enabled">
             <th>
@@ -347,11 +347,11 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Structured Data                            -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="schema" class="ss-settings-table" role="presentation">
+      <table id="schema" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
           <tr>
             <th><label for="wpm-settings-schema_org_enabled">Enable JSON-LD</label><p class="description">Emit Organization, WebSite, Article, FAQPage and BreadcrumbList markup</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-schema_org_enabled" name="wp_manifest_settings[schema_org_enabled]" value="1" checked><label for="wpm-settings-schema_org_enabled">Enable JSON-LD</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-schema_org_enabled" name="wp_manifest_settings[schema_org_enabled]" value="1" checked><label for="wpm-settings-schema_org_enabled">Enable JSON-LD</label></div></td>
           </tr>
         </tbody>
       </table>
@@ -359,14 +359,14 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Web Manifest                               -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="webmanifest" class="ss-settings-table" role="presentation">
+      <table id="webmanifest" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Web app manifest"><span>Web app manifest</span></th>
           </tr>
           <tr>
             <th><label for="wpm-settings-manifest_enabled">Enable manifest.json</label><p class="description">Serve /manifest.json and add &lt;link rel="manifest"&gt; to the front end.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-manifest_enabled" name="wp_manifest_settings[manifest_enabled]" value="1" checked><label for="wpm-settings-manifest_enabled">Enable manifest.json</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-manifest_enabled" name="wp_manifest_settings[manifest_enabled]" value="1" checked><label for="wpm-settings-manifest_enabled">Enable manifest.json</label></div></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-manifest_name">App name</label><p class="description">Full name shown in install prompts. Empty uses the site name.</p></th>
@@ -381,19 +381,19 @@
             <td><textarea id="wpm-settings-manifest_description" name="wp_manifest_settings[manifest_description]" rows="2" class="large-text"></textarea></td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Icons"><span>Icons</span></th>
           </tr>
           <tr>
             <th><label for="wpm-settings-manifest_icon_192">192 × 192 icon</label><p class="description">PNG or SVG. Required for Android home screen.</p></th>
-            <td><input type="hidden" id="wpm-settings-manifest_icon_192" name="wp_manifest_settings[manifest_icon_192]" value="0"><button type="button" class="button ss-pick-media" data-target="wpm-settings-manifest_icon_192">Select media</button></td>
+            <td><input type="hidden" id="wpm-settings-manifest_icon_192" name="wp_manifest_settings[manifest_icon_192]" value="0"><button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-manifest_icon_192">Select media</button></td>
           </tr>
           <tr>
             <th><label for="wpm-settings-manifest_icon_512">512 × 512 icon</label><p class="description">PNG or SVG. Used for splash screens and PWA store icons.</p></th>
-            <td><input type="hidden" id="wpm-settings-manifest_icon_512" name="wp_manifest_settings[manifest_icon_512]" value="0"><button type="button" class="button ss-pick-media" data-target="wpm-settings-manifest_icon_512">Select media</button></td>
+            <td><input type="hidden" id="wpm-settings-manifest_icon_512" name="wp_manifest_settings[manifest_icon_512]" value="0"><button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-manifest_icon_512">Select media</button></td>
           </tr>
 
-          <tr class="ss-settings-section-row">
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Appearance"><span>Appearance</span></th>
           </tr>
           <tr>
@@ -421,10 +421,10 @@
       </table>
 
       <!-- Sticky Submit Bar -->
-      <div class="ss-submit-wrapper">
+      <div class="wp-polyfill-submit-wrapper">
         <button type="submit" name="save" class="button button-primary button-large">Save Settings</button>
-        <p class="ss-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>
-        <button type="button" name="reset" class="button button-secondary button-large ss-reset-button">Reset Settings</button>
+        <p class="wp-polyfill-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>
+        <button type="button" name="reset" class="button button-secondary button-large wp-polyfill-reset-button">Reset Settings</button>
       </div>
       <span class="spinner saving"></span>
 

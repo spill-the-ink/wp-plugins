@@ -13,8 +13,8 @@ interface CheckboxFieldProps {
 
 function CheckboxField({ name, label, description, checked, onChange, className }: CheckboxFieldProps) {
   return (
-    <div className={cn("wps-settings__field--checkbox", className)}>
-      <label className="wps-settings__checkbox-label" htmlFor={name}>
+    <div className={cn("wp-polyfill-settings__field--checkbox", className)}>
+      <label className="wp-polyfill-settings__checkbox-label" htmlFor={name}>
         <Checkbox
           id={name}
           name={name}
@@ -23,7 +23,7 @@ function CheckboxField({ name, label, description, checked, onChange, className 
         />
         <span>{label}</span>
       </label>
-      {description && <p className="wps-settings__field-description">{description}</p>}
+      {description && <p className="wp-polyfill-settings__field-description">{description}</p>}
     </div>
   );
 }

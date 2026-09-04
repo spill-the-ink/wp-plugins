@@ -2,10 +2,10 @@
 	"plugins": [
 		{
 			"dir": "wp-calendar",
-			"slug": "post-calendar",
+			"slug": "wp-calendar",
 			"usesSharedPhp": false,
 			"include": [
-				"post-calendar.php",
+				"wp-calendar.php",
 				"uninstall.php",
 				"README.md",
 				"includes",

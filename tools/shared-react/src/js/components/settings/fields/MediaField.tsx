@@ -22,18 +22,18 @@ function MediaField({ name, label, description, value, onChange, className }: Me
   const previewUrl = attachmentUrl ?? (value > 0 ? null : null);
 
   return (
-    <div className={cn("wps-settings__field--media", className)}>
+    <div className={cn("wp-polyfill-settings__field--media", className)}>
       <input type="hidden" name={name} value={value || 0} />
       {previewUrl && (
         <img
           src={previewUrl}
           alt=""
-          className="wps-settings__media-preview"
+          className="wp-polyfill-settings__media-preview"
           style={{ maxWidth: 200, height: "auto", display: "block", margin: "6px 0" }}
         />
       )}
       {value > 0 && !previewUrl && (
-        <p className="wps-settings__media-id">Attachment #{value}</p>
+        <p className="wp-polyfill-settings__media-id">Attachment #{value}</p>
       )}
       <Button type="button" variant="secondary" size="sm" onClick={openMediaPicker} disabled={loading}>
         {value > 0 ? "Replace image" : "Select image"}
@@ -49,7 +49,7 @@ function MediaField({ name, label, description, value, onChange, className }: Me
           Remove
         </Button>
       )}
-      {description && <p className="wps-settings__field-description">{description}</p>}
+      {description && <p className="wp-polyfill-settings__field-description">{description}</p>}
     </div>
   );
 }

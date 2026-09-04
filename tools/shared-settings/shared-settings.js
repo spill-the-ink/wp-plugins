@@ -5,7 +5,7 @@
  * unsaved-changes detection, AJAX save/reset, and media picker.
  *
  * Expects `window.SharedSettingsConfig` (localized from PHP) and
- * `.ss-admin-wrapper` DOM structure rendered by Settings_Page.
+ * `.wp-polyfill-admin-wrapper` DOM structure rendered by Settings_Page.
  *
  * @since 0.2.0
  */
@@ -14,10 +14,10 @@
 
   // ── Locals ──────────────────────────────────────
   var config = window.SharedSettingsConfig || {};
-  var form   = document.querySelector('.ss-admin-wrapper form.ss-admin-wrapper');
+  var form   = document.querySelector('.wp-polyfill-admin-wrapper form.wp-polyfill-admin-wrapper');
 
   if (!form) {
-    form = document.querySelector('form.ss-admin-wrapper');
+    form = document.querySelector('form.wp-polyfill-admin-wrapper');
   }
 
   if (!form) {
@@ -25,14 +25,14 @@
   }
 
   var formId             = form.id || 'shared-settings';
-  var settingsTabs       = document.querySelectorAll('#ss-settings-tabs-wrapper a');
-  var settingsFormTables = form.querySelectorAll('table.ss-settings-table');
+  var settingsTabs       = document.querySelectorAll('#wp-polyfill-settings-tabs-wrapper a');
+  var settingsFormTables = form.querySelectorAll('table.wp-polyfill-settings-table');
   var settingsTabFilter  = document.getElementById('ss-settings-tab-filter');
-  var settingsSearchClear = form.querySelector('.ss-settings-search-clear');
-  var settingsSearchNoResults = document.querySelector('.ss-settings-search-no-results');
-  var submitWrapper      = form.querySelector('.ss-submit-wrapper');
+  var settingsSearchClear = form.querySelector('.wp-polyfill-settings-search-clear');
+  var settingsSearchNoResults = document.querySelector('.wp-polyfill-settings-search-no-results');
+  var submitWrapper      = form.querySelector('.wp-polyfill-submit-wrapper');
   var spinner            = document.querySelector('.spinner.saving');
-  var resetButton        = form.querySelector('.ss-reset-button');
+  var resetButton        = form.querySelector('.wp-polyfill-reset-button');
   var initialFormData    = '';
 
   // Store serialized form data on load
@@ -281,7 +281,7 @@
       submitWrapper.classList.toggle('has-unsaved-settings', unsaved);
       submitWrapper.classList.remove('has-saved-settings');
     }
-    var msg = form.querySelector('.ss-settings-unsaved-message');
+    var msg = form.querySelector('.wp-polyfill-settings-unsaved-message');
     if (msg) {
       msg.hidden = !unsaved;
     }
@@ -320,7 +320,7 @@
       submitWrapper.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
     } else if (status === 'saved') {
       submitWrapper.classList.add('has-saved-settings');
-      var msg = form.querySelector('.ss-settings-unsaved-message');
+      var msg = form.querySelector('.wp-polyfill-settings-unsaved-message');
       if (msg) msg.hidden = true;
       // Refresh initial data
       try {
@@ -429,7 +429,7 @@
 
   // ── 6. MEDIA PICKER ──────────────────────────────
 
-  var mediaButtons = form.querySelectorAll('.ss-pick-media');
+  var mediaButtons = form.querySelectorAll('.wp-polyfill-pick-media');
   for (var i = 0; i < mediaButtons.length; i++) {
     mediaButtons[i].addEventListener('click', function (e) {
       e.preventDefault();
@@ -463,7 +463,7 @@
   }
 
   function updateMediaPreview(input, attachment) {
-    var container = input.parentElement.querySelector('.ss-media-preview');
+    var container = input.parentElement.querySelector('.wp-polyfill-media-preview');
     if (!container) return;
 
     if (attachment.sizes && attachment.sizes.thumbnail) {

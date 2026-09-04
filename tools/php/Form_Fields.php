@@ -107,7 +107,7 @@ class Form_Fields {
 		$checked = $store->get( $key, false );
 		$input_id = $form_id . '-' . $key;
 
-		echo '<div class="ss-setting-wrapper">';
+		echo '<div class="wp-polyfill-setting-wrapper">';
 		printf(
 			'<input type="checkbox" id="%1$s" name="%2$s[%3$s]" value="1" %4$s />',
 			esc_attr( $input_id ),
@@ -128,15 +128,15 @@ class Form_Fields {
 		$values  = (array) $store->get( $field['id'], [] );
 		$name    = ( $field['option_name'] ?? '' ) . '[' . $field['id'] . '][]';
 		$layout  = $field['options_layout'] ?? 'vertical';
-		$wrapper_class = 'vertical' === $layout ? '' : ' ss-checkbox-group--horizontal';
+		$wrapper_class = 'vertical' === $layout ? '' : ' wp-polyfill-checkbox-group--horizontal';
 
-		echo '<div class="ss-checkbox-group' . esc_attr( $wrapper_class ) . '">';
+		echo '<div class="wp-polyfill-checkbox-group' . esc_attr( $wrapper_class ) . '">';
 
 		foreach ( $options as $value => $label ) {
 			$input_id = $form_id . '-' . $field['id'] . '-' . sanitize_html_class( $value );
 			$checked  = in_array( (string) $value, array_map( 'strtolower', $values ), true );
 
-			echo '<div class="ss-setting-wrapper">';
+			echo '<div class="wp-polyfill-setting-wrapper">';
 			printf(
 				'<input type="checkbox" id="%1$s" name="%2$s" value="%3$s" %4$s />',
 				esc_attr( $input_id ),
@@ -198,7 +198,7 @@ class Form_Fields {
 			$id
 		);
 
-		echo '<div class="ss-media-preview" data-target="' . esc_attr( $input_id ) . '">';
+		echo '<div class="wp-polyfill-media-preview" data-target="' . esc_attr( $input_id ) . '">';
 
 		if ( $id ) {
 			if ( wp_attachment_is_image( $id ) ) {
@@ -217,7 +217,7 @@ class Form_Fields {
 		echo '</div>';
 
 		printf(
-			'<button type="button" class="button ss-pick-media" data-target="%s">%s</button>',
+			'<button type="button" class="button wp-polyfill-pick-media" data-target="%s">%s</button>',
 			esc_attr( $input_id ),
 			esc_html__( 'Select media', 'shared-settings' )
 		);

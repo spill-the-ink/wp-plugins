@@ -73,7 +73,7 @@ export default defineConfig(({ mode, command }) => {
         ? {
             proxy: buildApiProxy(
               env.PC_REMOTE_URL,
-              '/wp-json/post-calendar/v1',
+              '/wp-json/wp-calendar/v1',
             ),
           }
         : undefined,

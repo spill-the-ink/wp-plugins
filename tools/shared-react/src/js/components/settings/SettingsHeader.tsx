@@ -9,9 +9,9 @@ interface SettingsHeaderProps extends React.FormHTMLAttributes<HTMLFormElement> 
 
 const SettingsHeader = React.forwardRef<HTMLFormElement, SettingsHeaderProps>(({ optionsName, title, description, className, children, ...props }, ref) => {
   return (
-    <div className={cn('wps-settings', className)}>
-      {title && <h1 className='wps-settings__title'>{title}</h1>}
-      {description && <p className='wps-settings__description'>{description}</p>}
+    <div className={cn('wp-polyfill-settings', className)}>
+      {title && <h1 className='wp-polyfill-settings__title'>{title}</h1>}
+      {description && <p className='wp-polyfill-settings__description'>{description}</p>}
     </div>
   );
 });

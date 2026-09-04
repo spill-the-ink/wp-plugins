@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Store {
+class Settings_Store {
 
 	private string $option_name;
 	private array  $defaults;

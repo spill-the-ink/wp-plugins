@@ -45,7 +45,7 @@ class Settings_Page {
 		add_action( 'wp_ajax_' . $this->option_name . '_save', [ $this, 'ajax_save' ] );
 		add_action( 'wp_ajax_' . $this->option_name . '_reset', [ $this, 'ajax_reset' ] );
 
-		$this->store = new Store( $this->option_name, $this->get_defaults() );
+		$this->store = new Settings_Store( $this->option_name, $this->get_defaults() );
 	}
 
 	/**
@@ -263,12 +263,12 @@ class Settings_Page {
 		$tabs     = $this->get_sorted_tabs();
 		$first_id = $tabs ? $tabs[0]['id'] : '';
 
-		echo '<div class="wrap ss-admin-wrapper ss-admin-settings-page">';
+		echo '<div class="wrap wp-polyfill-admin-wrapper wp-polyfill-admin-settings-page">';
 		$this->render_header();
 		$this->render_search();
 		$this->render_tabs( $tabs );
 
-		echo '<form id="' . esc_attr( $this->form_id ) . '" class="ss-admin-wrapper" method="post" autocomplete="off">';
+		echo '<form id="' . esc_attr( $this->form_id ) . '" class="wp-polyfill-admin-wrapper" method="post" autocomplete="off">';
 
 		foreach ( $tabs as $tab ) {
 			$this->render_tab_table( $tab );
@@ -280,9 +280,9 @@ class Settings_Page {
 	}
 
 	private function render_header(): void {
-		echo '<div class="ss-settings-header">';
-		echo '<div class="ss-settings-heading">';
-		echo '<div class="ss-settings-title-row">';
+		echo '<div class="wp-polyfill-settings-header">';
+		echo '<div class="wp-polyfill-settings-heading">';
+		echo '<div class="wp-polyfill-settings-title-row">';
 		echo '<h1 class="title">' . esc_html( $this->page_title ) . '</h1>';
 		echo '</div>';
 		echo '</div>';
@@ -290,19 +290,19 @@ class Settings_Page {
 	}
 
 	private function render_search(): void {
-		echo '<div class="ss-settings-tab-search">';
-		echo '<label class="screen-reader-text" for="ss-settings-tab-filter">' . esc_html__( 'Search settings', 'shared-settings' ) . '</label>';
+		echo '<div class="wp-polyfill-settings-tab-search">';
+		echo '<label class="screen-reader-text" for="wp-polyfill-settings-tab-filter">' . esc_html__( 'Search settings', 'shared-settings' ) . '</label>';
 		echo '<span class="dashicons dashicons-search" aria-hidden="true"></span>';
-		echo '<input type="search" id="ss-settings-tab-filter" placeholder="' . esc_attr__( 'Search settings...', 'shared-settings' ) . '" autocomplete="off">';
-		echo '<button type="button" class="ss-settings-search-clear" aria-label="' . esc_attr__( 'Clear search', 'shared-settings' ) . '" hidden>';
+		echo '<input type="search" id="wp-polyfill-settings-tab-filter" placeholder="' . esc_attr__( 'Search settings...', 'shared-settings' ) . '" autocomplete="off">';
+		echo '<button type="button" class="wp-polyfill-settings-search-clear" aria-label="' . esc_attr__( 'Clear search', 'shared-settings' ) . '" hidden>';
 		echo '<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>';
 		echo '</button>';
 		echo '</div>';
-		echo '<p class="ss-settings-search-no-results" aria-live="polite" hidden>' . esc_html__( 'No settings found.', 'shared-settings' ) . '</p>';
+		echo '<p class="wp-polyfill-settings-search-no-results" aria-live="polite" hidden>' . esc_html__( 'No settings found.', 'shared-settings' ) . '</p>';
 	}
 
 	private function render_tabs( array $tabs ): void {
-		echo '<ul id="ss-settings-tabs-wrapper" class="nav-tab-wrapper">';
+		echo '<ul id="wp-polyfill-settings-tabs-wrapper" class="nav-tab-wrapper">';
 
 		foreach ( $tabs as $i => $tab ) {
 			$active = 0 === $i ? ' nav-tab-active' : '';
@@ -325,7 +325,7 @@ class Settings_Page {
 		$tab_sections = $this->get_sections_for_tab( $tab['id'] );
 
 		printf(
-			'<table id="%1$s" class="ss-settings-table%2$s" role="presentation">',
+			'<table id="%1$s" class="wp-polyfill-settings-table%2$s" role="presentation">',
 			esc_attr( $tab['id'] ),
 			$active
 		);
@@ -344,7 +344,7 @@ class Settings_Page {
 		// Section heading row: visually hidden, exposed to screen readers only.
 		// The section title is a label for the field group, not a visible heading.
 		if ( $section['title'] ) {
-			echo '<tr class="ss-settings-section-row">';
+			echo '<tr class="wp-polyfill-settings-section-row">';
 			printf(
 				'<th class="screen-reader-text" colspan="2" aria-label="%s"><span>%s</span></th></tr>',
 				esc_attr( $section['title'] ),
@@ -396,7 +396,7 @@ class Settings_Page {
 	private function render_field_heading( array $field ): void {
 		$dep = $this->get_dependency_attrs( $field );
 
-		printf( '<tr class="ss-settings-section-row" %s>', $dep );
+		printf( '<tr class="wp-polyfill-settings-section-row" %s>', $dep );
 		echo '<th>';
 		printf( '<label>%s</label>', esc_html( $field['label'] ) );
 		echo '</th><td></td></tr>';
@@ -405,22 +405,22 @@ class Settings_Page {
 	private function render_field_html( array $field ): void {
 		$dep = $this->get_dependency_attrs( $field );
 
-		printf( '<tr class="ss-panel-row" %s><td colspan="2"><div class="ss-settings-panel">', $dep );
+		printf( '<tr class="wp-polyfill-panel-row" %s><td colspan="2"><div class="wp-polyfill-settings-panel">', $dep );
 		echo $field['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</div></td></tr>';
 	}
 
 	private function render_submit_bar(): void {
-		echo '<div class="ss-submit-wrapper">';
+		echo '<div class="wp-polyfill-submit-wrapper">';
 		printf(
 			'<button type="submit" name="save" class="button button-primary button-large">%s</button>',
 			esc_html__( 'Save Settings', 'shared-settings' )
 		);
-		echo '<p class="ss-settings-unsaved-message" role="status" aria-live="polite" hidden>';
+		echo '<p class="wp-polyfill-settings-unsaved-message" role="status" aria-live="polite" hidden>';
 		echo esc_html__( 'Unsaved changes', 'shared-settings' );
 		echo '</p>';
 		printf(
-			'<button type="button" name="reset" class="button button-secondary button-large ss-reset-button">%s</button>',
+			'<button type="button" name="reset" class="button button-secondary button-large wp-polyfill-reset-button">%s</button>',
 			esc_html__( 'Reset Settings', 'shared-settings' )
 		);
 		echo '</div>';
