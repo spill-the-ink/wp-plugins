@@ -1,4 +1,5 @@
 export { SettingsForm, SettingsSection, SettingsField } from './SettingsForm';
+export type { SettingsHeader } from './SettingsHeader';
 export type { SettingsFormProps, SettingsSectionProps, SettingsFieldProps } from './SettingsForm';
 export { TextField } from './fields/TextField';
 export type { TextFieldProps } from './fields/TextField';

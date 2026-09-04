@@ -14,15 +14,14 @@
 			]
 		},
 		{
-			"dir": "wp-seo",
-			"slug": "wp-seo",
+			"dir": "wp-manifest",
+			"slug": "wp-manifest",
 			"usesSharedPhp": true,
 			"include": [
-				"wp-seo.php",
+				"wp-manifest.php",
 				"uninstall.php",
 				"assets",
-				"includes",
-				"dist"
+				"includes"
 			]
 		}
 	]

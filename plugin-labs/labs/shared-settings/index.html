@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:," />
+  <title>Shared Settings — Labs Demo</title>
+
+  <!-- WordPress Dashicons (loaded from wp.org for the demo) -->
+  <link rel="stylesheet" href="https://s.w.org/wp-includes/css/dashicons.min.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f1;
+      color: #1d2327;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap ss-admin-wrapper ss-admin-settings-page">
+
+    <!-- Header -->
+    <div class="ss-settings-header">
+      <div class="ss-settings-heading">
+        <div class="ss-settings-title-row">
+          <h1 class="title">Shared Settings — Demo</h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="ss-settings-tab-search">
+      <label class="screen-reader-text" for="ss-settings-tab-filter">Search settings</label>
+      <span class="dashicons dashicons-search" aria-hidden="true"></span>
+      <input type="search" id="ss-settings-tab-filter" placeholder="Search settings..." autocomplete="off">
+      <button type="button" class="ss-settings-search-clear" aria-label="Clear search" hidden>
+        <span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="ss-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>
+
+    <!-- Tabs -->
+    <ul id="ss-settings-tabs-wrapper" class="nav-tab-wrapper">
+      <li><a href="#tab-general" class="nav-tab nav-tab-active" aria-current="true" data-tab-id="tab-general">General</a></li>
+      <li><a href="#tab-formats" class="nav-tab" data-tab-id="tab-formats">Post Formats</a></li>
+      <li><a href="#tab-media" class="nav-tab" data-tab-id="tab-media">Media</a></li>
+      <li><a href="#tab-advanced" class="nav-tab" data-tab-id="tab-advanced">Advanced</a></li>
+    </ul>
+
+    <!-- Settings Form -->
+    <form id="shared-settings-demo" class="ss-admin-wrapper" method="post" autocomplete="off">
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: General                                    -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="tab-general" class="ss-settings-table active" role="presentation">
+        <tbody>
+          <tr>
+            <th><label for="demo-site_title">Site title</label><p class="description">The site title is used in the browser tab and search results.</p></th>
+            <td><input type="text" id="demo-site_title" name="demo_settings[site_title]" value="My WordPress Site" class="regular-text"></td>
+          </tr>
+          <tr>
+            <th><label for="demo-tagline">Tagline</label><p class="description">A short description of your site. Used in meta descriptions when no specific description is set.</p></th>
+            <td><input type="text" id="demo-tagline" name="demo_settings[tagline]" value="Just another WordPress site" class="regular-text"></td>
+          </tr>
+          <tr>
+            <th><label for="demo-site_url">Site URL</label><p class="description">The canonical URL of your site. Leave empty to use the WordPress site address.</p></th>
+            <td><input type="text" id="demo-site_url" name="demo_settings[site_url]" value="https://example.com" class="regular-text" placeholder="https://example.com"></td>
+          </tr>
+          <tr>
+            <th><label for="demo-show_header">Show site header</label><p class="description">Display the site title and tagline in the frontend header.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-show_header" name="demo_settings[show_header]" value="1" checked><label for="demo-show_header">Show site header</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="demo-show_footer">Show site footer</label><p class="description">Display copyright and credits in the site footer.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-show_footer" name="demo_settings[show_footer]" value="1" checked><label for="demo-show_footer">Show site footer</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="demo-posts_per_page">Posts per page</label><p class="description">Number of posts displayed on blog listing pages. 0 uses the WordPress default.</p></th>
+            <td><input type="number" id="demo-posts_per_page" name="demo_settings[posts_per_page]" value="10" min="0" max="100" class="small-text"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Post Formats                               -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="tab-formats" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr>
+            <th><label>Available formats</label></th>
+            <td>
+              <div class="ss-checkbox-group">
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_aside" name="demo_settings[formats][]" value="aside" checked><label for="demo-format_aside">Aside</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_gallery" name="demo_settings[formats][]" value="gallery"><label for="demo-format_gallery">Gallery</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_link" name="demo_settings[formats][]" value="link"><label for="demo-format_link">Link</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_image" name="demo_settings[formats][]" value="image" checked><label for="demo-format_image">Image</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_quote" name="demo_settings[formats][]" value="quote" checked><label for="demo-format_quote">Quote</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_video" name="demo_settings[formats][]" value="video"><label for="demo-format_video">Video</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_audio" name="demo_settings[formats][]" value="audio"><label for="demo-format_audio">Audio</label></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th><label for="demo-default_format">Default format</label><p class="description">The format assigned to new posts.</p></th>
+            <td>
+              <select id="demo-default_format" name="demo_settings[default_format]" class="regular-text">
+                <option value="standard" selected>Standard</option>
+                <option value="aside">Aside</option>
+                <option value="gallery">Gallery</option>
+                <option value="image">Image</option>
+                <option value="quote">Quote</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Media                                      -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="tab-media" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr>
+            <th><label for="demo-thumbnail_width">Thumbnail width</label><p class="description">Maximum width in pixels for thumbnail images.</p></th>
+            <td><input type="number" id="demo-thumbnail_width" name="demo_settings[thumbnail_width]" value="150" min="0" max="2000" class="small-text"></td>
+          </tr>
+          <tr>
+            <th><label for="demo-thumbnail_height">Thumbnail height</label><p class="description">Maximum height in pixels for thumbnail images.</p></th>
+            <td><input type="number" id="demo-thumbnail_height" name="demo_settings[thumbnail_height]" value="150" min="0" max="2000" class="small-text"></td>
+          </tr>
+          <tr>
+            <th><label for="demo-crop_thumbnails">Crop thumbnails</label><p class="description">Hard crop thumbnails to exact dimensions.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-crop_thumbnails" name="demo_settings[crop_thumbnails]" value="1" checked><label for="demo-crop_thumbnails">Crop thumbnails to exact dimensions</label></div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Advanced                                   -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="tab-advanced" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr>
+            <th><label for="demo-enable_caching">Enable page caching</label><p class="description">Cache rendered pages for faster delivery.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-enable_caching" name="demo_settings[enable_caching]" value="1" checked><label for="demo-enable_caching">Enable page caching</label></div></td>
+          </tr>
+          <tr data-settings-show-if="#demo-enable_caching">
+            <th><label for="demo-cache_ttl">Cache duration (seconds)</label><p class="description">How long cached pages are kept before regeneration.</p></th>
+            <td><input type="number" id="demo-cache_ttl" name="demo_settings[cache_ttl]" value="3600" min="60" max="86400" class="small-text"></td>
+          </tr>
+          <tr data-settings-show-if="#demo-enable_caching">
+            <th><label for="demo-cache_logged_in">Cache for logged-in users</label><p class="description">This can significantly increase server load.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-cache_logged_in" name="demo_settings[cache_logged_in]" value="1"><label for="demo-cache_logged_in">Cache for logged-in users</label></div></td>
+          </tr>
+
+          <tr>
+            <th><label for="demo-enable_analytics">Enable analytics tracking</label><p class="description">Add tracking scripts to frontend pages.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-enable_analytics" name="demo_settings[enable_analytics]" value="1"><label for="demo-enable_analytics">Enable analytics tracking</label></div></td>
+          </tr>
+          <tr data-settings-show-if="#demo-enable_analytics">
+            <th><label for="demo-analytics_id">Tracking ID</label><p class="description">Your analytics property ID (e.g. UA-XXXXXXX or G-XXXXXXX).</p></th>
+            <td><input type="text" id="demo-analytics_id" name="demo_settings[analytics_id]" value="" class="regular-text" placeholder="G-XXXXXXXXXX"></td>
+          </tr>
+          <tr data-settings-show-if-not="#demo-enable_analytics">
+            <th><label>Analytics disabled</label><p class="description">Enable analytics tracking above to configure tracking settings.</p></th>
+            <td><p style="color:#646970;margin:6px 0 0;">Analytics tracking is currently disabled.</p></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Sticky Submit Bar -->
+      <div class="ss-submit-wrapper">
+        <button type="submit" name="save" class="button button-primary button-large">Save Settings</button>
+        <p class="ss-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>
+        <button type="button" name="reset" class="button button-secondary button-large ss-reset-button">Reset Settings</button>
+      </div>
+      <span class="spinner saving"></span>
+
+    </form>
+  </div>
+
+  <!-- Shared Settings JS + CSS (loaded via Vite module) -->
+  <script type="module" src="/labs/shared-settings/main.ts"></script>
+
+</body>
+
+</html>

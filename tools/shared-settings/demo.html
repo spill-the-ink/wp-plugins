@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:,">
+  <title>Shared Settings – Static Demo</title>
+
+  <!-- WordPress Dashicons (loaded from wp.org for the demo) -->
+  <link rel="stylesheet" href="https://s.w.org/wp-includes/css/dashicons.min.css">
+
+  <!-- Admin base styles (minimal reset) -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f1;
+      color: #1d2327;
+    }
+    /* WordPress admin form element resets */
+    input, select, textarea, button { font-family: inherit; font-size: inherit; }
+    .screen-reader-text {
+      border: 0;
+      clip: rect(1px, 1px, 1px, 1px);
+      clip-path: inset(50%);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+      word-wrap: normal !important;
+    }
+    /* WP admin button styles (subset) */
+    .button {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 26px;
+      min-height: 30px;
+      padding: 0 10px;
+      cursor: pointer;
+      border: 1px solid #2271b1;
+      border-radius: 3px;
+      color: #2271b1;
+      background: #f6f7f7;
+      box-shadow: 0 1px 0 #2271b1;
+      text-align: center;
+    }
+    .button:hover {
+      background: #f0f0f1;
+      border-color: #135e96;
+      color: #135e96;
+      box-shadow: 0 1px 0 #135e96;
+    }
+    .button-primary {
+      background: #2271b1;
+      border-color: #2271b1;
+      color: #fff;
+      box-shadow: 0 1px 0 #135e96;
+    }
+    .button-primary:hover {
+      background: #135e96;
+      border-color: #135e96;
+    }
+    .button-secondary {
+      color: #d63638;
+      border-color: #d63638;
+      box-shadow: 0 1px 0 #d63638;
+    }
+    .button-secondary:hover {
+      background: #d63638;
+      color: #fff;
+    }
+    .button-large {
+      font-size: 14px;
+      line-height: 32px;
+      min-height: 36px;
+      padding: 0 12px;
+    }
+  </style>
+
+  <!-- Shared Settings CSS -->
+  <link rel="stylesheet" href="shared-settings.css">
+</head>
+<body>
+
+  <!-- Simulated WordPress .wrap container -->
+  <div class="wrap ss-admin-wrapper ss-admin-settings-page">
+
+    <!-- Header -->
+    <div class="ss-settings-header">
+      <div class="ss-settings-heading">
+        <div class="ss-settings-title-row">
+          <h1 class="title">WordPress Manifest</h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="ss-settings-tab-search">
+      <label class="screen-reader-text" for="ss-settings-tab-filter">Search settings</label>
+      <span class="dashicons dashicons-search" aria-hidden="true"></span>
+      <input type="search" id="ss-settings-tab-filter" placeholder="Search settings..." autocomplete="off">
+      <button type="button" class="ss-settings-search-clear" aria-label="Clear search" hidden>
+        <span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="ss-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>
+
+    <!-- Tabs -->
+    <ul id="ss-settings-tabs-wrapper" class="nav-tab-wrapper">
+      <li><a href="#identity" class="nav-tab nav-tab-active" aria-current="true" data-tab-id="identity">Site Identity</a></li>
+      <li><a href="#indexing" class="nav-tab" data-tab-id="indexing">Indexing</a></li>
+      <li><a href="#social" class="nav-tab" data-tab-id="social">Social &amp; Sharing</a></li>
+      <li><a href="#ai" class="nav-tab" data-tab-id="ai">AI &amp; Crawlers</a></li>
+      <li><a href="#schema" class="nav-tab" data-tab-id="schema">Structured Data</a></li>
+      <li><a href="#webmanifest" class="nav-tab" data-tab-id="webmanifest">Web Manifest</a></li>
+    </ul>
+
+    <!-- Settings Form -->
+    <form id="wpm-settings" class="ss-admin-wrapper" method="post" autocomplete="off">
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Site Identity                              -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="identity" class="ss-settings-table active" role="presentation">
+        <tbody>
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Site defaults"><span>Site defaults</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-default_description">Default meta description</label>
+              <p class="description">Used whenever a page, post or archive has no specific description. WordPress core outputs none by default.</p>
+            </th>
+            <td>
+              <textarea id="wpm-settings-default_description" name="wp_manifest_settings[default_description]" rows="4" class="large-text">Thoughts on code, WordPress and the open web.</textarea>
+            </td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Canonical domain"><span>Canonical domain</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-canonical_site_url">Canonical domain</label>
+              <p class="description">Base URL that canonicals, Open Graph URLs and structured-data URLs should point to. Useful to prepare a staging copy for its production domain.</p>
+            </th>
+            <td>
+              <input type="text" id="wpm-settings-canonical_site_url" name="wp_manifest_settings[canonical_site_url]" value="https://example.com" class="regular-text" placeholder="https://example.com">
+            </td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Fallback media"><span>Fallback media</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-default_og_image">Default Open Graph image</label>
+              <p class="description">Fallback image for og:image when a post has no featured image.</p>
+            </th>
+            <td>
+              <input type="hidden" id="wpm-settings-default_og_image" name="wp_manifest_settings[default_og_image]" value="42">
+              <div class="ss-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E200 × 120%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
+              <button type="button" class="button ss-pick-media" data-target="wpm-settings-default_og_image">Select media</button>
+              <p class="description">Attachment ID of the fallback or override image.</p>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-org_logo">Organization logo</label>
+              <p class="description">Used in JSON-LD Organization schema and web app manifest.</p>
+            </th>
+            <td>
+              <input type="hidden" id="wpm-settings-org_logo" name="wp_manifest_settings[org_logo]" value="42">
+              <div class="ss-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3ELogo%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
+              <button type="button" class="button ss-pick-media" data-target="wpm-settings-org_logo">Select media</button>
+            </td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Social profiles"><span>Social profiles</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-org_same_as">Social profile URLs</label>
+              <p class="description">One URL per line. Added to the Organization schema as sameAs links.</p>
+            </th>
+            <td>
+              <textarea id="wpm-settings-org_same_as" name="wp_manifest_settings[org_same_as]" rows="4" class="large-text">https://github.com/spill-the-ink</textarea>
+            </td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Core settings"><span>Core settings</span></th>
+          </tr>
+          <tr class="ss-panel-row">
+            <td colspan="2">
+              <div class="ss-settings-panel">
+                <div class="wpm-core-check">
+                  <h2>Settings to review</h2>
+                  <p>Settings that affect the metadata rendered by this plugin:</p>
+                  <table class="widefat striped" style="max-width:960px;"><tbody>
+                    <tr><td style="width:1%;white-space:nowrap;"><span style="color:#00a32a;font-weight:600;">OK</span></td><td style="width:22%;"><strong>Indexing</strong></td><td>This site is publicly indexable, so the metadata below is applied as configured.</td></tr>
+                    <tr><td style="width:1%;white-space:nowrap;"><span style="color:#d63638;font-weight:600;">Action needed</span></td><td style="width:22%;"><strong>Permalink structure</strong></td><td>Plain permalinks are active. Use a permanent structure such as /%postname%/.</td></tr>
+                    <tr><td style="width:1%;white-space:nowrap;"><span style="color:#00a32a;font-weight:600;">OK</span></td><td style="width:22%;"><strong>Canonical domain</strong></td><td>Canonical domain matches the current host.</td></tr>
+                    <tr><td style="width:1%;white-space:nowrap;"><span style="color:#2271b1;font-weight:600;">Recommended</span></td><td style="width:22%;"><strong>Site timezone</strong></td><td>Timezone is UTC. Set your location so structured-data timestamps are correct.</td></tr>
+                    <tr><td style="width:1%;white-space:nowrap;"><span style="color:#2271b1;font-weight:600;">Recommended</span></td><td style="width:22%;"><strong>Site language</strong></td><td>og:locale is derived from the site language.</td></tr>
+                    <tr><td style="width:1%;white-space:nowrap;"><span style="color:#2271b1;font-weight:600;">Recommended</span></td><td style="width:22%;"><strong>Image sizes</strong></td><td>og:image uses the "large" size. Upload featured images at 1200px+ wide.</td></tr>
+                  </tbody></table>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Indexing                                   -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="indexing" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr>
+            <th><label for="wpm-settings-noindex_categories">Category archives</label><p class="description">Category archives — noindex</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_categories" name="wp_manifest_settings[noindex_categories]" value="1"><label for="wpm-settings-noindex_categories">Category archives</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-noindex_tags">Tag archives</label><p class="description">Tag archives — noindex</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_tags" name="wp_manifest_settings[noindex_tags]" value="1"><label for="wpm-settings-noindex_tags">Tag archives</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-noindex_authors">Author archives</label><p class="description">Author archives — noindex</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_authors" name="wp_manifest_settings[noindex_authors]" value="1" checked><label for="wpm-settings-noindex_authors">Author archives</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-noindex_dates">Date archives</label><p class="description">Date archives — noindex</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_dates" name="wp_manifest_settings[noindex_dates]" value="1" checked><label for="wpm-settings-noindex_dates">Date archives</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-noindex_search">Search result pages</label><p class="description">Search result pages — noindex</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_search" name="wp_manifest_settings[noindex_search]" value="1" checked><label for="wpm-settings-noindex_search">Search result pages</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-noindex_paged">Paginated archive pages</label><p class="description">Paginated archive pages — noindex</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_paged" name="wp_manifest_settings[noindex_paged]" value="1" checked><label for="wpm-settings-noindex_paged">Paginated archive pages</label></div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Social &amp; Sharing                       -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="social" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr class="ss-panel-row">
+            <td colspan="2">
+              <div class="ss-settings-panel">
+                <div class="wpm-og-preview" data-wpm-og-preview="1">
+                  <p class="wpm-og-preview__heading">Shared link preview</p>
+                  <div class="wpm-og-preview__card">
+                    <div class="wpm-og-preview__media wpm-og-preview__media--empty"><span class="dashicons dashicons-format-image" aria-hidden="true"></span></div>
+                    <div class="wpm-og-preview__body">
+                      <div class="wpm-og-preview__domain" data-wpm-og-domain>example.com</div>
+                      <div class="wpm-og-preview__title" data-wpm-og-title>Example Site</div>
+                      <div class="wpm-og-preview__desc" data-wpm-og-desc>Thoughts on code, WordPress and the open web.</div>
+                    </div>
+                  </div>
+                  <p class="wpm-og-preview__note description">How this site appears when a link is shared on social platforms. Updates as you edit the settings above.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: AI &amp; Crawlers                          -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="ai" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="AI crawler policy"><span>AI crawler policy</span></th>
+          </tr>
+          <tr>
+            <th><label>Block these crawlers</label></th>
+            <td>
+              <div class="ss-checkbox-group">
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-gptbot" name="wp_manifest_settings[block_ai_bots][]" value="gptbot" checked><label for="wpm-settings-block_ai_bots-gptbot">GPTBot</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-chatgpt-user" name="wp_manifest_settings[block_ai_bots][]" value="chatgpt-user"><label for="wpm-settings-block_ai_bots-chatgpt-user">ChatGPT-User</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-oai-searchbot" name="wp_manifest_settings[block_ai_bots][]" value="oai-searchbot"><label for="wpm-settings-block_ai_bots-oai-searchbot">OAI-SearchBot</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-claudebot" name="wp_manifest_settings[block_ai_bots][]" value="claudebot" checked><label for="wpm-settings-block_ai_bots-claudebot">ClaudeBot</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-claude-web" name="wp_manifest_settings[block_ai_bots][]" value="claude-web"><label for="wpm-settings-block_ai_bots-claude-web">Claude-Web</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-perplexitybot" name="wp_manifest_settings[block_ai_bots][]" value="perplexitybot"><label for="wpm-settings-block_ai_bots-perplexitybot">PerplexityBot</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-bytespider" name="wp_manifest_settings[block_ai_bots][]" value="bytespider"><label for="wpm-settings-block_ai_bots-bytespider">Bytespider</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-google-extended" name="wp_manifest_settings[block_ai_bots][]" value="google-extended"><label for="wpm-settings-block_ai_bots-google-extended">Google-Extended</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-ccbot" name="wp_manifest_settings[block_ai_bots][]" value="ccbot" checked><label for="wpm-settings-block_ai_bots-ccbot">CCBot</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-anthropic-ai" name="wp_manifest_settings[block_ai_bots][]" value="anthropic-ai"><label for="wpm-settings-block_ai_bots-anthropic-ai">anthropic-ai</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-meta-externalagent" name="wp_manifest_settings[block_ai_bots][]" value="meta-externalagent"><label for="wpm-settings-block_ai_bots-meta-externalagent">Meta-ExternalAgent</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-amazonbot" name="wp_manifest_settings[block_ai_bots][]" value="amazonbot"><label for="wpm-settings-block_ai_bots-amazonbot">Amazonbot</label></div>
+                <div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-block_ai_bots-cohere-ai" name="wp_manifest_settings[block_ai_bots][]" value="cohere-ai"><label for="wpm-settings-block_ai_bots-cohere-ai">cohere-ai</label></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-block_ai_bots_extra">Additional user agents to block</label>
+              <p class="description">One user agent per line, e.g. MyBot. Empty lines are ignored.</p>
+            </th>
+            <td>
+              <textarea id="wpm-settings-block_ai_bots_extra" name="wp_manifest_settings[block_ai_bots_extra]" rows="4" class="large-text"></textarea>
+            </td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="llms.txt"><span>llms.txt</span></th>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-llms_enabled">Enable llms.txt</label><p class="description">Serve llms.txt at /llms.txt</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-llms_enabled" name="wp_manifest_settings[llms_enabled]" value="1" checked><label for="wpm-settings-llms_enabled">Enable llms.txt</label></div></td>
+          </tr>
+          <tr data-settings-show-if="#wpm-settings-llms_enabled">
+            <th>
+              <label for="wpm-settings-llms_summary">Site summary</label>
+              <p class="description">Plain-text summary served to AI crawlers. Empty uses the site tagline.</p>
+            </th>
+            <td>
+              <textarea id="wpm-settings-llms_summary" name="wp_manifest_settings[llms_summary]" rows="4" class="large-text">A personal site about WordPress plugin development.</textarea>
+            </td>
+          </tr>
+          <tr data-settings-show-if="#wpm-settings-llms_enabled">
+            <th>
+              <label for="wpm-settings-llms_max_entries">Max links per section</label>
+              <p class="description">Maximum pages and posts linked from llms.txt per section. 0 omits the lists.</p>
+            </th>
+            <td>
+              <input type="number" id="wpm-settings-llms_max_entries" name="wp_manifest_settings[llms_max_entries]" value="20" min="0" max="200" class="small-text">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Structured Data                            -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="schema" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr>
+            <th><label for="wpm-settings-schema_org_enabled">Enable JSON-LD</label><p class="description">Emit Organization, WebSite, Article, FAQPage and BreadcrumbList markup</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-schema_org_enabled" name="wp_manifest_settings[schema_org_enabled]" value="1" checked><label for="wpm-settings-schema_org_enabled">Enable JSON-LD</label></div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Web Manifest                               -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="webmanifest" class="ss-settings-table" role="presentation">
+        <tbody>
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Web app manifest"><span>Web app manifest</span></th>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_enabled">Enable manifest.json</label><p class="description">Serve /manifest.json and add &lt;link rel="manifest"&gt; to the front end.</p></th>
+            <td><div class="ss-setting-wrapper"><input type="checkbox" id="wpm-settings-manifest_enabled" name="wp_manifest_settings[manifest_enabled]" value="1" checked><label for="wpm-settings-manifest_enabled">Enable manifest.json</label></div></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_name">App name</label><p class="description">Full name shown in install prompts. Empty uses the site name.</p></th>
+            <td><input type="text" id="wpm-settings-manifest_name" name="wp_manifest_settings[manifest_name]" value="Example Site" class="regular-text"></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_short_name">Short name</label><p class="description">Name shown on home screen. Keep to 12 characters. Empty uses the app name.</p></th>
+            <td><input type="text" id="wpm-settings-manifest_short_name" name="wp_manifest_settings[manifest_short_name]" value="Example" class="regular-text"></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_description">Description</label><p class="description">App description. Empty uses the site tagline.</p></th>
+            <td><textarea id="wpm-settings-manifest_description" name="wp_manifest_settings[manifest_description]" rows="2" class="large-text"></textarea></td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Icons"><span>Icons</span></th>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_icon_192">192 × 192 icon</label><p class="description">PNG or SVG. Required for Android home screen.</p></th>
+            <td><input type="hidden" id="wpm-settings-manifest_icon_192" name="wp_manifest_settings[manifest_icon_192]" value="0"><button type="button" class="button ss-pick-media" data-target="wpm-settings-manifest_icon_192">Select media</button></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_icon_512">512 × 512 icon</label><p class="description">PNG or SVG. Used for splash screens and PWA store icons.</p></th>
+            <td><input type="hidden" id="wpm-settings-manifest_icon_512" name="wp_manifest_settings[manifest_icon_512]" value="0"><button type="button" class="button ss-pick-media" data-target="wpm-settings-manifest_icon_512">Select media</button></td>
+          </tr>
+
+          <tr class="ss-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Appearance"><span>Appearance</span></th>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_theme_color">Theme color</label><p class="description">Hex color for the browser toolbar, e.g. #4a90d9.</p></th>
+            <td><input type="text" id="wpm-settings-manifest_theme_color" name="wp_manifest_settings[manifest_theme_color]" value="#4a90d9" class="regular-text" placeholder="#4a90d9"></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_background_color">Background color</label><p class="description">Hex color for the splash screen background, e.g. #ffffff.</p></th>
+            <td><input type="text" id="wpm-settings-manifest_background_color" name="wp_manifest_settings[manifest_background_color]" value="#ffffff" class="regular-text" placeholder="#ffffff"></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_display">Display mode</label><p class="description">How the browser displays the site when launched from the home screen.</p></th>
+            <td><select id="wpm-settings-manifest_display" name="wp_manifest_settings[manifest_display]" class="regular-text">
+              <option value="standalone" selected>Standalone — no browser UI</option>
+              <option value="fullscreen">Fullscreen</option>
+              <option value="minimal-ui">Minimal UI — back/forward buttons</option>
+              <option value="browser">Browser — full chrome</option>
+            </select></td>
+          </tr>
+          <tr>
+            <th><label for="wpm-settings-manifest_start_url">Start URL</label><p class="description">Page opened when the site is launched from the home screen.</p></th>
+            <td><input type="text" id="wpm-settings-manifest_start_url" name="wp_manifest_settings[manifest_start_url]" value="/" class="regular-text" placeholder="/"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Sticky Submit Bar -->
+      <div class="ss-submit-wrapper">
+        <button type="submit" name="save" class="button button-primary button-large">Save Settings</button>
+        <p class="ss-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>
+        <button type="button" name="reset" class="button button-secondary button-large ss-reset-button">Reset Settings</button>
+      </div>
+      <span class="spinner saving"></span>
+
+    </form>
+  </div>
+
+  <!-- Shared Settings JS -->
+  <script>
+    // Stub wp.media for the demo (no real media library)
+    window.wp = window.wp || {};
+    window.wp.media = function() {
+      return {
+        on: function() { return this; },
+        open: function() {
+          var id = prompt('Enter a numeric attachment ID:');
+          if (id && this._selectCallback) {
+            this._selectCallback({ id: parseInt(id, 10), url: '' });
+          }
+          return this;
+        },
+        state: function() {
+          return {
+            get: function() {
+              var self = this;
+              return {
+                first: function() {
+                  return {
+                    toJSON: function() { return self._attachment || {}; }
+                  };
+                },
+                _attachment: null
+              };
+            }
+          };
+        }
+      };
+    };
+  </script>
+  <script src="shared-settings.js"></script>
+
+</body>
+</html>

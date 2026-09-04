@@ -1,0 +1,52 @@
+/*
+ * Canonical design tokens for the shared React components.
+ *
+ * Import this from any consuming stylesheet to activate Tailwind and load the
+ * shared UI theme in one place:
+ *
+ *     @import "<path>/shared-react/src/js/styles/theme.css";
+ *
+ * Every color/radius the shared components reference is defined here. Tailwind
+ * v4 turns these `--color-*` / `--radius-*` values into the corresponding
+ * `bg-*`, `text-*`, `border-*`, `ring-*`, `rounded-*`, … utilities.
+ */
+
+@import "tailwindcss";
+
+/* Scan the shared components so their utility classes are generated. */
+@source "../**/*.{tsx,ts}";
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #1e1e1e;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #1e1e1e;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1e1e1e;
+
+  --color-primary: #1e1e1e;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #f3f4f6;
+  --color-secondary-foreground: #1e1e1e;
+
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #6b7280;
+
+  --color-accent: #f3f4f6;
+  --color-accent-foreground: #1e1e1e;
+
+  --color-destructive: #9f1239;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: #d9d9d9;
+  --color-input: #d9d9d9;
+  --color-ring: #1e1e1e;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-DEFAULT: 0.625rem;
+}

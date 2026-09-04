@@ -1,0 +1,74 @@
+@import "../../../tools/shared-react/src/js/styles/theme.css";
+
+/* Shared settings CSS for the labs environment */
+@import "../../../tools/shared-settings/shared-settings.css";
+
+@source "./**/*.{tsx,ts}";
+
+/* Labs-specific overrides */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  background: #f0f0f1;
+}
+
+/* WordPress admin form element resets for labs */
+input, select, textarea, button { font-family: inherit; font-size: inherit; }
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+/* WP admin button styles (subset for labs) */
+.button {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 26px;
+  min-height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: 1px solid #2271b1;
+  border-radius: 3px;
+  color: #2271b1;
+  background: #f6f7f7;
+  /* box-shadow: 0 1px 0 #2271b1; */
+  text-align: center;
+}
+.button:hover {
+  background: #f0f0f1;
+  border-color: #135e96;
+  color: #135e96;
+}
+.button-primary {
+  background: #2271b1;
+  border-color: #2271b1;
+  color: #fff;
+  /* box-shadow: 0 1px 0 #135e96; */
+}
+.button-primary:hover {
+  background: #135e96;
+  border-color: #135e96;
+}
+.button-secondary {
+  color: #d63638;
+  border-color: #d63638;
+  /* box-shadow: 0 1px 0 #d63638; */
+}
+.button-secondary:hover {
+  background: #d63638;
+  color: #fff;
+}
+.button-large {
+  font-size: 14px;
+  line-height: 32px;
+  min-height: 36px;
+  padding: 0 12px;
+}

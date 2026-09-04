@@ -1,6 +1,6 @@
-[submodule "plugins/wp-seo"]
-	path = plugins/wp-seo
-	url = https://github.com/spill-the-ink/wp-seo.git
+[submodule "plugins/wp-manifest"]
+	path = plugins/wp-manifest
+	url = https://github.com/spill-the-ink/wp-manifest.git
 	branch = main
 [submodule "plugins/wp-calendar"]
 	path = plugins/wp-calendar

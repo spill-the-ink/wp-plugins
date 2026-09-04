@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Settings_Store {
+class Store {
 
 	private string $option_name;
 	private array  $defaults;
@@ -23,6 +23,9 @@ class Settings_Store {
 		$this->defaults    = $defaults;
 	}
 
+	/**
+	 * Get a single option value, or the full options array when $key is empty.
+	 */
 	public function get( string $key = '', $default = null ) {
 		$options = $this->all();
 
@@ -30,33 +33,39 @@ class Settings_Store {
 			return $options;
 		}
 
-		if ( isset( $options[ $key ] ) ) {
-			return $options[ $key ];
-		}
-
-		return $default;
+		return $options[ $key ] ?? $default;
 	}
 
+	/**
+	 * Get all options merged with defaults. Cached per request.
+	 */
 	public function all(): array {
 		if ( null === $this->cached ) {
-			$this->cached = wp_parse_args(
-				get_option( $this->option_name, [] ),
-				$this->defaults
-			);
+			$raw = get_option( $this->option_name, [] );
+			$this->cached = wp_parse_args( is_array( $raw ) ? $raw : [], $this->defaults );
 		}
 
 		return $this->cached;
 	}
 
+	/**
+	 * Save all options at once (full replace).
+	 */
 	public function update( array $data ): void {
-		$this->cached = null;
 		update_option( $this->option_name, $data );
+		$this->cached = null;
 	}
 
+	/**
+	 * Return the defaults array.
+	 */
 	public function defaults(): array {
 		return $this->defaults;
 	}
 
+	/**
+	 * Force a cache refresh on next get().
+	 */
 	public function reset(): void {
 		$this->cached = null;
 	}

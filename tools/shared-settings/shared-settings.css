@@ -1,0 +1,631 @@
+/**
+ * Shared Settings CSS – Bricks-style admin settings layout.
+ *
+ * @since 0.2.0
+ */
+
+/* ── CSS Custom Properties ──────────────────────── */
+
+:root {
+  /* Surfaces */
+  --ss-bg: #ffffff;
+  --ss-bg-muted: #f0f0f1;
+  --ss-fg: #1d2327;
+  --ss-fg-muted: #646970;
+  --ss-fg-faint: #8c8f94;
+
+  /* Borders */
+  --ss-border: #c3c4c7;
+  --ss-border-muted: #e0e0e0;
+  --ss-border-focus: #2271b1;
+
+  /* Accent */
+  --ss-primary: #2271b1;
+  --ss-primary-hover: #135e96;
+  --ss-primary-text: #ffffff;
+
+  /* Status */
+  --ss-success: #00a32a;
+  --ss-success-text: #00a32a;
+  --ss-warning: #dba617;
+  --ss-warning-text: #9d6c08;
+  --ss-error: #d63638;
+  --ss-error-text: #d63638;
+
+  /* Typography */
+  --ss-font-size: 15px;
+  --ss-font-size-lg: 16px;
+  --ss-font-size-sm: 12px;
+  --ss-line-height: 1.4;
+
+  /* Spacing */
+  --ss-space-xs: 4px;
+  --ss-space-sm: 8px;
+  --ss-space: 16px;
+  --ss-space-lg: 24px;
+
+  /* Radius */
+  --ss-radius: 2px;
+  --ss-radius-lg: 4px;
+
+  /* Layout */
+  --ss-readable-width: 800px;
+  --ss-icon-size: 20px;
+
+  /* Elevation */
+  --ss-shadow-sm: 0 1px 1px rgba(0, 0, 0, 0.04);
+  --ss-shadow-md: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* Control height */
+  --ss-control-height: 30px;
+  --ss-control-height-sm: 24px;
+}
+
+*[hidden] {
+  display: none !important;
+}
+
+/* ── Page Wrapper ───────────────────────────────── */
+
+.ss-admin-settings-page {
+  color: var(--ss-fg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ss-space);
+  max-width: none;
+}
+
+body > .ss-admin-settings-page {
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.ss-admin-settings-page .admin-notices-placeholder {
+  display: none;
+}
+
+/* ── Header ─────────────────────────────────────── */
+
+.ss-settings-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ss-space);
+}
+
+.ss-settings-heading {
+  flex: 1;
+}
+
+.ss-settings-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ss-space-sm);
+}
+
+.ss-settings-heading .title {
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* ── Search ─────────────────────────────────────── */
+
+.ss-settings-tab-search {
+  max-width: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.ss-settings-tab-search > .dashicons {
+  color: var(--ss-fg-faint);
+  font-size: var(--ss-icon-size);
+  height: var(--ss-icon-size);
+  inset-inline-start: var(--ss-space);
+  line-height: 1;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--ss-icon-size);
+}
+
+.ss-settings-tab-search input[type="search"] {
+  background-color: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-lg);
+  box-shadow: none;
+  color: var(--ss-fg);
+  font-size: var(--ss-font-size-lg);
+  margin: 0;
+  min-height: calc(var(--ss-control-height) + var(--ss-space-sm));
+  padding: 0 calc(var(--ss-icon-size) + var(--ss-space-lg)) 0 calc(var(--ss-space-lg) + var(--ss-space));
+  width: 100%;
+  transition: border-color 0.15s ease;
+}
+
+.ss-settings-tab-search input[type="search"]:focus {
+  border-color: var(--ss-border-focus);
+  box-shadow: 0 0 0 1px var(--ss-border-focus);
+  outline: 2px transparent;
+}
+
+.ss-settings-search-clear {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--ss-fg-faint);
+  cursor: pointer;
+  display: flex;
+  font-size: var(--ss-icon-size);
+  height: var(--ss-icon-size);
+  inset-inline-end: var(--ss-space);
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--ss-icon-size);
+}
+
+.ss-settings-search-clear:hover {
+  color: var(--ss-fg);
+}
+
+.ss-settings-search-no-results {
+  background: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  color: var(--ss-fg-muted);
+  display: flex;
+  min-height: var(--ss-control-height-sm);
+  padding: var(--ss-space-sm) var(--ss-space);
+}
+
+/* ── Tabs ───────────────────────────────────────── */
+
+#ss-settings-tabs-wrapper {
+  border-bottom: 1px solid var(--ss-border);
+  margin: 0;
+
+  display: flex;
+  flex-direction: row;
+  justify-items: flex-end;
+
+  padding-inline-start: 0;
+}
+
+#ss-settings-tabs-wrapper > li{
+  display: flex;
+  flex-direction: row;
+  justify-items: flex-end;
+}
+
+#ss-settings-tabs-wrapper .nav-tab {
+  box-sizing: content-box;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--ss-fg-muted);
+  cursor: pointer;
+  font-size: var(--ss-font-size);
+  line-height: 1.4;
+  font-weight: 600;
+  padding: 0 12px calc(var(--ss-space-xs));
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 40px;
+  text-decoration: none;
+
+  transition: background 0.15s, color 0.15s;
+}
+
+#ss-settings-tabs-wrapper .nav-tab:hover {
+  text-decoration: underline;
+}
+
+#ss-settings-tabs-wrapper .nav-tab-active,
+#ss-settings-tabs-wrapper .nav-tab.active {
+  border-bottom-color: var(--wp-admin-theme-color,#2271b1);
+  color: var(--ss-fg);
+  position: relative;
+  z-index: 1;
+
+  margin-bottom: -1px;
+  padding-bottom: calc(var(--ss-space-xs) + 1px);
+}
+
+/* ── Tables (tab content) ───────────────────────── */
+
+table.ss-settings-table {
+  background: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-lg);
+  border-spacing: 0;
+  box-shadow: var(--ss-shadow-sm);
+  display: none;
+  font-size: inherit;
+  margin: var(--ss-space) 0 calc(var(--ss-space-lg) + var(--ss-space-sm));
+  overflow: hidden;
+  width: 100%;
+}
+
+table.ss-settings-table.active,
+.ss-admin-wrapper form.searching-all-settings table.ss-settings-table.has-search-match {
+  display: block;
+}
+
+table.ss-settings-table:not(.active):not(.has-search-match) {
+  display: none;
+}
+
+/* Hide a tab's table (including the active one) when search leaves no
+   visible rows in it. Steers the effective tab away from empty content. */
+.ss-admin-wrapper form.searching-all-settings table.ss-settings-table.ss-table-hidden {
+  display: none;
+}
+
+/* ── Screen-reader-only (visually hidden, accessible) ── */
+
+.screen-reader-text,
+tr.ss-settings-section-row .screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+/* ── Field Rows (flat table) ────────────────────── */
+
+table.ss-settings-table tbody > tr {
+  align-items: start;
+  border-bottom: 1px solid var(--ss-border-muted);
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(320px, 3fr);
+  padding: 0;
+}
+
+/* Section heading rows are screen-reader-only: no visible border/height. */
+table.ss-settings-table tbody > tr.ss-settings-section-row {
+  border-bottom: none;
+}
+
+table.ss-settings-table tbody > tr:last-child {
+  border-bottom: none;
+}
+
+table.ss-settings-table tbody > tr[hidden] {
+  display: none;
+}
+
+table.ss-settings-table tbody > tr.ss-dependency-hidden {
+  display: none;
+}
+
+/* Left column: label + description */
+table.ss-settings-table th {
+  font-weight: 600;
+  padding: var(--ss-space);
+  text-align: left;
+  vertical-align: top;
+}
+
+table.ss-settings-table th label {
+  font-size: var(--ss-font-size);
+  font-weight: 600;
+  line-height: var(--ss-line-height);
+}
+
+table.ss-settings-table th .description {
+  color: var(--ss-fg-muted);
+  font-size: var(--ss-font-size-sm);
+  font-weight: 400;
+  line-height: var(--ss-line-height);
+  margin: var(--ss-space-xs) 0 0;
+}
+
+/* Right column: controls */
+table.ss-settings-table td {
+  padding: var(--ss-space);
+  vertical-align: top;
+}
+
+/* ── Standard Field Controls ────────────────────── */
+
+table.ss-settings-table input[type="text"],
+table.ss-settings-table input[type="number"],
+table.ss-settings-table input[type="url"],
+table.ss-settings-table input[type="email"],
+table.ss-settings-table input[type="password"] {
+  background-color: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: none;
+  color: var(--ss-fg);
+  font-size: var(--ss-font-size);
+  margin: 0;
+  min-height: var(--ss-control-height);
+  padding: 0 var(--ss-space-sm);
+  width: 100%;
+  max-width: 400px;
+}
+
+table.ss-settings-table input[type="text"]:focus,
+table.ss-settings-table input[type="number"]:focus,
+table.ss-settings-table input[type="url"]:focus,
+table.ss-settings-table input[type="email"]:focus,
+table.ss-settings-table input[type="password"]:focus {
+  border-color: var(--ss-border-focus);
+  box-shadow: 0 0 0 1px var(--ss-border-focus);
+  outline: 2px transparent;
+}
+
+table.ss-settings-table input.small-text {
+  max-width: 120px;
+}
+
+table.ss-settings-table textarea {
+  background-color: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: none;
+  color: var(--ss-fg);
+  font-family: inherit;
+  font-size: var(--ss-font-size);
+  margin: 0;
+  padding: var(--ss-space-sm);
+  width: 100%;
+  max-width: 500px;
+}
+
+table.ss-settings-table textarea:focus {
+  border-color: var(--ss-border-focus);
+  box-shadow: 0 0 0 1px var(--ss-border-focus);
+  outline: 2px transparent;
+}
+
+table.ss-settings-table select {
+  background-color: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: none;
+  color: var(--ss-fg);
+  font-size: var(--ss-font-size);
+  margin: 0;
+  min-height: var(--ss-control-height);
+  max-width: 400px;
+  width: 100%;
+}
+
+table.ss-settings-table select:focus {
+  border-color: var(--ss-border-focus);
+  box-shadow: 0 0 0 1px var(--ss-border-focus);
+  outline: 2px transparent;
+}
+
+/* ── Checkbox & Setting Wrapper ─────────────────── */
+
+.ss-setting-wrapper {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--ss-space-sm);
+  line-height: var(--ss-line-height);
+  padding: var(--ss-space-xs) 0;
+}
+
+.ss-setting-wrapper input[type="checkbox"],
+.ss-setting-wrapper input[type="radio"] {
+  margin-top: 2px;
+}
+
+.ss-setting-wrapper label {
+  font-size: var(--ss-font-size);
+}
+
+.ss-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ss-checkbox-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--ss-space-sm) var(--ss-space-lg);
+}
+
+/* ── Separator ──────────────────────────────────── */
+
+.ss-separator {
+  border-bottom: 1px solid var(--ss-border-muted);
+  margin: var(--ss-space-sm) 0;
+}
+
+/* ── Media Field ────────────────────────────────── */
+
+.ss-media-preview {
+  max-width: 200px;
+  margin-bottom: var(--ss-space-sm);
+}
+
+.ss-media-preview img {
+  border: 1px solid var(--ss-border-muted);
+  border-radius: var(--ss-radius);
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Sticky Submit Bar ──────────────────────────── */
+
+.ss-submit-wrapper {
+  align-items: center;
+  background-color: var(--ss-bg);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-lg);
+  bottom: 16px;
+  box-shadow: var(--ss-shadow-md);
+  display: flex;
+  gap: var(--ss-space);
+  justify-content: flex-start;
+  margin-top: var(--ss-space-lg);
+  padding: var(--ss-space) var(--ss-space);
+  position: sticky;
+  z-index: 10;
+}
+
+.ss-submit-wrapper.has-unsaved-settings {
+  border-color: var(--ss-warning);
+}
+
+.ss-submit-wrapper.has-saved-settings {
+  border-color: var(--ss-success);
+}
+
+.ss-settings-unsaved-message {
+  align-items: center;
+  color: var(--ss-fg-muted);
+  display: inline-flex;
+  font-size: var(--ss-font-size);
+  line-height: var(--ss-line-height);
+  margin: 0;
+}
+
+.ss-settings-unsaved-message[data-state="warning"] {
+  color: var(--ss-warning-text);
+}
+
+.ss-settings-unsaved-message[data-state="success"] {
+  color: var(--ss-success-text);
+}
+
+.ss-submit-wrapper .ss-reset-button {
+  border-color: var(--ss-error);
+  color: var(--ss-error);
+  margin-inline-start: auto;
+}
+
+/* ── Informational / visualization rows ─────────── */
+
+/* Full-width rows (html field type) rendered inside a settings table. */
+table.ss-settings-table tbody > tr.ss-panel-row td {
+  border-bottom: none;
+  grid-column: 1 / -1;
+  padding: 0;
+}
+
+.ss-settings-panel {
+  padding: var(--ss-space);
+}
+
+/* Open Graph shared-link preview */
+.ss-og-preview__heading {
+  font-size: var(--ss-font-size);
+  font-weight: 600;
+  margin: 0 0 var(--ss-space-sm);
+}
+
+.ss-og-preview__card {
+  background: var(--ss-bg-muted);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius-lg);
+  display: flex;
+  max-width: 520px;
+  overflow: hidden;
+}
+
+.ss-og-preview__media {
+  flex: 0 0 200px;
+  max-width: 200px;
+  min-height: 200px;
+}
+
+.ss-og-preview__media img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.ss-og-preview__media--empty {
+  align-items: center;
+  background: var(--ss-bg);
+  color: var(--ss-fg-faint);
+  display: flex;
+  font-size: 32px;
+  justify-content: center;
+}
+
+.ss-og-preview__body {
+  flex: 1;
+  padding: var(--ss-space);
+}
+
+.ss-og-preview__domain {
+  color: var(--ss-fg-faint);
+  font-size: var(--ss-font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ss-og-preview__title {
+  color: var(--ss-primary);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: var(--ss-line-height);
+  margin-top: var(--ss-space-xs);
+}
+
+.ss-og-preview__desc {
+  color: var(--ss-fg-muted);
+  font-size: var(--ss-font-size-sm);
+  line-height: var(--ss-line-height);
+  margin-top: var(--ss-space-xs);
+}
+
+.ss-og-preview__note {
+  margin-top: var(--ss-space-sm);
+  max-width: 520px;
+}
+
+/* ── Spinner ────────────────────────────────────── */
+
+.spinner.saving {
+  display: none;
+  float: none;
+  margin: 0;
+}
+
+.spinner.saving.is-active {
+  display: inline-block;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+
+@media screen and (max-width: 960px) {
+  table.ss-settings-table tr {
+    grid-template-columns: 1fr;
+  }
+
+  table.ss-settings-table th {
+    padding-right: 0;
+    padding-bottom: var(--ss-space-xs);
+  }
+
+  table.ss-settings-table td {
+    padding-left: 0;
+  }
+}

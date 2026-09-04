@@ -4,15 +4,18 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=18",
-    "npm": ">=9"
+    "node": ">=22.12.0",
+    "yarn": ">=1.22"
   },
   "scripts": {
-    "build": "npm run build-plugins",
-    "build:plugin:wp-seo": "node tools/copy-php.js && vite build --mode wp-seo",
+    "build": "yarn run build-plugins",
+    "build:plugin:wp-manifest": "node tools/copy-php.js",
     "build:plugin:wp-calendar": "yarn --cwd plugins/wp-calendar run build:pot && yarn --cwd plugins/wp-calendar run build:lang && yarn --cwd plugins/wp-calendar run build && node tools/copy-php.js",
-    "build-plugins": "npm run build:plugin:wp-seo && npm run build:plugin:wp-calendar",
-    "release": "npm run build-plugins && node tools/release.js"
+    "build-plugins": "yarn run build:plugin:wp-manifest && yarn run build:plugin:wp-calendar",
+    "release": "yarn run build-plugins && node tools/release.js",
+    "labs": "yarn --cwd plugin-labs run dev",
+    "labs:wp-calendar": "yarn --cwd plugin-labs run dev:wp-calendar",
+    "labs:wp-manifest": "yarn --cwd plugin-labs run dev"
   },  
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.11",

@@ -1,9 +1,9 @@
 <?php
 /**
- * Shared form field renderers for the WordPress Settings API.
+ * Shared form field renderers for the settings table layout.
  *
  * @package WpPluginShared
- * @since   0.1.0
+ * @since   0.2.0
  */
 
 namespace WpPluginShared;
@@ -14,114 +14,212 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Form_Fields {
 
-	public static function text( array $args, Settings_Store $store ): void {
-		$key = $args['key'] ?? '';
-		$val = $store->get( $key, '' );
+	/**
+	 * Render a field into the settings table.
+	 *
+	 * @param array  $field   Field configuration.
+	 * @param Store  $store   Options store.
+	 * @param string $form_id Form id prefix for element ids.
+	 */
+	public static function render( array $field, Store $store, string $form_id ): void {
+		$type = $field['type'] ?? 'text';
 
-		printf(
-			'<input type="text" class="regular-text" name="%1$s[%2$s]" value="%3$s" />',
-			esc_attr( $args['option_name'] ?? '' ),
-			esc_attr( $key ),
-			esc_attr( $val )
-		);
-
-		if ( ! empty( $args['description'] ) ) {
-			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+		switch ( $type ) {
+			case 'text':
+				self::text( $field, $store, $form_id );
+				break;
+			case 'textarea':
+				self::textarea( $field, $store, $form_id );
+				break;
+			case 'number':
+				self::number( $field, $store, $form_id );
+				break;
+			case 'checkbox':
+				self::checkbox( $field, $store, $form_id );
+				break;
+			case 'checkbox_group':
+				self::checkbox_group( $field, $store, $form_id );
+				break;
+			case 'select':
+				self::select( $field, $store, $form_id );
+				break;
+			case 'media':
+				self::media( $field, $store, $form_id );
+				break;
+			default:
+				do_action( 'ss_render_field_' . $type, $field, $store, $form_id );
+				break;
 		}
 	}
 
-	public static function textarea( array $args, Settings_Store $store ): void {
-		$key = $args['key'] ?? '';
-		$val = $store->get( $key, '' );
-		$rows = $args['rows'] ?? 4;
+	public static function text( array $field, Store $store, string $form_id ): void {
+		$key   = $field['id'];
+		$value = $store->get( $key, '' );
+		$input_id = $form_id . '-' . $key;
 
 		printf(
-			'<textarea class="large-text" rows="%1$d" name="%2$s[%3$s]">%4$s</textarea>',
+			'<input type="text" id="%1$s" name="%2$s[%3$s]" value="%4$s" class="regular-text" placeholder="%5$s" />',
+			esc_attr( $input_id ),
+			esc_attr( $field['option_name'] ?? '' ),
+			esc_attr( $key ),
+			esc_attr( $value ),
+			esc_attr( $field['placeholder'] ?? '' )
+		);
+	}
+
+	public static function textarea( array $field, Store $store, string $form_id ): void {
+		$key   = $field['id'];
+		$value = $store->get( $key, '' );
+		$rows  = $field['rows'] ?? 4;
+		$input_id = $form_id . '-' . $key;
+
+		printf(
+			'<textarea id="%1$s" name="%2$s[%3$s]" rows="%4$d" class="large-text" placeholder="%5$s">%6$s</textarea>',
+			esc_attr( $input_id ),
+			esc_attr( $field['option_name'] ?? '' ),
+			esc_attr( $key ),
 			(int) $rows,
-			esc_attr( $args['option_name'] ?? '' ),
-			esc_attr( $key ),
-			esc_textarea( $val )
+			esc_attr( $field['placeholder'] ?? '' ),
+			esc_textarea( $value )
 		);
-
-		if ( ! empty( $args['description'] ) ) {
-			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
-		}
 	}
 
-	public static function number( array $args, Settings_Store $store ): void {
-		$key  = $args['key'] ?? '';
-		$val  = (int) $store->get( $key, 0 );
-		$min  = $args['min'] ?? 0;
-		$max  = $args['max'] ?? 1000;
+	public static function number( array $field, Store $store, string $form_id ): void {
+		$key   = $field['id'];
+		$value = (int) $store->get( $key, 0 );
+		$min   = $field['min'] ?? 0;
+		$max   = $field['max'] ?? 10000;
+		$input_id = $form_id . '-' . $key;
 
 		printf(
-			'<input type="number" class="small-text" name="%1$s[%2$s]" value="%3$d" min="%4$d" max="%5$d" />',
-			esc_attr( $args['option_name'] ?? '' ),
+			'<input type="number" id="%1$s" name="%2$s[%3$s]" value="%4$d" min="%5$d" max="%6$d" class="small-text" />',
+			esc_attr( $input_id ),
+			esc_attr( $field['option_name'] ?? '' ),
 			esc_attr( $key ),
-			$val,
+			$value,
 			(int) $min,
 			(int) $max
 		);
-
-		if ( ! empty( $args['description'] ) ) {
-			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
-		}
 	}
 
-	public static function checkbox( array $args, Settings_Store $store ): void {
-		$key     = $args['key'] ?? '';
+	public static function checkbox( array $field, Store $store, string $form_id ): void {
+		$key     = $field['id'];
 		$checked = $store->get( $key, false );
-		$label   = $args['label'] ?? '';
+		$input_id = $form_id . '-' . $key;
+
+		echo '<div class="ss-setting-wrapper">';
+		printf(
+			'<input type="checkbox" id="%1$s" name="%2$s[%3$s]" value="1" %4$s />',
+			esc_attr( $input_id ),
+			esc_attr( $field['option_name'] ?? '' ),
+			esc_attr( $key ),
+			checked( $checked, true, false )
+		);
+		printf(
+			'<label for="%1$s">%2$s</label>',
+			esc_attr( $input_id ),
+			esc_html( $field['label'] )
+		);
+		echo '</div>';
+	}
+
+	public static function checkbox_group( array $field, Store $store, string $form_id ): void {
+		$options = $field['options'] ?? [];
+		$values  = (array) $store->get( $field['id'], [] );
+		$name    = ( $field['option_name'] ?? '' ) . '[' . $field['id'] . '][]';
+		$layout  = $field['options_layout'] ?? 'vertical';
+		$wrapper_class = 'vertical' === $layout ? '' : ' ss-checkbox-group--horizontal';
+
+		echo '<div class="ss-checkbox-group' . esc_attr( $wrapper_class ) . '">';
+
+		foreach ( $options as $value => $label ) {
+			$input_id = $form_id . '-' . $field['id'] . '-' . sanitize_html_class( $value );
+			$checked  = in_array( (string) $value, array_map( 'strtolower', $values ), true );
+
+			echo '<div class="ss-setting-wrapper">';
+			printf(
+				'<input type="checkbox" id="%1$s" name="%2$s" value="%3$s" %4$s />',
+				esc_attr( $input_id ),
+				esc_attr( $name ),
+				esc_attr( $value ),
+				$checked ? ' checked' : ''
+			);
+			printf(
+				'<label for="%1$s">%2$s</label>',
+				esc_attr( $input_id ),
+				esc_html( $label )
+			);
+			echo '</div>';
+		}
+
+		echo '</div>';
+	}
+
+	public static function select( array $field, Store $store, string $form_id ): void {
+		$key     = $field['id'];
+		$value   = $store->get( $key, '' );
+		$options = $field['options'] ?? [];
+		$input_id = $form_id . '-' . $key;
+
+		// Support callable options (lazy-loaded).
+		if ( is_callable( $options ) ) {
+			$options = $options();
+		}
 
 		printf(
-			'<label><input type="checkbox" name="%1$s[%2$s]" value="1" %3$s /> %4$s</label>',
-			esc_attr( $args['option_name'] ?? '' ),
-			esc_attr( $key ),
-			checked( $checked, true, false ),
-			esc_html( $label )
+			'<select id="%1$s" name="%2$s[%3$s]" class="regular-text">',
+			esc_attr( $input_id ),
+			esc_attr( $field['option_name'] ?? '' ),
+			esc_attr( $key )
 		);
 
-		if ( ! empty( $args['description'] ) ) {
-			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+		foreach ( $options as $opt_value => $opt_label ) {
+			printf(
+				'<option value="%1$s" %2$s>%3$s</option>',
+				esc_attr( $opt_value ),
+				selected( (string) $value, (string) $opt_value, false ),
+				esc_html( $opt_label )
+			);
 		}
+
+		echo '</select>';
 	}
 
-	public static function media( array $args, Settings_Store $store ): void {
-		$key      = $args['key'] ?? '';
+	public static function media( array $field, Store $store, string $form_id ): void {
+		$key      = $field['id'];
 		$id       = (int) $store->get( $key, 0 );
-		$name     = ( $args['option_name'] ?? '' ) . '[' . $key . ']';
-		$id_attr  = 'wps-media-' . $key;
+		$name     = ( $field['option_name'] ?? '' ) . '[' . $key . ']';
+		$input_id = $form_id . '-' . $key;
 
 		printf(
 			'<input type="hidden" id="%1$s" name="%2$s" value="%3$d" />',
-			esc_attr( $id_attr ),
+			esc_attr( $input_id ),
 			esc_attr( $name ),
 			$id
 		);
 
-		echo '<div class="wps-media-preview" data-target="' . esc_attr( $id_attr ) . '">';
+		echo '<div class="ss-media-preview" data-target="' . esc_attr( $input_id ) . '">';
 
-		if ( $id && wp_attachment_is_image( $id ) ) {
-			echo wp_get_attachment_image( $id, 'thumbnail', false, [
-				'style' => 'max-width:200px;height:auto;display:block;margin:6px 0;',
-			] );
-		} elseif ( $id && wp_get_attachment_url( $id ) ) {
-			printf(
-				'<a href="%s" target="_blank" rel="noopener">%s</a>',
-				esc_url( wp_get_attachment_url( $id ) ),
-				sprintf( 'Attachment #%d', $id )
-			);
+		if ( $id ) {
+			if ( wp_attachment_is_image( $id ) ) {
+				echo wp_get_attachment_image( $id, 'thumbnail', false, [
+					'style' => 'max-width:200px;height:auto;display:block;margin:6px 0;',
+				] );
+			} elseif ( wp_get_attachment_url( $id ) ) {
+				printf(
+					'<a href="%s" target="_blank" rel="noopener">%s</a>',
+					esc_url( wp_get_attachment_url( $id ) ),
+					sprintf( esc_html__( 'Attachment #%d', 'shared-settings' ), $id )
+				);
+			}
 		}
 
 		echo '</div>';
 
 		printf(
-			'<button type="button" class="button wps-pick-image" data-target="%s">Select image</button>',
-			esc_attr( $id_attr )
+			'<button type="button" class="button ss-pick-media" data-target="%s">%s</button>',
+			esc_attr( $input_id ),
+			esc_html__( 'Select media', 'shared-settings' )
 		);
-
-		if ( ! empty( $args['description'] ) ) {
-			echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
-		}
 	}
 }

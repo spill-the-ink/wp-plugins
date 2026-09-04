@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../tools/shared-react/src/js/*"],
+      "@shared": ["../tools/shared-react/src/js/index.ts"],
+      "@plugin-shared/*": ["../tools/shared-react/src/js/*"],
+      "@wp-calendar/*": ["../plugins/wp-calendar/src/*"]
+    }
+  },
+  "include": ["labs/**/*.ts", "labs/**/*.tsx"]
+}

@@ -1,20 +1,6 @@
-import { defineConfig, mergeConfig } from 'vite';
-import { createPluginConfig } from './tools/vite.config.shared.ts';
+import { defineConfig } from 'vite';
 
-const wpSeoConfig = () =>
-  mergeConfig(
-    createPluginConfig({
-      pluginDir: 'plugins/wp-seo',
-      pluginName: 'wp-seo',
-      entry: { settings: 'src/settings.tsx' },
-      globalName: 'WpSeoSettings',
-    }),
-    { build: { emptyOutDir: true } }
-  );
+// wp-manifest no longer ships a JS bundle — its settings page is pure PHP + vanilla JS.
+// Its shared-settings JS/CSS is copied by tools/copy-php.js instead.
 
-export default defineConfig(({ mode }) => {
-  if (mode === 'wp-seo') {
-    return wpSeoConfig();
-  }
-  return {};
-});
+export default defineConfig(() => ({}));
