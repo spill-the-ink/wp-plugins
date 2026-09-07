@@ -99,16 +99,16 @@ function ogPreviewHtml(): string {
     String(val("default_description", "") || "") ||
     "A short, descriptive summary of this site will appear here once a default description is set.";
   return (
-    '<div class="wpm-og-preview" data-wpm-og-preview="1">' +
-    '<p class="wpm-og-preview__heading">Shared link preview</p>' +
-    '<div class="wpm-og-preview__card">' +
-    '<div class="wpm-og-preview__media wpm-og-preview__media--empty"><span class="dashicons dashicons-format-image" aria-hidden="true"></span></div>' +
-    '<div class="wpm-og-preview__body">' +
-    '<div class="wpm-og-preview__domain" data-wpm-og-domain>' + domain + "</div>" +
-    '<div class="wpm-og-preview__title" data-wpm-og-title>' + title + "</div>" +
-    '<div class="wpm-og-preview__desc" data-wpm-og-desc>' + desc + "</div>" +
+    '<div class="wp-manifest-og-preview" data-wp-manifest-og-preview="1">' +
+    '<p class="wp-manifest-og-preview__heading">Shared link preview</p>' +
+    '<div class="wp-manifest-og-preview__card">' +
+    '<div class="wp-manifest-og-preview__media wp-manifest-og-preview__media--empty"><span class="dashicons dashicons-format-image" aria-hidden="true"></span></div>' +
+    '<div class="wp-manifest-og-preview__body">' +
+    '<div class="wp-manifest-og-preview__domain" data-wp-manifest-og-domain>' + domain + "</div>" +
+    '<div class="wp-manifest-og-preview__title" data-wp-manifest-og-title>' + title + "</div>" +
+    '<div class="wp-manifest-og-preview__desc" data-wp-manifest-og-desc>' + desc + "</div>" +
     "</div></div>" +
-    '<p class="wpm-og-preview__note description">How this site appears when a link is shared on social platforms. Updates as you edit the settings above.</p>' +
+    '<p class="wp-manifest-og-preview__note description">How this site appears when a link is shared on social platforms. Updates as you edit the settings above.</p>' +
     "</div>"
   );
 }
@@ -180,7 +180,7 @@ function coreCheckHtml(): string {
 }
 
 const page = {
-  pageTitle: "WordPress Manifest",
+  pageTitle: "Manifest",
   formId,
   optionName: opt,
   tabs: [
@@ -258,6 +258,19 @@ const page = {
           ],
         },
         {
+          id: "open_graph_preview",
+          title: "Open Graph preview",
+          description: "How this site appears when a link is shared on social platforms.",
+          fields: [
+            {
+              id: "og_preview_panel",
+              label: "",
+              type: "html",
+              html: ogPreviewHtml(),
+            },
+          ],
+        },
+        {
           id: "core_check",
           title: "Core settings",
           fields: [
@@ -309,31 +322,6 @@ const page = {
             value: val(key, false),
           })),
         },
-      ],
-    },
-    {
-      id: "social",
-      label: "Social & Sharing",
-      sections: [
-        {
-          id: "open_graph_preview",
-          title: "Open Graph preview",
-          description: "How this site appears when a link is shared on social platforms.",
-          fields: [
-            {
-              id: "og_preview_panel",
-              label: "",
-              type: "html",
-              html: ogPreviewHtml(),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "ai",
-      label: "AI & Crawlers",
-      sections: [
         {
           id: "ai_bots",
           title: "AI crawler policy",
@@ -531,11 +519,11 @@ const page = {
 };
 
 function wireOgPreview() {
-  const preview = document.querySelector("[data-wpm-og-preview]");
+  const preview = document.querySelector("[data-wp-manifest-og-preview]");
   if (!preview) return;
-  const titleEl = preview.querySelector("[data-wpm-og-title]");
-  const descEl = preview.querySelector("[data-wpm-og-desc]");
-  const domEl = preview.querySelector("[data-wpm-og-domain]");
+  const titleEl = preview.querySelector("[data-wp-manifest-og-title]");
+  const descEl = preview.querySelector("[data-wp-manifest-og-desc]");
+  const domEl = preview.querySelector("[data-wp-manifest-og-domain]");
   const descInput = document.getElementById(formId + "-default_description") as HTMLTextAreaElement | null;
   const domInput = document.getElementById(formId + "-canonical_site_url") as HTMLInputElement | null;
   function read() {

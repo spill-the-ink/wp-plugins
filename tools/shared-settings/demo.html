@@ -96,7 +96,7 @@
     <div class="wp-polyfill-settings-header">
       <div class="wp-polyfill-settings-heading">
         <div class="wp-polyfill-settings-title-row">
-          <h1 class="title">WordPress Manifest</h1>
+          <h1 class="title">Manifest</h1>
         </div>
       </div>
     </div>
@@ -116,8 +116,6 @@
     <ul id="wp-polyfill-settings-tabs-wrapper" class="nav-tab-wrapper">
       <li><a href="#identity" class="nav-tab nav-tab-active" aria-current="true" data-tab-id="identity">Site Identity</a></li>
       <li><a href="#indexing" class="nav-tab" data-tab-id="indexing">Indexing</a></li>
-      <li><a href="#social" class="nav-tab" data-tab-id="social">Social &amp; Sharing</a></li>
-      <li><a href="#ai" class="nav-tab" data-tab-id="ai">AI &amp; Crawlers</a></li>
       <li><a href="#schema" class="nav-tab" data-tab-id="schema">Structured Data</a></li>
       <li><a href="#webmanifest" class="nav-tab" data-tab-id="webmanifest">Web Manifest</a></li>
     </ul>
@@ -197,6 +195,28 @@
           </tr>
 
           <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Open Graph preview"><span>Open Graph preview</span></th>
+          </tr>
+          <tr class="wp-polyfill-panel-row">
+            <td colspan="2">
+              <div class="wp-polyfill-settings-panel">
+                <div class="wp-manifest-og-preview" data-wp-manifest-og-preview="1">
+                  <p class="wp-manifest-og-preview__heading">Shared link preview</p>
+                  <div class="wp-manifest-og-preview__card">
+                    <div class="wp-manifest-og-preview__media wp-manifest-og-preview__media--empty"><span class="dashicons dashicons-format-image" aria-hidden="true"></span></div>
+                    <div class="wp-manifest-og-preview__body">
+                      <div class="wp-manifest-og-preview__domain" data-wp-manifest-og-domain>example.com</div>
+                      <div class="wp-manifest-og-preview__title" data-wp-manifest-og-title>Example Site</div>
+                      <div class="wp-manifest-og-preview__desc" data-wp-manifest-og-desc>Thoughts on code, WordPress and the open web.</div>
+                    </div>
+                  </div>
+                  <p class="wp-manifest-og-preview__note description">How this site appears when a link is shared on social platforms. Updates as you edit the settings above.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Core settings"><span>Core settings</span></th>
           </tr>
           <tr class="wp-polyfill-panel-row">
@@ -249,40 +269,7 @@
             <th><label for="wpm-settings-noindex_paged">Paginated archive pages</label><p class="description">Paginated archive pages — noindex</p></th>
             <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_paged" name="wp_manifest_settings[noindex_paged]" value="1" checked><label for="wpm-settings-noindex_paged">Paginated archive pages</label></div></td>
           </tr>
-        </tbody>
-      </table>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- TAB: Social &amp; Sharing                       -->
-      <!-- ═══════════════════════════════════════════════ -->
-      <table id="social" class="wp-polyfill-settings-table" role="presentation">
-        <tbody>
-          <tr class="wp-polyfill-panel-row">
-            <td colspan="2">
-              <div class="wp-polyfill-settings-panel">
-                <div class="wpm-og-preview" data-wpm-og-preview="1">
-                  <p class="wpm-og-preview__heading">Shared link preview</p>
-                  <div class="wpm-og-preview__card">
-                    <div class="wpm-og-preview__media wpm-og-preview__media--empty"><span class="dashicons dashicons-format-image" aria-hidden="true"></span></div>
-                    <div class="wpm-og-preview__body">
-                      <div class="wpm-og-preview__domain" data-wpm-og-domain>example.com</div>
-                      <div class="wpm-og-preview__title" data-wpm-og-title>Example Site</div>
-                      <div class="wpm-og-preview__desc" data-wpm-og-desc>Thoughts on code, WordPress and the open web.</div>
-                    </div>
-                  </div>
-                  <p class="wpm-og-preview__note description">How this site appears when a link is shared on social platforms. Updates as you edit the settings above.</p>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- TAB: AI &amp; Crawlers                          -->
-      <!-- ═══════════════════════════════════════════════ -->
-      <table id="ai" class="wp-polyfill-settings-table" role="presentation">
-        <tbody>
           <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="AI crawler policy"><span>AI crawler policy</span></th>
           </tr>

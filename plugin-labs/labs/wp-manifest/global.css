@@ -5,22 +5,22 @@
 @import "../../../tools/shared-settings/labs-wp-admin.css";
 
 /* Plugin-specific panels rendered through the shared html field (ss-panel-row). */
-.wpm-og-preview {
+.wp-manifest-og-preview {
   max-width: 520px;
   margin: 8px 0;
   font-size: 13px;
 }
-.wpm-og-preview__heading {
+.wp-manifest-og-preview__heading {
   margin: 0 0 6px;
   font-weight: 600;
 }
-.wpm-og-preview__card {
+.wp-manifest-og-preview__card {
   border: 1px solid #c3c4c7;
   border-radius: 4px;
   background: #fff;
   overflow: hidden;
 }
-.wpm-og-preview__media {
+.wp-manifest-og-preview__media {
   height: 160px;
   display: flex;
   align-items: center;
@@ -28,24 +28,24 @@
   background: #f0f0f1;
   color: #787c82;
 }
-.wpm-og-preview__body {
+.wp-manifest-og-preview__body {
   padding: 10px 12px;
 }
-.wpm-og-preview__domain {
+.wp-manifest-og-preview__domain {
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 0.4px;
   color: #787c82;
 }
-.wpm-og-preview__title {
+.wp-manifest-og-preview__title {
   font-size: 15px;
   font-weight: 600;
   margin: 2px 0;
 }
-.wpm-og-preview__desc {
+.wp-manifest-og-preview__desc {
   color: #3c434a;
 }
-.wpm-og-preview__note {
+.wp-manifest-og-preview__note {
   margin: 6px 0 0;
 }
 .wpm-core-check h2 {

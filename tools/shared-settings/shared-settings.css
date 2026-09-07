@@ -193,7 +193,8 @@ body > .wp-polyfill-admin-settings-page {
   display: flex;
   flex-direction: row;
   justify-items: flex-end;
-
+  
+  gap: var(--wp-polyfill-space);
   padding-inline-start: 0;
 }
 
@@ -216,13 +217,14 @@ body > .wp-polyfill-admin-settings-page {
   font-size: var(--wp-polyfill-font-size);
   line-height: 1.4;
   font-weight: 600;
-  padding: 0 12px calc(var(--wp-polyfill-space-xs));
+  padding: 0 var(--wp-polyfill-space-xs) var(--wp-polyfill-space-xs);
 
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 
+  margin: 0px;
   min-height: 40px;
   text-decoration: none;
 
@@ -534,13 +536,13 @@ table.wp-polyfill-settings-table tbody > tr.wp-polyfill-panel-row td {
 }
 
 /* Open Graph shared-link preview */
-.wp-polyfill-og-preview__heading {
+.wp-manifest-og-preview__heading {
   font-size: var(--wp-polyfill-font-size);
   font-weight: 600;
   margin: 0 0 var(--wp-polyfill-space-sm);
 }
 
-.wp-polyfill-og-preview__card {
+.wp-manifest-og-preview__card {
   background: var(--wp-polyfill-bg-muted);
   border: 1px solid var(--wp-polyfill-border);
   border-radius: var(--wp-polyfill-radius-lg);
@@ -549,20 +551,20 @@ table.wp-polyfill-settings-table tbody > tr.wp-polyfill-panel-row td {
   overflow: hidden;
 }
 
-.wp-polyfill-og-preview__media {
+.wp-manifest-og-preview__media {
   flex: 0 0 200px;
   max-width: 200px;
   min-height: 200px;
 }
 
-.wp-polyfill-og-preview__media img {
+.wp-manifest-og-preview__media img {
   display: block;
   height: 100%;
   object-fit: cover;
   width: 100%;
 }
 
-.wp-polyfill-og-preview__media--empty {
+.wp-manifest-og-preview__media--empty {
   align-items: center;
   background: var(--wp-polyfill-bg);
   color: var(--wp-polyfill-fg-faint);
@@ -571,19 +573,19 @@ table.wp-polyfill-settings-table tbody > tr.wp-polyfill-panel-row td {
   justify-content: center;
 }
 
-.wp-polyfill-og-preview__body {
+.wp-manifest-og-preview__body {
   flex: 1;
   padding: var(--wp-polyfill-space);
 }
 
-.wp-polyfill-og-preview__domain {
+.wp-manifest-og-preview__domain {
   color: var(--wp-polyfill-fg-faint);
   font-size: var(--wp-polyfill-font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
-.wp-polyfill-og-preview__title {
+.wp-manifest-og-preview__title {
   color: var(--wp-polyfill-primary);
   font-size: 15px;
   font-weight: 600;
@@ -591,14 +593,14 @@ table.wp-polyfill-settings-table tbody > tr.wp-polyfill-panel-row td {
   margin-top: var(--wp-polyfill-space-xs);
 }
 
-.wp-polyfill-og-preview__desc {
+.wp-manifest-og-preview__desc {
   color: var(--wp-polyfill-fg-muted);
   font-size: var(--wp-polyfill-font-size-sm);
   line-height: var(--wp-polyfill-line-height);
   margin-top: var(--wp-polyfill-space-xs);
 }
 
-.wp-polyfill-og-preview__note {
+.wp-manifest-og-preview__note {
   margin-top: var(--wp-polyfill-space-sm);
   max-width: 520px;
 }
