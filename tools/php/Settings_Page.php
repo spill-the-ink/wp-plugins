@@ -27,7 +27,7 @@ class Settings_Page {
 	private array  $tabs      = [];
 	private array  $sections   = [];
 	private array  $fields     = [];
-	private ?Store $store      = null;
+	private ?Settings_Store $store = null;
 
 	public function __construct( array $args ) {
 		$this->menu_slug      = $args['menu_slug']      ?? '';
@@ -487,7 +487,7 @@ class Settings_Page {
 		return false !== $pos ? $pos : 0;
 	}
 
-	public function get_store(): Store {
+	public function get_store(): Settings_Store {
 		return $this->store;
 	}
 

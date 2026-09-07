@@ -230,7 +230,7 @@ body > .wp-polyfill-admin-settings-page {
 }
 
 #wp-polyfill-settings-tabs-wrapper .nav-tab:hover {
-  text-decoration: underline;
+  color: var(--wp-polyfill-fg);
 }
 
 #wp-polyfill-settings-tabs-wrapper .nav-tab-active,

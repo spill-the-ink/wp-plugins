@@ -18,10 +18,10 @@ class Form_Fields {
 	 * Render a field into the settings table.
 	 *
 	 * @param array  $field   Field configuration.
-	 * @param Store  $store   Options store.
-	 * @param string $form_id Form id prefix for element ids.
+	 * @param Settings_Store $store   Options store.
+	 * @param string          $form_id Form id prefix for element ids.
 	 */
-	public static function render( array $field, Store $store, string $form_id ): void {
+	public static function render( array $field, Settings_Store $store, string $form_id ): void {
 		$type = $field['type'] ?? 'text';
 
 		switch ( $type ) {
@@ -47,13 +47,13 @@ class Form_Fields {
 				self::media( $field, $store, $form_id );
 				break;
 			default:
-				do_action( 'ss_render_field_' . $type, $field, $store, $form_id );
+				do_action( 'wp_polyfill_render_field_' . $type, $field, $store, $form_id );
 				break;
 		}
 	}
 
-	public static function text( array $field, Store $store, string $form_id ): void {
-		$key   = $field['id'];
+	public static function text( array $field, Settings_Store $store, string $form_id ): void {
+		$key = $field['id'];
 		$value = $store->get( $key, '' );
 		$input_id = $form_id . '-' . $key;
 
@@ -67,10 +67,10 @@ class Form_Fields {
 		);
 	}
 
-	public static function textarea( array $field, Store $store, string $form_id ): void {
-		$key   = $field['id'];
+	public static function textarea( array $field, Settings_Store $store, string $form_id ): void {
+		$key = $field['id'];
 		$value = $store->get( $key, '' );
-		$rows  = $field['rows'] ?? 4;
+		$rows = $field['rows'] ?? 4;
 		$input_id = $form_id . '-' . $key;
 
 		printf(
@@ -84,11 +84,11 @@ class Form_Fields {
 		);
 	}
 
-	public static function number( array $field, Store $store, string $form_id ): void {
-		$key   = $field['id'];
+	public static function number( array $field, Settings_Store $store, string $form_id ): void {
+		$key = $field['id'];
 		$value = (int) $store->get( $key, 0 );
-		$min   = $field['min'] ?? 0;
-		$max   = $field['max'] ?? 10000;
+		$min = $field['min'] ?? 0;
+		$max = $field['max'] ?? 10000;
 		$input_id = $form_id . '-' . $key;
 
 		printf(
@@ -102,8 +102,8 @@ class Form_Fields {
 		);
 	}
 
-	public static function checkbox( array $field, Store $store, string $form_id ): void {
-		$key     = $field['id'];
+	public static function checkbox( array $field, Settings_Store $store, string $form_id ): void {
+		$key = $field['id'];
 		$checked = $store->get( $key, false );
 		$input_id = $form_id . '-' . $key;
 
@@ -123,18 +123,18 @@ class Form_Fields {
 		echo '</div>';
 	}
 
-	public static function checkbox_group( array $field, Store $store, string $form_id ): void {
+	public static function checkbox_group( array $field, Settings_Store $store, string $form_id ): void {
 		$options = $field['options'] ?? [];
-		$values  = (array) $store->get( $field['id'], [] );
-		$name    = ( $field['option_name'] ?? '' ) . '[' . $field['id'] . '][]';
-		$layout  = $field['options_layout'] ?? 'vertical';
+		$values = (array) $store->get( $field['id'], [] );
+		$name = ( $field['option_name'] ?? '' ) . '[' . $field['id'] . '][]';
+		$layout = $field['options_layout'] ?? 'vertical';
 		$wrapper_class = 'vertical' === $layout ? '' : ' wp-polyfill-checkbox-group--horizontal';
 
 		echo '<div class="wp-polyfill-checkbox-group' . esc_attr( $wrapper_class ) . '">';
 
 		foreach ( $options as $value => $label ) {
 			$input_id = $form_id . '-' . $field['id'] . '-' . sanitize_html_class( $value );
-			$checked  = in_array( (string) $value, array_map( 'strtolower', $values ), true );
+			$checked = in_array( (string) $value, array_map( 'strtolower', $values ), true );
 
 			echo '<div class="wp-polyfill-setting-wrapper">';
 			printf(
@@ -155,9 +155,9 @@ class Form_Fields {
 		echo '</div>';
 	}
 
-	public static function select( array $field, Store $store, string $form_id ): void {
-		$key     = $field['id'];
-		$value   = $store->get( $key, '' );
+	public static function select( array $field, Settings_Store $store, string $form_id ): void {
+		$key = $field['id'];
+		$value = $store->get( $key, '' );
 		$options = $field['options'] ?? [];
 		$input_id = $form_id . '-' . $key;
 
@@ -185,10 +185,10 @@ class Form_Fields {
 		echo '</select>';
 	}
 
-	public static function media( array $field, Store $store, string $form_id ): void {
-		$key      = $field['id'];
-		$id       = (int) $store->get( $key, 0 );
-		$name     = ( $field['option_name'] ?? '' ) . '[' . $key . ']';
+	public static function media( array $field, Settings_Store $store, string $form_id ): void {
+		$key = $field['id'];
+		$id = (int) $store->get( $key, 0 );
+		$name = ( $field['option_name'] ?? '' ) . '[' . $key . ']';
 		$input_id = $form_id . '-' . $key;
 
 		printf(

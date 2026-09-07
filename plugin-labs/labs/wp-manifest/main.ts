@@ -34,7 +34,7 @@ if (typeof (window as any).wp === "undefined") {
 
 // The wp-manifest settings schema mirrored 1:1 from
 // plugins/wp-manifest/includes/settings-page.php (tabs/sections/fields).
-// Values are the labs demo runtime; the renderer produces the same ss-*
+// Values are the labs demo runtime; the renderer produces the same wp-polyfill-*
 // flat-table markup the PHP Settings_Page renders in WordPress.
 const AI_BOT_AGENTS: Record<string, string> = {
   gptbot: "GPTBot",
@@ -555,7 +555,7 @@ function wireOgPreview() {
   if (domInput) domInput.addEventListener("input", read);
 }
 
-const root = document.querySelector(".ss-admin-wrapper");
+const root = document.querySelector(".wp-polyfill-admin-wrapper");
 if (root) {
   // renderSharedSettingsPage is attached to window by renderer.js (imported below).
   import("../../../tools/shared-settings/renderer.js").then(() => {

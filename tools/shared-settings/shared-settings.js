@@ -27,7 +27,7 @@
   var formId             = form.id || 'shared-settings';
   var settingsTabs       = document.querySelectorAll('#wp-polyfill-settings-tabs-wrapper a');
   var settingsFormTables = form.querySelectorAll('table.wp-polyfill-settings-table');
-  var settingsTabFilter  = document.getElementById('ss-settings-tab-filter');
+  var settingsTabFilter  = document.getElementById('wp-polyfill-settings-tab-filter');
   var settingsSearchClear = form.querySelector('.wp-polyfill-settings-search-clear');
   var settingsSearchNoResults = document.querySelector('.wp-polyfill-settings-search-no-results');
   var submitWrapper      = form.querySelector('.wp-polyfill-submit-wrapper');
@@ -128,7 +128,7 @@
         if (searchQuery) {
           textMatch = getSearchText(row).indexOf(searchQuery) !== -1;
         }
-        var depHidden = row.classList.contains('ss-dependency-hidden');
+        var depHidden = row.classList.contains('wp-polyfill-dependency-hidden');
         rowMatches.push(textMatch && !depHidden);
       }
 
@@ -137,7 +137,7 @@
       //    rows is visible. Walk backwards so we know the members' state.
       var sectionHasVisibleMember = false;
       for (var j = rows.length - 1; j >= 0; j--) {
-        if (rows[j].classList.contains('ss-settings-section-row')) {
+        if (rows[j].classList.contains('wp-polyfill-settings-section-row')) {
           rowMatches[j] = rowMatches[j] && sectionHasVisibleMember;
           sectionHasVisibleMember = false;
         } else if (rowMatches[j]) {
@@ -155,7 +155,7 @@
       table.classList.toggle('has-search-match', tableHasMatch);
       // Hide the whole table when searching left it with no visible rows,
       // even if it is the currently active tab.
-      table.classList.toggle('ss-table-hidden', !!searchQuery && !tableHasMatch);
+      table.classList.toggle('wp-polyfill-table-hidden', !!searchQuery && !tableHasMatch);
 
       if (tableHasMatch) hasAnyVisibleRow = true;
     }
@@ -239,11 +239,11 @@
       var matches = dependencyMatches(dep, target);
 
       if (matches) {
-        dep.classList.remove('ss-dependency-hidden');
+        dep.classList.remove('wp-polyfill-dependency-hidden');
         dep.removeAttribute('hidden');
         dep.removeAttribute('aria-hidden');
       } else {
-        dep.classList.add('ss-dependency-hidden');
+        dep.classList.add('wp-polyfill-dependency-hidden');
         dep.setAttribute('hidden', '');
         dep.setAttribute('aria-hidden', 'true');
       }

@@ -1,7 +1,7 @@
 /**
  * Shared Settings – vanilla HTML renderer.
  *
- * Produces the exact same `.ss-admin-wrapper` flat-table markup that the PHP
+ * Produces the exact same `.wp-polyfill-admin-wrapper` flat-table markup that the PHP
  * `Settings_Page`/`Form_Fields` classes render in WordPress, so that a static
  * labs page mirrors the real admin settings page byte-for-byte (same classes,
  * same structure, same ids/names). The screen reader section heading, field
@@ -77,7 +77,7 @@
 
       case 'checkbox': {
         var checked = fieldValue(field) ? ' checked="checked"' : '';
-        return '<div class="ss-setting-wrapper">' +
+        return '<div class="wp-polyfill-setting-wrapper">' +
           '<input type="checkbox" id="' + escAttr(id) + '" name="' + escAttr(fieldName(optionName, field)) + '" value="1"' + checked + ' />' +
           '<label for="' + escAttr(id) + '">' + escHtml(field.label) + '</label>' +
           '</div>';
@@ -86,13 +86,13 @@
       case 'checkbox_group': {
         var opts = field.options || {};
         var values = Array.isArray(fieldValue(field)) ? fieldValue(field) : [];
-        var layoutClass = (field.optionsLayout === 'horizontal') ? ' ss-checkbox-group--horizontal' : '';
-        var out = '<div class="ss-checkbox-group' + layoutClass + '">';
+        var layoutClass = (field.optionsLayout === 'horizontal') ? ' wp-polyfill-checkbox-group--horizontal' : '';
+        var out = '<div class="wp-polyfill-checkbox-group' + layoutClass + '">';
         Object.keys(opts).forEach(function (optValue) {
           var label = opts[optValue];
           var optId = id + '-' + String(optValue).replace(/[^a-z0-9-_]/gi, '');
           var isChecked = values.indexOf(String(optValue).toLowerCase()) !== -1 || values.indexOf(optValue) !== -1;
-          out += '<div class="ss-setting-wrapper">' +
+          out += '<div class="wp-polyfill-setting-wrapper">' +
             '<input type="checkbox" id="' + escAttr(optId) + '" name="' + escAttr(fieldName(optionName, field)) + '" value="' + escAttr(optValue) + '"' + (isChecked ? ' checked' : '') + ' />' +
             '<label for="' + escAttr(optId) + '">' + escHtml(label) + '</label>' +
             '</div>';
@@ -115,12 +115,12 @@
       case 'media': {
         var mediaId = (+fieldValue(field)) || 0;
         return '<input type="hidden" id="' + escAttr(id) + '" name="' + escAttr(fieldName(optionName, field)) + '" value="' + mediaId + '" />' +
-          '<div class="ss-media-preview" data-target="' + escAttr(id) + '"></div>' +
-          '<button type="button" class="button ss-pick-media" data-target="' + escAttr(id) + '">Select media</button>';
+          '<div class="wp-polyfill-media-preview" data-target="' + escAttr(id) + '"></div>' +
+          '<button type="button" class="button wp-polyfill-pick-media" data-target="' + escAttr(id) + '">Select media</button>';
       }
 
       case 'html': {
-        return '<tr class="ss-panel-row"><td colspan="2"><div class="ss-settings-panel">' + (field.html || '') + '</div></td></tr>';
+        return '<tr class="wp-polyfill-panel-row"><td colspan="2"><div class="wp-polyfill-settings-panel">' + (field.html || '') + '</div></td></tr>';
       }
 
       case 'text':
@@ -151,7 +151,7 @@
   function renderSection(section, optionName, formId) {
     var out = '';
     if (section.title) {
-      out += '<tr class="ss-settings-section-row">';
+      out += '<tr class="wp-polyfill-settings-section-row">';
       out += '<th class="screen-reader-text" colspan="2" aria-label="' + escAttr(section.title) + '"><span>' + escHtml(section.title) + '</span></th></tr>';
     }
     (section.fields || []).forEach(function (field) {
@@ -162,7 +162,7 @@
 
   /**
    * Render a full settings page into an HTML string.
-   * Returns markup for the `.ss-admin-wrapper` block (header, search, tabs,
+   * Returns markup for the `.wp-polyfill-admin-wrapper` block (header, search, tabs,
    * form, sticky submit bar) — the same structure WordPress renders.
    */
   function renderSharedSettingsPage(def) {
@@ -173,21 +173,21 @@
     var out = '';
 
     // Header
-    out += '<div class="ss-settings-header"><div class="ss-settings-heading"><div class="ss-settings-title-row">';
+    out += '<div class="wp-polyfill-settings-header"><div class="wp-polyfill-settings-heading"><div class="wp-polyfill-settings-title-row">';
     out += '<h1 class="title">' + escHtml(def.pageTitle || 'Settings') + '</h1>';
     out += '</div></div></div>';
 
     // Search
-    out += '<div class="ss-settings-tab-search">';
-    out += '<label class="screen-reader-text" for="ss-settings-tab-filter">Search settings</label>';
+    out += '<div class="wp-polyfill-settings-tab-search">';
+    out += '<label class="screen-reader-text" for="wp-polyfill-settings-tab-filter">Search settings</label>';
     out += '<span class="dashicons dashicons-search" aria-hidden="true"></span>';
-    out += '<input type="search" id="ss-settings-tab-filter" placeholder="Search settings..." autocomplete="off">';
-    out += '<button type="button" class="ss-settings-search-clear" aria-label="Clear search" hidden><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button>';
+    out += '<input type="search" id="wp-polyfill-settings-tab-filter" placeholder="Search settings..." autocomplete="off">';
+    out += '<button type="button" class="wp-polyfill-settings-search-clear" aria-label="Clear search" hidden><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button>';
     out += '</div>';
-    out += '<p class="ss-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>';
+    out += '<p class="wp-polyfill-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>';
 
     // Tabs
-    out += '<ul id="ss-settings-tabs-wrapper" class="nav-tab-wrapper">';
+    out += '<ul id="wp-polyfill-settings-tabs-wrapper" class="nav-tab-wrapper">';
     tabs.forEach(function (tab, i) {
       var active = i === 0 ? ' nav-tab-active' : '';
       var aria = i === 0 ? ' aria-current="true"' : '';
@@ -196,10 +196,10 @@
     out += '</ul>';
 
     // Form + tables
-    out += '<form id="' + escAttr(formId) + '" class="ss-admin-wrapper" method="post" action="' + escAttr(formAction) + '" autocomplete="off">';
+    out += '<form id="' + escAttr(formId) + '" class="wp-polyfill-admin-wrapper" method="post" action="' + escAttr(formAction) + '" autocomplete="off">';
     tabs.forEach(function (tab, i) {
       var active = i === 0 ? ' active' : '';
-      out += '<table id="' + escAttr(tab.id) + '" class="ss-settings-table' + active + '" role="presentation"><tbody>';
+      out += '<table id="' + escAttr(tab.id) + '" class="wp-polyfill-settings-table' + active + '" role="presentation"><tbody>';
       (tab.sections || []).forEach(function (section) {
         out += renderSection(section, optionName, formId);
       });
@@ -207,10 +207,10 @@
     });
 
     // Sticky submit bar
-    out += '<div class="ss-submit-wrapper">';
+    out += '<div class="wp-polyfill-submit-wrapper">';
     out += '<button type="submit" name="save" class="button button-primary button-large">Save Settings</button>';
-    out += '<p class="ss-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>';
-    out += '<button type="button" name="reset" class="button button-secondary button-large ss-reset-button">Reset Settings</button>';
+    out += '<p class="wp-polyfill-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>';
+    out += '<button type="button" name="reset" class="button button-secondary button-large wp-polyfill-reset-button">Reset Settings</button>';
     out += '</div>';
     out += '<span class="spinner saving"></span>';
     out += '</form>';
