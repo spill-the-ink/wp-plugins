@@ -115,6 +115,7 @@
     <!-- Tabs -->
     <ul id="wp-polyfill-settings-tabs-wrapper" class="nav-tab-wrapper">
       <li><a href="#identity" class="nav-tab nav-tab-active" aria-current="true" data-tab-id="identity">Site Identity</a></li>
+      <li><a href="#meta" class="nav-tab" data-tab-id="meta">Meta Tags</a></li>
       <li><a href="#indexing" class="nav-tab" data-tab-id="indexing">Indexing</a></li>
       <li><a href="#schema" class="nav-tab" data-tab-id="schema">Structured Data</a></li>
       <li><a href="#webmanifest" class="nav-tab" data-tab-id="webmanifest">Web Manifest</a></li>
@@ -129,19 +130,6 @@
       <table id="identity" class="wp-polyfill-settings-table active" role="presentation">
         <tbody>
           <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Site defaults"><span>Site defaults</span></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-default_description">Default meta description</label>
-              <p class="description">Used whenever a page, post or archive has no specific description. WordPress core outputs none by default.</p>
-            </th>
-            <td>
-              <textarea id="wpm-settings-default_description" name="wp_manifest_settings[default_description]" rows="4" class="large-text">Thoughts on code, WordPress and the open web.</textarea>
-            </td>
-          </tr>
-
-          <tr class="wp-polyfill-settings-section-row">
             <th class="screen-reader-text" colspan="2" aria-label="Canonical domain"><span>Canonical domain</span></th>
           </tr>
           <tr>
@@ -151,46 +139,6 @@
             </th>
             <td>
               <input type="text" id="wpm-settings-canonical_site_url" name="wp_manifest_settings[canonical_site_url]" value="https://example.com" class="regular-text" placeholder="https://example.com">
-            </td>
-          </tr>
-
-          <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Fallback media"><span>Fallback media</span></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-default_og_image">Default Open Graph image</label>
-              <p class="description">Fallback image for og:image when a post has no featured image.</p>
-            </th>
-            <td>
-              <input type="hidden" id="wpm-settings-default_og_image" name="wp_manifest_settings[default_og_image]" value="42">
-              <div class="wp-polyfill-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E200 × 120%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
-              <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-default_og_image">Select media</button>
-              <p class="description">Attachment ID of the fallback or override image.</p>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-org_logo">Organization logo</label>
-              <p class="description">Used in JSON-LD Organization schema and web app manifest.</p>
-            </th>
-            <td>
-              <input type="hidden" id="wpm-settings-org_logo" name="wp_manifest_settings[org_logo]" value="42">
-              <div class="wp-polyfill-media-preview"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%23e0e0e0' width='200' height='120'/%3E%3Ctext fill='%23999' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3ELogo%3C/text%3E%3C/svg%3E" style="max-width:200px;height:auto;display:block;margin:6px 0;border:1px solid #e0e0e0;border-radius:2px;"></div>
-              <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-org_logo">Select media</button>
-            </td>
-          </tr>
-
-          <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Social profiles"><span>Social profiles</span></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-org_same_as">Social profile URLs</label>
-              <p class="description">One URL per line. Added to the Organization schema as sameAs links.</p>
-            </th>
-            <td>
-              <textarea id="wpm-settings-org_same_as" name="wp_manifest_settings[org_same_as]" rows="4" class="large-text">https://github.com/spill-the-ink</textarea>
             </td>
           </tr>
 
@@ -245,17 +193,8 @@
       <!-- ═══════════════════════════════════════════════ -->
       <table id="indexing" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
-          <tr>
-            <th><label for="wpm-settings-noindex_categories">Category archives</label><p class="description">Category archives — noindex</p></th>
-            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_categories" name="wp_manifest_settings[noindex_categories]" value="1"><label for="wpm-settings-noindex_categories">Category archives</label></div></td>
-          </tr>
-          <tr>
-            <th><label for="wpm-settings-noindex_tags">Tag archives</label><p class="description">Tag archives — noindex</p></th>
-            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_tags" name="wp_manifest_settings[noindex_tags]" value="1"><label for="wpm-settings-noindex_tags">Tag archives</label></div></td>
-          </tr>
-          <tr>
-            <th><label for="wpm-settings-noindex_authors">Author archives</label><p class="description">Author archives — noindex</p></th>
-            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="wpm-settings-noindex_authors" name="wp_manifest_settings[noindex_authors]" value="1" checked><label for="wpm-settings-noindex_authors">Author archives</label></div></td>
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Indexability"><span>Indexability</span></th>
           </tr>
           <tr>
             <th><label for="wpm-settings-noindex_dates">Date archives</label><p class="description">Date archives — noindex</p></th>
@@ -326,6 +265,242 @@
             </th>
             <td>
               <input type="number" id="wpm-settings-llms_max_entries" name="wp_manifest_settings[llms_max_entries]" value="20" min="0" max="200" class="small-text">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- TAB: Meta Tags                                  -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <table id="meta" class="wp-polyfill-settings-table" role="presentation">
+        <tbody>
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Default"><span>Default</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-default_title">All other pages</label>
+              <p class="description">Fallback used whenever no context-specific row applies, such as search results and other unmatched pages.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-default_title" name="wp_manifest_settings[default_title]" value="{{ site.name }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-default_description" name="wp_manifest_settings[default_description]" rows="2" class="large-text">Thoughts on code, WordPress and the open web.</textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-default_og_image" name="wp_manifest_settings[default_og_image]" value="42">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-default_og_image"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-default_og_image">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Homepage and blog index"><span>Homepage &amp; blog index</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-home_title">Homepage</label>
+              <p class="description">Templates for the front page and posts index. When a static page is the front page, this row wins there over the Pages row.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-home_title" name="wp_manifest_settings[home_title]" value="{{ site.name }} {{ sep }} {{ site.description }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-home_description" name="wp_manifest_settings[home_description]" rows="2" class="large-text">{{ site.description }}</textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-home_og_image" name="wp_manifest_settings[home_og_image]" value="0">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-home_og_image"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-home_og_image">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Post types"><span>Post types</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-post_type_title-post">Posts</label>
+              <p class="description">Singular pages and archives per post type. Noindex applies to both.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
+                  <input type="checkbox" id="wpm-settings-post_type_noindex-post" name="wp_manifest_settings[post_type_noindex][post]" value="1" checked>
+                  <label for="wpm-settings-post_type_noindex-post">Noindex</label>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-post_type_title-post" name="wp_manifest_settings[post_type_title][post]" value="{{ post.title }} {{ sep }} {{ site.name }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-post_type_description-post" name="wp_manifest_settings[post_type_description][post]" rows="2" class="large-text"></textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-post_type_og_image-post" name="wp_manifest_settings[post_type_og_image][post]" value="0">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-post_type_og_image-post"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-post_type_og_image-post">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-post_type_title-page">Pages</label>
+              <p class="description">Singular pages. A static front page uses the Homepage row instead.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
+                  <input type="checkbox" id="wpm-settings-post_type_noindex-page" name="wp_manifest_settings[post_type_noindex][page]" value="1">
+                  <label for="wpm-settings-post_type_noindex-page">Noindex</label>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-post_type_title-page" name="wp_manifest_settings[post_type_title][page]" value="{{ post.title }} {{ sep }} {{ site.name }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-post_type_description-page" name="wp_manifest_settings[post_type_description][page]" rows="2" class="large-text"></textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-post_type_og_image-page" name="wp_manifest_settings[post_type_og_image][page]" value="0">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-post_type_og_image-page"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-post_type_og_image-page">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Taxonomies"><span>Taxonomies</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-taxonomy_title-category">Categories</label>
+              <p class="description">Term archives. Tokens: {{ term.name }}, {{ term.description }}.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
+                  <input type="checkbox" id="wpm-settings-taxonomy_noindex-category" name="wp_manifest_settings[taxonomy_noindex][category]" value="1" checked>
+                  <label for="wpm-settings-taxonomy_noindex-category">Noindex</label>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-taxonomy_title-category" name="wp_manifest_settings[taxonomy_title][category]" value="{{ term.name }} {{ sep }} {{ site.name }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-taxonomy_description-category" name="wp_manifest_settings[taxonomy_description][category]" rows="2" class="large-text"></textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-taxonomy_og_image-category" name="wp_manifest_settings[taxonomy_og_image][category]" value="0">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-taxonomy_og_image-category"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-taxonomy_og_image-category">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-taxonomy_title-post_tag">Tags</label>
+              <p class="description">Term archives.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
+                  <input type="checkbox" id="wpm-settings-taxonomy_noindex-post_tag" name="wp_manifest_settings[taxonomy_noindex][post_tag]" value="1" checked>
+                  <label for="wpm-settings-taxonomy_noindex-post_tag">Noindex</label>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-taxonomy_title-post_tag" name="wp_manifest_settings[taxonomy_title][post_tag]" value="{{ term.name }} {{ sep }} {{ site.name }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-taxonomy_description-post_tag" name="wp_manifest_settings[taxonomy_description][post_tag]" rows="2" class="large-text"></textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-taxonomy_og_image-post_tag" name="wp_manifest_settings[taxonomy_og_image][post_tag]" value="0">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-taxonomy_og_image-post_tag"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-taxonomy_og_image-post_tag">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Author archives"><span>Author archives</span></th>
+          </tr>
+          <tr>
+            <th>
+              <label for="wpm-settings-author_title">Author archives</label>
+              <p class="description">Tokens: {{ author.name }}, {{ author.bio }}.</p>
+            </th>
+            <td>
+              <div class="wp-polyfill-context-fields">
+                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
+                  <input type="checkbox" id="wpm-settings-noindex_authors" name="wp_manifest_settings[noindex_authors]" value="1" checked>
+                  <label for="wpm-settings-noindex_authors">Noindex</label>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Title template</span>
+                  <input type="text" id="wpm-settings-author_title" name="wp_manifest_settings[author_title]" value="{{ author.name }} {{ sep }} {{ site.name }}" class="regular-text">
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Description template</span>
+                  <textarea id="wpm-settings-author_description" name="wp_manifest_settings[author_description]" rows="2" class="large-text"></textarea>
+                </div>
+                <div class="wp-polyfill-context-control">
+                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
+                  <input type="hidden" id="wpm-settings-author_og_image" name="wp_manifest_settings[author_og_image]" value="0">
+                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-author_og_image"></div>
+                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-author_og_image">Select media</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="wp-polyfill-settings-section-row">
+            <th class="screen-reader-text" colspan="2" aria-label="Available template variables"><span>Available template variables</span></th>
+          </tr>
+          <tr class="wp-polyfill-panel-row">
+            <td colspan="2">
+              <div class="wp-polyfill-settings-panel">
+                <ul class="wp-polyfill-template-vars" style="margin:0;padding-left:1.2em;columns:2;" role="list">
+                  <li><code>{{ site.name }}</code> — Site title</li>
+                  <li><code>{{ site.description }}</code> — Tagline</li>
+                  <li><code>{{ site.url }}</code> — Site base URL</li>
+                  <li><code>{{ post.title }}</code> — Current post/page title</li>
+                  <li><code>{{ post.excerpt }}</code> — Excerpt without tags</li>
+                  <li><code>{{ post.url }}</code> — Canonical URL</li>
+                  <li><code>{{ term.name }}</code> — Current term name</li>
+                  <li><code>{{ term.description }}</code> — Term description</li>
+                  <li><code>{{ author.name }}</code> — Archive author name</li>
+                  <li><code>{{ author.bio }}</code> — Author bio</li>
+                  <li><code>{{ sep }}</code> — Separator</li>
+                </ul>
+              </div>
             </td>
           </tr>
         </tbody>

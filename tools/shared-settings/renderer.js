@@ -21,13 +21,14 @@
  *         fields: [{
  *           id, label, type, description,
  *           placeholder, rows, min, max,
- *           options, optionsLayout, value, html
+ *           options, optionsLayout, value, html,
+ *           context (control→option-key map), member, values (for type 'context')
  *         }]
  *       }]
  *     }]
  *   })
  *
- * @since 0.2.0
+ * @since   0.3.0
  */
 (function (global) {
   'use strict';
@@ -46,14 +47,17 @@
   }
 
   // Field names follow the PHP convention: optionName[fieldId].
+  // A `namePath` (e.g. 'post_type_noindex[product]') emits optionName[post_type_noindex][product].
   function fieldName(optionName, field) {
-    if (field.type === 'checkbox_group') {
-      return optionName + '[' + field.id + '][]';
+    if (field.namePath) {
+      return optionName + '[' + field.namePath + ']';
     }
-    if (field.type === 'media') {
-      return optionName + '[' + field.id + ']';
-    }
-    return optionName + '[' + field.id + ']';
+    return optionName + '[' + field.id + ']' + (field.type === 'checkbox_group' ? '[]' : '');
+  }
+
+  function fieldId(formId, field) {
+    var key = field.namePath || field.id;
+    return formId + '-' + String(key).replace(/[^a-z0-9_-]+/gi, '-');
   }
 
   function fieldValue(field) {
@@ -61,7 +65,7 @@
   }
 
   function renderControl(field, optionName, formId) {
-    var id = formId + '-' + field.id;
+    var id = fieldId(formId, field);
 
     switch (field.type) {
       case 'textarea': {
@@ -101,6 +105,24 @@
         return out;
       }
 
+      case 'checkbox_map': {
+        var mOpts = field.options || {};
+        var mValues = fieldValue(field) && typeof fieldValue(field) === 'object' ? fieldValue(field) : {};
+        var mLayout = (field.optionsLayout === 'horizontal') ? ' wp-polyfill-checkbox-group--horizontal' : '';
+        var mOut = '<div class="wp-polyfill-checkbox-group' + mLayout + '">';
+        Object.keys(mOpts).forEach(function (optKey) {
+          var label = mOpts[optKey];
+          var optId = fieldId(formId, { namePath: field.id + '[' + optKey + ']' });
+          var isChecked = !!mValues[optKey];
+          mOut += '<div class="wp-polyfill-setting-wrapper">' +
+            '<input type="checkbox" id="' + escAttr(optId) + '" name="' + escAttr(fieldName(optionName, { namePath: field.id + '[' + optKey + ']', type: 'checkbox' })) + '" value="1"' + (isChecked ? ' checked' : '') + ' />' +
+            '<label for="' + escAttr(optId) + '">' + escHtml(label) + '</label>' +
+            '</div>';
+        });
+        mOut += '</div>';
+        return mOut;
+      }
+
       case 'select': {
         var sOpts = field.options || {};
         var sVal = String(fieldValue(field));
@@ -117,6 +139,58 @@
         return '<input type="hidden" id="' + escAttr(id) + '" name="' + escAttr(fieldName(optionName, field)) + '" value="' + mediaId + '" />' +
           '<div class="wp-polyfill-media-preview" data-target="' + escAttr(id) + '"></div>' +
           '<button type="button" class="button wp-polyfill-pick-media" data-target="' + escAttr(id) + '">Select media</button>';
+      }
+
+      case 'context': {
+        // Composite per-context row: optional noindex toggle + title text +
+        // description textarea + Open Graph image, mirroring Form_Fields::context().
+        var spec = field.context || {};
+        var member = field.member || '';
+        var values = field.values || {};
+        var cRows = field.rows || 2;
+        var cOut = '<div class="wp-polyfill-context-fields">';
+
+        if (spec.noindex) {
+          var noSub = { namePath: member ? spec.noindex + '[' + member + ']' : spec.noindex, type: 'checkbox' };
+          var noId = fieldId(formId, noSub);
+          cOut += '<div class="wp-polyfill-context-control wp-polyfill-context-control--inline">' +
+            '<input type="checkbox" id="' + escAttr(noId) + '" name="' + escAttr(fieldName(optionName, noSub)) + '" value="1"' + (values.noindex ? ' checked' : '') + ' />' +
+            '<label for="' + escAttr(noId) + '">Noindex</label>' +
+            '</div>';
+        }
+
+        if (spec.title) {
+          var tSub = { namePath: member ? spec.title + '[' + member + ']' : spec.title, type: 'text' };
+          var tId = fieldId(formId, tSub);
+          cOut += '<div class="wp-polyfill-context-control">' +
+            '<span class="wp-polyfill-context-control__label">Title template</span>' +
+            '<input type="text" id="' + escAttr(tId) + '" name="' + escAttr(fieldName(optionName, tSub)) + '" value="' + escAttr(values.title == null ? '' : values.title) + '" class="regular-text" placeholder="' + escAttr(field.placeholder || '') + '" />' +
+            '</div>';
+        }
+
+        if (spec.description) {
+          var dSub = { namePath: member ? spec.description + '[' + member + ']' : spec.description, type: 'textarea' };
+          var dId = fieldId(formId, dSub);
+          cOut += '<div class="wp-polyfill-context-control">' +
+            '<span class="wp-polyfill-context-control__label">Description template</span>' +
+            '<textarea id="' + escAttr(dId) + '" name="' + escAttr(fieldName(optionName, dSub)) + '" rows="' + (+cRows) + '" class="large-text">' + escHtml(values.description == null ? '' : values.description) + '</textarea>' +
+            '</div>';
+        }
+
+        if (spec.og_image) {
+          var mSub = { namePath: member ? spec.og_image + '[' + member + ']' : spec.og_image, type: 'media' };
+          var mId = fieldId(formId, mSub);
+          var mVal = (+values.og_image) || 0;
+          cOut += '<div class="wp-polyfill-context-control">' +
+            '<span class="wp-polyfill-context-control__label">Open Graph image</span>' +
+            '<input type="hidden" id="' + escAttr(mId) + '" name="' + escAttr(fieldName(optionName, mSub)) + '" value="' + mVal + '" />' +
+            '<div class="wp-polyfill-media-preview" data-target="' + escAttr(mId) + '"></div>' +
+            '<button type="button" class="button wp-polyfill-pick-media" data-target="' + escAttr(mId) + '">Select media</button>' +
+            '</div>';
+        }
+
+        cOut += '</div>';
+        return cOut;
       }
 
       case 'html': {
@@ -138,7 +212,7 @@
 
     var out = '<tr>';
     out += '<th>';
-    out += '<label for="' + escAttr(formId + '-' + field.id) + '">' + escHtml(field.label) + '</label>';
+    out += '<label for="' + escAttr(fieldId(formId, field)) + '">' + escHtml(field.label) + '</label>';
     if (field.description) {
       out += '<p class="description">' + escHtml(field.description) + '</p>';
     }

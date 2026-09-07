@@ -6,7 +6,7 @@
  * and fields before the admin_init hook fires.
  *
  * @package WpPluginShared
- * @since   0.2.0
+ * @since   0.3.0
  */
 
 namespace WpPluginShared;
@@ -90,7 +90,7 @@ class Settings_Page {
 			'shared-settings',
 			$plugin_url . 'shared-settings.js',
 			[],
-			'0.2.0',
+			'0.3.0',
 			true
 		);
 
@@ -98,7 +98,7 @@ class Settings_Page {
 			'shared-settings',
 			$plugin_url . 'shared-settings.css',
 			[],
-			'0.2.0'
+			'0.3.0'
 		);
 
 		wp_enqueue_script( 'shared-settings' );
@@ -216,6 +216,7 @@ class Settings_Page {
 	 *   'min' / 'max'  => int (number type)
 	 *   'rows'         => int (textarea type)
 	 *   'options'      => array|callable (select type)
+	 *   'name_path'    => string  nested option key, e.g. 'post_type_noindex[product]' (emits {option_name}[post_type_noindex][product])
 	 *   'show_if'      => string  e.g. '#otherField' or '{ "selector": "#field", "value": "val" }'
 	 *   'show_if_not'  => string  inverse of show_if
 	 *   'show_value'   => string  value to match (used with show_if/show_if_not)
@@ -230,6 +231,7 @@ class Settings_Page {
 			'label'      => $label,
 			'type'       => $type,
 			'section_id' => $section_id,
+			'option_name'       => $this->option_name,
 			'description'      => $args['description'] ?? '',
 			'placeholder'      => $args['placeholder'] ?? '',
 			'default'          => $args['default'] ?? null,
@@ -237,14 +239,16 @@ class Settings_Page {
 			'max'              => $args['max'] ?? null,
 			'rows'             => $args['rows'] ?? 4,
 			'options'          => $args['options'] ?? [],
-			'show_if'          => $args['show_if'] ?? '',
-			'show_if_not'      => $args['show_if_not'] ?? '',
-			'show_value'       => $args['show_value'] ?? '',
-			'disable_when_hidden' => ! empty( $args['disable_when_hidden'] ),
-			'html'             => $args['html'] ?? '',
-			'heading_tag'      => $args['heading_tag'] ?? 'h3',
-			'options_layout'   => $args['options_layout'] ?? 'vertical',
-		];
+'name_path'        => $args['name_path'] ?? '',
+   			'show_if'          => $args['show_if'] ?? '',
+   			'show_if_not'      => $args['show_if_not'] ?? '',
+   			'show_value'       => $args['show_value'] ?? '',
+   			'disable_when_hidden' => ! empty( $args['disable_when_hidden'] ),
+   			'html'             => $args['html'] ?? '',
+   			'heading_tag'      => $args['heading_tag'] ?? 'h3',
+   			'options_layout'   => $args['options_layout'] ?? 'vertical',
+   			'context'          => $args['context'] ?? [],
+   		];
 	}
 
 	// ──────────────────────────────────────────────
@@ -360,7 +364,7 @@ class Settings_Page {
 
 	private function render_field_row( array $field ): void {
 		$dep_attrs = $this->get_dependency_attrs( $field );
-		$input_id  = esc_attr( $this->form_id . '-' . $field['id'] );
+		$input_id  = esc_attr( Form_Fields::field_id( $field, $this->form_id ) );
 
 		if ( 'heading' === $field['type'] ) {
 			$this->render_field_heading( $field );

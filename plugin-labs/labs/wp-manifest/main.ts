@@ -55,12 +55,34 @@ const AI_BOT_AGENTS: Record<string, string> = {
 };
 
 const DEMO_RUNTIME: Record<string, unknown> = {
+  // Meta Tags – per-context rows
   default_description: "Thoughts on code, WordPress and the open web.",
   default_og_image: 42,
-  canonical_site_url: "https://example.com",
-  noindex_categories: false,
-  noindex_tags: false,
+  default_title: "{{ site.name }}",
+  home_description: "{{ site.description }}",
+  home_og_image: 0,
+  home_title: "{{ site.name }} {{ sep }} {{ site.description }}",
+  post_type_description: {},
+  post_type_og_image: {},
+  post_type_title: {
+    post: "{{ post.title }} {{ sep }} {{ site.name }}",
+    page: "{{ post.title }} {{ sep }} {{ site.name }}",
+  },
+  taxonomy_description: {},
+  taxonomy_og_image: {},
+  taxonomy_title: {
+    category: "{{ term.name }} {{ sep }} {{ site.name }}",
+    post_tag: "{{ term.name }} {{ sep }} {{ site.name }}",
+  },
+  author_description: "",
+  author_og_image: 0,
+  author_title: "{{ author.name }} {{ sep }} {{ site.name }}",
+  post_type_noindex: { post: true, page: false },
+  taxonomy_noindex: { category: true, post_tag: true },
   noindex_authors: true,
+  // Site Identity
+  canonical_site_url: "https://example.com",
+  // Indexing
   noindex_dates: true,
   noindex_search: true,
   noindex_paged: true,
@@ -70,8 +92,6 @@ const DEMO_RUNTIME: Record<string, unknown> = {
   llms_summary: "A personal site about WordPress plugin development.",
   llms_max_entries: 20,
   schema_org_enabled: true,
-  org_logo: 42,
-  org_same_as: "https://github.com/spill-the-ink",
   manifest_enabled: true,
   manifest_name: "Example Site",
   manifest_short_name: "Example",
@@ -86,6 +106,50 @@ const DEMO_RUNTIME: Record<string, unknown> = {
 
 function val(key: string, fallback: unknown): unknown {
   return DEMO_RUNTIME[key] !== undefined ? DEMO_RUNTIME[key] : fallback;
+}
+
+// Read a member value out of a nested DEMO_RUNTIME map (maps mirror the
+// PHP post_type_title[]/taxonomy_noindex[]-style option keys).
+function mem(key: string, member: string | undefined, fallback: unknown): unknown {
+  if (!member) {
+    return val(key, fallback);
+  }
+  const map = DEMO_RUNTIME[key];
+  if (map && typeof map === "object" && (map as Record<string, unknown>)[member] !== undefined) {
+    return (map as Record<string, unknown>)[member];
+  }
+  return fallback;
+}
+
+// Composite per-context row field (type 'context'), mirroring
+// Settings_Page::register_context_field() in settings-page.php.
+function contextField(
+  id: string,
+  label: string,
+  spec: Record<string, string>,
+  member?: string,
+): Record<string, unknown> {
+  const values: Record<string, unknown> = {};
+  Object.keys(spec).forEach((key) => {
+    values[key] = mem(
+      spec[key],
+      member,
+      key === "og_image" ? 0 : key === "noindex" ? false : "",
+    );
+  });
+  const field: Record<string, unknown> = {
+    id,
+    label,
+    type: "context",
+    rows: 2,
+    namePath: spec.title + (member ? "[" + member + "]" : ""),
+    context: spec,
+    values,
+  };
+  if (member) {
+    field.member = member;
+  }
+  return field;
 }
 
 const formId = "wpm-settings";
@@ -179,6 +243,39 @@ function coreCheckHtml(): string {
   );
 }
 
+// Available template variables (mirrors helpers.php wp_manifest_template_variables()).
+const TEMPLATE_VARS: Array<[string, string]> = [
+  ["{{ site.name }}", "Site name"],
+  ["{{ site.description }}", "Site tagline"],
+  ["{{ site.url }}", "Site URL"],
+  ["{{ post.title }}", "Post title"],
+  ["{{ post.excerpt }}", "Post excerpt"],
+  ["{{ post.url }}", "Post URL"],
+  ["{{ term.name }}", "Term name"],
+  ["{{ term.description }}", "Term description"],
+  ["{{ term.url }}", "Term URL"],
+  ["{{ author.name }}", "Author display name"],
+  ["{{ author.bio }}", "Author bio"],
+  ["{{ post_type.name }}", "Post type name"],
+  [
+    "{{ current.type }}",
+    "Current context (home/singular/term/author/post_type_archive)",
+  ],
+  ["{{ page.number }}", "Archive page number"],
+  ["{{ sep }}", "Separator — collapsed and deduplicated on output"],
+];
+
+function templateVariablesHtml(): string {
+  const items = TEMPLATE_VARS.map(
+    ([token, label]) => "<li><code>" + token + "</code> — " + label + "</li>",
+  ).join("");
+  return (
+    '<ul class="wp-polyfill-template-vars" style="margin:0;padding-left:1.2em;columns:2;" role="list">' +
+    items +
+    "</ul>"
+  );
+}
+
 const page = {
   pageTitle: "Manifest",
   formId,
@@ -189,21 +286,6 @@ const page = {
       label: "Site Identity",
       sections: [
         {
-          id: "defaults",
-          title: "Site defaults",
-          fields: [
-            {
-              id: "default_description",
-              label: "Default meta description",
-              type: "textarea",
-              description:
-                "Used whenever a page, post or archive has no specific description. WordPress core outputs none by default.",
-              rows: 4,
-              value: val("default_description", ""),
-            },
-          ],
-        },
-        {
           id: "canonical",
           title: "Canonical domain",
           description:
@@ -213,47 +295,8 @@ const page = {
               id: "canonical_site_url",
               label: "Canonical domain",
               type: "text",
-              description:
-                "Base URL (with scheme) that canonicals, Open Graph URLs and structured-data URLs should point to. Useful to prepare a staging copy for its production domain.",
               placeholder: "https://example.com",
               value: val("canonical_site_url", ""),
-            },
-          ],
-        },
-        {
-          id: "identity_media",
-          title: "Fallback media",
-          description:
-            "Images used as fallbacks across the plugin when a post has no specific image.",
-          fields: [
-            {
-              id: "default_og_image",
-              label: "Default Open Graph image",
-              type: "media",
-              description: "Fallback image for og:image when a post has no featured image.",
-              value: val("default_og_image", 0),
-            },
-            {
-              id: "org_logo",
-              label: "Organization logo",
-              type: "media",
-              description: "Used in JSON-LD Organization schema and web app manifest.",
-              value: val("org_logo", 0),
-            },
-          ],
-        },
-        {
-          id: "social_profiles",
-          title: "Social profiles",
-          description: "Added to the Organization schema as sameAs links.",
-          fields: [
-            {
-              id: "org_same_as",
-              label: "Social profile URLs",
-              type: "textarea",
-              description: "One URL per line.",
-              rows: 4,
-              value: val("org_same_as", ""),
             },
           ],
         },
@@ -285,6 +328,120 @@ const page = {
       ],
     },
     {
+      id: "meta",
+      label: "Meta Tags",
+      sections: [
+        {
+          id: "defaults",
+          title: "Default",
+          description:
+            "Fallback used whenever no context-specific row applies, such as search results and other unmatched pages.",
+          fields: [
+            contextField("context_default", "All other pages", {
+              title: "default_title",
+              description: "default_description",
+              og_image: "default_og_image",
+            }),
+          ],
+        },
+        {
+          id: "homepage",
+          title: "Homepage & blog index",
+          description:
+            "Templates for the front page and the posts index. When a static page is set as the front page, this row wins there over the Pages row.",
+          fields: [
+            contextField("context_home", "Homepage", {
+              title: "home_title",
+              description: "home_description",
+              og_image: "home_og_image",
+            }),
+          ],
+        },
+        {
+          id: "post_type_contexts",
+          title: "Post types",
+          description: "Singular pages and archives per post type. Noindex applies to both.",
+          fields: [
+            contextField(
+              "context_post_type_post",
+              "Post",
+              {
+                title: "post_type_title",
+                description: "post_type_description",
+                og_image: "post_type_og_image",
+                noindex: "post_type_noindex",
+              },
+              "post",
+            ),
+            contextField(
+              "context_post_type_page",
+              "Page",
+              {
+                title: "post_type_title",
+                description: "post_type_description",
+                og_image: "post_type_og_image",
+                noindex: "post_type_noindex",
+              },
+              "page",
+            ),
+          ],
+        },
+        {
+          id: "taxonomy_contexts",
+          title: "Taxonomies",
+          description: "Term archives per taxonomy.",
+          fields: [
+            contextField(
+              "context_taxonomy_category",
+              "Category",
+              {
+                title: "taxonomy_title",
+                description: "taxonomy_description",
+                og_image: "taxonomy_og_image",
+                noindex: "taxonomy_noindex",
+              },
+              "category",
+            ),
+            contextField(
+              "context_taxonomy_post_tag",
+              "Tag",
+              {
+                title: "taxonomy_title",
+                description: "taxonomy_description",
+                og_image: "taxonomy_og_image",
+                noindex: "taxonomy_noindex",
+              },
+              "post_tag",
+            ),
+          ],
+        },
+        {
+          id: "author_context",
+          title: "Author archives",
+          fields: [
+            contextField("context_author", "Author archives", {
+              title: "author_title",
+              description: "author_description",
+              og_image: "author_og_image",
+              noindex: "noindex_authors",
+            }),
+          ],
+        },
+        {
+          id: "template_variables",
+          title: "Available template variables",
+          fields: [
+            {
+              id: "template_variables_panel",
+              label: "",
+              type: "html",
+              html: templateVariablesHtml(),
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: "indexing",
       label: "Indexing",
       sections: [
@@ -292,34 +449,17 @@ const page = {
           id: "index",
           title: "Indexability",
           description:
-            "Apply noindex to whole template types. Individual posts/pages can be overridden from their Manifest metabox.",
+            "Apply noindex to whole template types. Individual posts, pages and archives can be overridden per context on the Meta Tags tab, or from their Manifest metabox.",
           fields: [
-            "noindex_categories",
-            "noindex_tags",
-            "noindex_authors",
-            "noindex_dates",
-            "noindex_search",
-            "noindex_paged",
-          ].map((key) => ({
+            ["noindex_dates", "Date archives"],
+            ["noindex_search", "Search result pages"],
+            ["noindex_paged", "Paginated archive pages"],
+          ].map(([key, label]) => ({
             id: key,
-            label: {
-              noindex_categories: "Category archives",
-              noindex_tags: "Tag archives",
-              noindex_authors: "Author archives",
-              noindex_dates: "Date archives",
-              noindex_search: "Search result pages",
-              noindex_paged: "Paginated archive pages",
-            }[key],
+            label,
             type: "checkbox",
-            description: `${{
-              noindex_categories: "Category archives",
-              noindex_tags: "Tag archives",
-              noindex_authors: "Author archives",
-              noindex_dates: "Date archives",
-              noindex_search: "Search result pages",
-              noindex_paged: "Paginated archive pages",
-            }[key]} — noindex`,
-            value: val(key, false),
+            description: label + " — noindex",
+            value: val(key, true),
           })),
         },
         {

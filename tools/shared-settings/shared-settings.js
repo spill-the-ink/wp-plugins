@@ -7,7 +7,7 @@
  * Expects `window.SharedSettingsConfig` (localized from PHP) and
  * `.wp-polyfill-admin-wrapper` DOM structure rendered by Settings_Page.
  *
- * @since 0.2.0
+ * @since   0.3.0
  */
 (function () {
   'use strict';
@@ -292,18 +292,50 @@
 
   // ── 5. AJAX SAVE / RESET ─────────────────────────
 
+  // Parse a form field name into bracket segments, e.g.
+  //   'noindex_authors'                → ['noindex_authors']
+  //   'block_ai_bots[]'                → ['block_ai_bots'] (array)
+  //   'post_type_noindex[product]'     → ['post_type_noindex', 'product']
+  //   'wp_manifest_settings[noindex_authors]' → ['noindex_authors'] (optionName stripped)
+  function parseFieldName(key) {
+    var isArray = key.slice(-2) === '[]';
+    var base = key.replace(/\[\]$/, '');
+
+    // Strip the option-name prefix so the nested payload matches what
+    // sanitize() expects (same shape as a native options.php POST).
+    if (config.optionName && base.indexOf(config.optionName + '[') === 0) {
+      base = base.slice(config.optionName.length + 1, -1);
+    }
+
+    var segments = base.split(/[\[\]]+/).filter(function (s) { return s !== ''; });
+    return { path: segments, isArray: isArray };
+  }
+
+  // Assign value into a nested object along a path.
+  function assignNested(result, path, value, isArray) {
+    var curr = result;
+    for (var i = 0; i < path.length - 1; i++) {
+      var seg = path[i];
+      if (curr[seg] == null || typeof curr[seg] !== 'object' || Array.isArray(curr[seg])) {
+        curr[seg] = {};
+      }
+      curr = curr[seg];
+    }
+    var last = path[path.length - 1];
+    if (isArray) {
+      if (!Array.isArray(curr[last])) curr[last] = [];
+      curr[last].push(value);
+    } else {
+      curr[last] = value;
+    }
+  }
+
   function serializeForm() {
     var data = new FormData(form);
     var result = {};
     data.forEach(function (value, key) {
-      // Handle array values like key[]
-      if (key.endsWith('[]')) {
-        var arrayKey = key.slice(0, -2);
-        if (!result[arrayKey]) result[arrayKey] = [];
-        result[arrayKey].push(value);
-      } else {
-        result[key] = value;
-      }
+      var parsed = parseFieldName(key);
+      assignNested(result, parsed.path, value, parsed.isArray);
     });
     return result;
   }
@@ -363,19 +395,8 @@
     payload.append('action', config.saveAction || 'shared_settings_save');
     payload.append('nonce', config.nonce || '');
 
-    // Send raw form data as JSON string
-    var formData = {};
-    var data = new FormData(form);
-    data.forEach(function (value, key) {
-      if (key.endsWith('[]')) {
-        var arrayKey = key.slice(0, -2);
-        if (!formData[arrayKey]) formData[arrayKey] = [];
-        formData[arrayKey].push(value);
-      } else {
-        formData[key] = value;
-      }
-    });
-    payload.append('settings', JSON.stringify(formData));
+    // Send serialized form data as JSON string (nested, optionName stripped)
+    payload.append('settings', JSON.stringify(serializeForm()));
 
     fetch(config.ajaxUrl, {
       method: 'POST',

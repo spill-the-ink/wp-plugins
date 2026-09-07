@@ -3,7 +3,7 @@
  * Shared form field renderers for the settings table layout.
  *
  * @package WpPluginShared
- * @since   0.2.0
+ * @since   0.3.0
  */
 
 namespace WpPluginShared;
@@ -17,9 +17,9 @@ class Form_Fields {
 	/**
 	 * Render a field into the settings table.
 	 *
-	 * @param array  $field   Field configuration.
+	 * @param array          $field   Field configuration.
 	 * @param Settings_Store $store   Options store.
-	 * @param string          $form_id Form id prefix for element ids.
+	 * @param string         $form_id Form id prefix for element ids.
 	 */
 	public static function render( array $field, Settings_Store $store, string $form_id ): void {
 		$type = $field['type'] ?? 'text';
@@ -40,11 +40,17 @@ class Form_Fields {
 			case 'checkbox_group':
 				self::checkbox_group( $field, $store, $form_id );
 				break;
+			case 'checkbox_map':
+				self::checkbox_map( $field, $store, $form_id );
+				break;
 			case 'select':
 				self::select( $field, $store, $form_id );
 				break;
 			case 'media':
 				self::media( $field, $store, $form_id );
+				break;
+			case 'context':
+				self::context( $field, $store, $form_id );
 				break;
 			default:
 				do_action( 'wp_polyfill_render_field_' . $type, $field, $store, $form_id );
@@ -52,50 +58,98 @@ class Form_Fields {
 		}
 	}
 
+	/**
+	 * Build the HTML field name.
+	 *
+	 * A `name_path` (e.g. `post_type_noindex[product]`) emits a nested option
+	 * key: `{option_name}[post_type_noindex][product]`. Without it the field id
+	 * is used: `{option_name}[{id}]`.
+	 */
+	public static function field_name( array $field ): string {
+		$base = $field['option_name'] ?? '';
+		$path = ! empty( $field['name_path'] ) ? $field['name_path'] : ( $field['id'] ?? '' );
+
+		return $base ? "{$base}[{$path}]" : $path;
+	}
+
+	/**
+	 * Build a stable, unique input id for a field.
+	 */
+	public static function field_id( array $field, string $form_id ): string {
+		$key = ! empty( $field['name_path'] ) ? $field['name_path'] : ( $field['id'] ?? '' );
+
+		return $form_id . '-' . preg_replace( '/[^a-z0-9_-]+/i', '-', $key );
+	}
+
+	/**
+	 * Resolve the stored value for a field, walking `name_path` maps when present.
+	 */
+	public static function field_value( array $field, Settings_Store $store, $default = '' ) {
+		$fallback = array_key_exists( 'default', $field ) ? $field['default'] : $default;
+
+		if ( empty( $field['name_path'] ) ) {
+			return $store->get( $field['id'] ?? '', $fallback );
+		}
+
+		$segments = explode( '[', $field['name_path'] );
+		$top      = array_shift( $segments );
+		$value    = $store->get( (string) $top, [] );
+
+		if ( ! is_array( $value ) ) {
+			return $fallback;
+		}
+
+		foreach ( $segments as $segment ) {
+			$segment = rtrim( $segment, ']' );
+			if ( ! isset( $value[ $segment ] ) ) {
+				return $fallback;
+			}
+			$value = $value[ $segment ];
+		}
+
+		return $value;
+	}
+
 	public static function text( array $field, Settings_Store $store, string $form_id ): void {
-		$key = $field['id'];
-		$value = $store->get( $key, '' );
-		$input_id = $form_id . '-' . $key;
+		$value       = self::field_value( $field, $store, '' );
+		$input_id    = self::field_id( $field, $form_id );
+		$placeholder = self::placeholder( $field, $store );
 
 		printf(
-			'<input type="text" id="%1$s" name="%2$s[%3$s]" value="%4$s" class="regular-text" placeholder="%5$s" />',
+			'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="regular-text" placeholder="%4$s" />',
 			esc_attr( $input_id ),
-			esc_attr( $field['option_name'] ?? '' ),
-			esc_attr( $key ),
+			esc_attr( self::field_name( $field ) ),
 			esc_attr( $value ),
-			esc_attr( $field['placeholder'] ?? '' )
+			esc_attr( $placeholder )
 		);
 	}
 
 	public static function textarea( array $field, Settings_Store $store, string $form_id ): void {
-		$key = $field['id'];
-		$value = $store->get( $key, '' );
-		$rows = $field['rows'] ?? 4;
-		$input_id = $form_id . '-' . $key;
+		$value       = self::field_value( $field, $store, '' );
+		$rows        = $field['rows'] ?? 4;
+		$input_id    = self::field_id( $field, $form_id );
+		$placeholder = self::placeholder( $field, $store );
 
 		printf(
-			'<textarea id="%1$s" name="%2$s[%3$s]" rows="%4$d" class="large-text" placeholder="%5$s">%6$s</textarea>',
+			'<textarea id="%1$s" name="%2$s" rows="%3$d" class="large-text" placeholder="%4$s">%5$s</textarea>',
 			esc_attr( $input_id ),
-			esc_attr( $field['option_name'] ?? '' ),
-			esc_attr( $key ),
+			esc_attr( self::field_name( $field ) ),
 			(int) $rows,
-			esc_attr( $field['placeholder'] ?? '' ),
+			esc_attr( $placeholder ),
 			esc_textarea( $value )
 		);
 	}
 
 	public static function number( array $field, Settings_Store $store, string $form_id ): void {
-		$key = $field['id'];
-		$value = (int) $store->get( $key, 0 );
-		$min = $field['min'] ?? 0;
-		$max = $field['max'] ?? 10000;
-		$input_id = $form_id . '-' . $key;
+		$value    = (int) self::field_value( $field, $store, 0 );
+		$min      = $field['min'] ?? 0;
+		$max      = $field['max'] ?? 10000;
+		$input_id = self::field_id( $field, $form_id );
 
 		printf(
-			'<input type="number" id="%1$s" name="%2$s[%3$s]" value="%4$d" min="%5$d" max="%6$d" class="small-text" />',
+			'<input type="number" id="%1$s" name="%2$s" value="%3$d" min="%4$d" max="%5$d" class="small-text" />',
 			esc_attr( $input_id ),
-			esc_attr( $field['option_name'] ?? '' ),
-			esc_attr( $key ),
+			esc_attr( self::field_name( $field ) ),
 			$value,
 			(int) $min,
 			(int) $max
@@ -103,16 +157,14 @@ class Form_Fields {
 	}
 
 	public static function checkbox( array $field, Settings_Store $store, string $form_id ): void {
-		$key = $field['id'];
-		$checked = $store->get( $key, false );
-		$input_id = $form_id . '-' . $key;
+		$checked  = self::field_value( $field, $store, false );
+		$input_id = self::field_id( $field, $form_id );
 
 		echo '<div class="wp-polyfill-setting-wrapper">';
 		printf(
-			'<input type="checkbox" id="%1$s" name="%2$s[%3$s]" value="1" %4$s />',
+			'<input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s />',
 			esc_attr( $input_id ),
-			esc_attr( $field['option_name'] ?? '' ),
-			esc_attr( $key ),
+			esc_attr( self::field_name( $field ) ),
 			checked( $checked, true, false )
 		);
 		printf(
@@ -125,16 +177,20 @@ class Form_Fields {
 
 	public static function checkbox_group( array $field, Settings_Store $store, string $form_id ): void {
 		$options = $field['options'] ?? [];
-		$values = (array) $store->get( $field['id'], [] );
-		$name = ( $field['option_name'] ?? '' ) . '[' . $field['id'] . '][]';
-		$layout = $field['options_layout'] ?? 'vertical';
+		$values  = (array) $store->get( $field['id'], [] );
+		$name    = ( $field['option_name'] ?? '' ) . '[' . $field['id'] . '][]';
+		$layout  = $field['options_layout'] ?? 'vertical';
 		$wrapper_class = 'vertical' === $layout ? '' : ' wp-polyfill-checkbox-group--horizontal';
+
+		if ( is_callable( $options ) ) {
+			$options = $options();
+		}
 
 		echo '<div class="wp-polyfill-checkbox-group' . esc_attr( $wrapper_class ) . '">';
 
 		foreach ( $options as $value => $label ) {
 			$input_id = $form_id . '-' . $field['id'] . '-' . sanitize_html_class( $value );
-			$checked = in_array( (string) $value, array_map( 'strtolower', $values ), true );
+			$checked  = in_array( (string) $value, array_map( 'strtolower', $values ), true );
 
 			echo '<div class="wp-polyfill-setting-wrapper">';
 			printf(
@@ -155,22 +211,59 @@ class Form_Fields {
 		echo '</div>';
 	}
 
-	public static function select( array $field, Settings_Store $store, string $form_id ): void {
-		$key = $field['id'];
-		$value = $store->get( $key, '' );
+	/**
+	 * Render a boolean map: one checkbox per option key, each stored as its own
+	 * nested key (`{option_name}[{id}][{key}]` → 0/1). Unchecked keys are simply
+	 * absent from the submitted form data.
+	 */
+	public static function checkbox_map( array $field, Settings_Store $store, string $form_id ): void {
 		$options = $field['options'] ?? [];
-		$input_id = $form_id . '-' . $key;
+		$values  = (array) self::field_value( $field, $store, [] );
+		$layout  = $field['options_layout'] ?? 'vertical';
+		$wrapper_class = 'vertical' === $layout ? '' : ' wp-polyfill-checkbox-group--horizontal';
 
-		// Support callable options (lazy-loaded).
+		if ( is_callable( $options ) ) {
+			$options = $options();
+		}
+
+		echo '<div class="wp-polyfill-checkbox-group' . esc_attr( $wrapper_class ) . '">';
+
+		foreach ( $options as $key => $label ) {
+			$member = array_merge( $field, array( 'name_path' => $field['id'] . '[' . $key . ']' ) );
+			$input_id = self::field_id( $member, $form_id );
+			$checked  = ! empty( $values[ $key ] );
+
+			echo '<div class="wp-polyfill-setting-wrapper">';
+			printf(
+				'<input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s />',
+				esc_attr( $input_id ),
+				esc_attr( self::field_name( $member ) ),
+				$checked ? ' checked' : ''
+			);
+			printf(
+				'<label for="%1$s">%2$s</label>',
+				esc_attr( $input_id ),
+				esc_html( $label )
+			);
+			echo '</div>';
+		}
+
+		echo '</div>';
+	}
+
+	public static function select( array $field, Settings_Store $store, string $form_id ): void {
+		$value    = self::field_value( $field, $store, '' );
+		$options  = $field['options'] ?? [];
+		$input_id = self::field_id( $field, $form_id );
+
 		if ( is_callable( $options ) ) {
 			$options = $options();
 		}
 
 		printf(
-			'<select id="%1$s" name="%2$s[%3$s]" class="regular-text">',
+			'<select id="%1$s" name="%2$s" class="regular-text">',
 			esc_attr( $input_id ),
-			esc_attr( $field['option_name'] ?? '' ),
-			esc_attr( $key )
+			esc_attr( self::field_name( $field ) )
 		);
 
 		foreach ( $options as $opt_value => $opt_label ) {
@@ -186,15 +279,13 @@ class Form_Fields {
 	}
 
 	public static function media( array $field, Settings_Store $store, string $form_id ): void {
-		$key = $field['id'];
-		$id = (int) $store->get( $key, 0 );
-		$name = ( $field['option_name'] ?? '' ) . '[' . $key . ']';
-		$input_id = $form_id . '-' . $key;
+		$id       = (int) self::field_value( $field, $store, 0 );
+		$input_id = self::field_id( $field, $form_id );
 
 		printf(
 			'<input type="hidden" id="%1$s" name="%2$s" value="%3$d" />',
 			esc_attr( $input_id ),
-			esc_attr( $name ),
+			esc_attr( self::field_name( $field ) ),
 			$id
 		);
 
@@ -221,5 +312,116 @@ class Form_Fields {
 			esc_attr( $input_id ),
 			esc_html__( 'Select media', 'shared-settings' )
 		);
+	}
+
+	/**
+	 * Render a composite settings row: one control group per site context.
+	 *
+	 * Each row holds an optional noindex toggle plus title and description
+	 * templates and an Open Graph image. All controls map to their own option
+	 * keys via `name_path`, so the regular serializer and sanitize round-trip
+	 * unchanged. The parent field's `name_path` should be the title control's
+	 * path so the row label binds to the title input.
+	 *
+	 * @param array $field Field config: { 'context' => array } with keys
+	 *                     'title'|'description'|'og_image' (option keys) and
+	 *                     optional 'noindex' (option key) + 'member' (map key).
+	 */
+	public static function context( array $field, Settings_Store $store, string $form_id ): void {
+		$spec = $field['context'] ?? [];
+		$map  = (string) ( $spec['member'] ?? '' );
+
+		echo '<div class="wp-polyfill-context-fields">';
+
+		if ( ! empty( $spec['noindex'] ) ) {
+			$sub      = self::context_field( $field, $spec['noindex'], $map );
+			$input_id = self::field_id( $sub, $form_id );
+			$checked  = (bool) self::field_value( $sub, $store, false );
+
+			echo '<div class="wp-polyfill-context-control wp-polyfill-context-control--inline">';
+			printf(
+				'<input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s />',
+				esc_attr( $input_id ),
+				esc_attr( self::field_name( $sub ) ),
+				$checked ? ' checked' : ''
+			);
+			printf(
+				'<label for="%1$s">%2$s</label>',
+				esc_attr( $input_id ),
+				esc_html__( 'Noindex', 'shared-settings' )
+			);
+			echo '</div>';
+		}
+
+		if ( ! empty( $spec['title'] ) ) {
+			$sub = self::context_field( $field, $spec['title'], $map );
+
+			echo '<div class="wp-polyfill-context-control">';
+			printf(
+				'<span class="wp-polyfill-context-control__label">%s</span>',
+				esc_html__( 'Title template', 'shared-settings' )
+			);
+			self::text( $sub, $store, $form_id );
+			echo '</div>';
+		}
+
+		if ( ! empty( $spec['description'] ) ) {
+			$sub = self::context_field( $field, $spec['description'], $map );
+
+			echo '<div class="wp-polyfill-context-control">';
+			printf(
+				'<span class="wp-polyfill-context-control__label">%s</span>',
+				esc_html__( 'Description template', 'shared-settings' )
+			);
+			self::textarea( $sub, $store, $form_id );
+			echo '</div>';
+		}
+
+		if ( ! empty( $spec['og_image'] ) ) {
+			$sub = self::context_field( $field, $spec['og_image'], $map );
+
+			echo '<div class="wp-polyfill-context-control">';
+			printf(
+				'<span class="wp-polyfill-context-control__label">%s</span>',
+				esc_html__( 'Open Graph image', 'shared-settings' )
+			);
+			self::media( $sub, $store, $form_id );
+			echo '</div>';
+		}
+
+		echo '</div>';
+	}
+
+	/**
+	 * Build a sub-field descriptor for one control of a context row.
+	 */
+	private static function context_field( array $field, string $key, string $map = '' ): array {
+		$name_path = $map ? "{$key}[{$map}]" : $key;
+
+		return array(
+			'id'          => $field['id'],
+			'name_path'   => $name_path,
+			'option_name' => $field['option_name'] ?? '',
+			'rows'        => $field['rows'] ?? 2,
+		);
+	}
+
+	/**
+	 * Placeholder for text-ish inputs: an explicit placeholder wins, otherwise
+	 * any non-empty default value for the field acts as the hint.
+	 */
+	private static function placeholder( array $field, Settings_Store $store ): string {
+		$placeholder = (string) ( $field['placeholder'] ?? '' );
+
+		if ( '' === $placeholder ) {
+			$key     = (string) ( $field['name_path'] ?? $field['id'] ?? '' );
+			$default = $store->defaults();
+
+			if ( $key && isset( $default[ $key ] ) && '' !== (string) $default[ $key ] ) {
+				$placeholder = (string) $default[ $key ];
+			}
+		}
+
+		return $placeholder;
 	}
 }
