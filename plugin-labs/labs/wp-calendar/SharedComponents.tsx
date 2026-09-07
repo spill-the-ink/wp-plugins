@@ -8,7 +8,9 @@ import {
   CheckboxField,
   Button,
 } from "@shared";
-import "@shared/styles/settings.css";
+import "@wordpress/components/build-style/style.css";
+import "../../../tools/shared-react/src/js/styles/theme.css";
+import "../../../tools/shared-settings/labs-wp-admin.css";
 
 /**
  * Sandbox for the shared React components (`tools/shared-react`).

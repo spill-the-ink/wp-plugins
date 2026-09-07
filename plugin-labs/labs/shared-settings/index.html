@@ -24,32 +24,32 @@
   </style>
 </head>
 
-<body>
+<body class="admin-color-modern">
 
-  <div class="wrap ss-admin-wrapper ss-admin-settings-page">
+  <div class="wrap wp-polyfill-admin-wrapper wp-polyfill-admin-settings-page">
 
     <!-- Header -->
-    <div class="ss-settings-header">
-      <div class="ss-settings-heading">
-        <div class="ss-settings-title-row">
+    <div class="wp-polyfill-settings-header">
+      <div class="wp-polyfill-settings-heading">
+        <div class="wp-polyfill-settings-title-row">
           <h1 class="title">Shared Settings — Demo</h1>
         </div>
       </div>
     </div>
 
     <!-- Search -->
-    <div class="ss-settings-tab-search">
-      <label class="screen-reader-text" for="ss-settings-tab-filter">Search settings</label>
+    <div class="wp-polyfill-settings-tab-search">
+      <label class="screen-reader-text" for="wp-polyfill-settings-tab-filter">Search settings</label>
       <span class="dashicons dashicons-search" aria-hidden="true"></span>
-      <input type="search" id="ss-settings-tab-filter" placeholder="Search settings..." autocomplete="off">
-      <button type="button" class="ss-settings-search-clear" aria-label="Clear search" hidden>
+      <input type="search" id="wp-polyfill-settings-tab-filter" placeholder="Search settings..." autocomplete="off">
+      <button type="button" class="wp-polyfill-settings-search-clear" aria-label="Clear search" hidden>
         <span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
       </button>
     </div>
-    <p class="ss-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>
+    <p class="wp-polyfill-settings-search-no-results" aria-live="polite" hidden>No settings found.</p>
 
     <!-- Tabs -->
-    <ul id="ss-settings-tabs-wrapper" class="nav-tab-wrapper">
+    <ul id="wp-polyfill-settings-tabs-wrapper" class="nav-tab-wrapper">
       <li><a href="#tab-general" class="nav-tab nav-tab-active" aria-current="true" data-tab-id="tab-general">General</a></li>
       <li><a href="#tab-formats" class="nav-tab" data-tab-id="tab-formats">Post Formats</a></li>
       <li><a href="#tab-media" class="nav-tab" data-tab-id="tab-media">Media</a></li>
@@ -57,12 +57,12 @@
     </ul>
 
     <!-- Settings Form -->
-    <form id="shared-settings-demo" class="ss-admin-wrapper" method="post" autocomplete="off">
+    <form id="shared-settings-demo" class="wp-polyfill-admin-wrapper" method="post" autocomplete="off">
 
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: General                                    -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="tab-general" class="ss-settings-table active" role="presentation">
+      <table id="tab-general" class="wp-polyfill-settings-table active" role="presentation">
         <tbody>
           <tr>
             <th><label for="demo-site_title">Site title</label><p class="description">The site title is used in the browser tab and search results.</p></th>
@@ -78,11 +78,11 @@
           </tr>
           <tr>
             <th><label for="demo-show_header">Show site header</label><p class="description">Display the site title and tagline in the frontend header.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-show_header" name="demo_settings[show_header]" value="1" checked><label for="demo-show_header">Show site header</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-show_header" name="demo_settings[show_header]" value="1" checked><label for="demo-show_header">Show site header</label></div></td>
           </tr>
           <tr>
             <th><label for="demo-show_footer">Show site footer</label><p class="description">Display copyright and credits in the site footer.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-show_footer" name="demo_settings[show_footer]" value="1" checked><label for="demo-show_footer">Show site footer</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-show_footer" name="demo_settings[show_footer]" value="1" checked><label for="demo-show_footer">Show site footer</label></div></td>
           </tr>
           <tr>
             <th><label for="demo-posts_per_page">Posts per page</label><p class="description">Number of posts displayed on blog listing pages. 0 uses the WordPress default.</p></th>
@@ -94,19 +94,19 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Post Formats                               -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="tab-formats" class="ss-settings-table" role="presentation">
+      <table id="tab-formats" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
           <tr>
             <th><label>Available formats</label></th>
             <td>
-              <div class="ss-checkbox-group">
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_aside" name="demo_settings[formats][]" value="aside" checked><label for="demo-format_aside">Aside</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_gallery" name="demo_settings[formats][]" value="gallery"><label for="demo-format_gallery">Gallery</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_link" name="demo_settings[formats][]" value="link"><label for="demo-format_link">Link</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_image" name="demo_settings[formats][]" value="image" checked><label for="demo-format_image">Image</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_quote" name="demo_settings[formats][]" value="quote" checked><label for="demo-format_quote">Quote</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_video" name="demo_settings[formats][]" value="video"><label for="demo-format_video">Video</label></div>
-                <div class="ss-setting-wrapper"><input type="checkbox" id="demo-format_audio" name="demo_settings[formats][]" value="audio"><label for="demo-format_audio">Audio</label></div>
+              <div class="wp-polyfill-checkbox-group">
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_aside" name="demo_settings[formats][]" value="aside" checked><label for="demo-format_aside">Aside</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_gallery" name="demo_settings[formats][]" value="gallery"><label for="demo-format_gallery">Gallery</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_link" name="demo_settings[formats][]" value="link"><label for="demo-format_link">Link</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_image" name="demo_settings[formats][]" value="image" checked><label for="demo-format_image">Image</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_quote" name="demo_settings[formats][]" value="quote" checked><label for="demo-format_quote">Quote</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_video" name="demo_settings[formats][]" value="video"><label for="demo-format_video">Video</label></div>
+                <div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-format_audio" name="demo_settings[formats][]" value="audio"><label for="demo-format_audio">Audio</label></div>
               </div>
             </td>
           </tr>
@@ -128,7 +128,7 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Media                                      -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="tab-media" class="ss-settings-table" role="presentation">
+      <table id="tab-media" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
           <tr>
             <th><label for="demo-thumbnail_width">Thumbnail width</label><p class="description">Maximum width in pixels for thumbnail images.</p></th>
@@ -140,7 +140,7 @@
           </tr>
           <tr>
             <th><label for="demo-crop_thumbnails">Crop thumbnails</label><p class="description">Hard crop thumbnails to exact dimensions.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-crop_thumbnails" name="demo_settings[crop_thumbnails]" value="1" checked><label for="demo-crop_thumbnails">Crop thumbnails to exact dimensions</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-crop_thumbnails" name="demo_settings[crop_thumbnails]" value="1" checked><label for="demo-crop_thumbnails">Crop thumbnails to exact dimensions</label></div></td>
           </tr>
         </tbody>
       </table>
@@ -148,11 +148,11 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- TAB: Advanced                                   -->
       <!-- ═══════════════════════════════════════════════ -->
-      <table id="tab-advanced" class="ss-settings-table" role="presentation">
+      <table id="tab-advanced" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
           <tr>
             <th><label for="demo-enable_caching">Enable page caching</label><p class="description">Cache rendered pages for faster delivery.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-enable_caching" name="demo_settings[enable_caching]" value="1" checked><label for="demo-enable_caching">Enable page caching</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-enable_caching" name="demo_settings[enable_caching]" value="1" checked><label for="demo-enable_caching">Enable page caching</label></div></td>
           </tr>
           <tr data-settings-show-if="#demo-enable_caching">
             <th><label for="demo-cache_ttl">Cache duration (seconds)</label><p class="description">How long cached pages are kept before regeneration.</p></th>
@@ -160,12 +160,12 @@
           </tr>
           <tr data-settings-show-if="#demo-enable_caching">
             <th><label for="demo-cache_logged_in">Cache for logged-in users</label><p class="description">This can significantly increase server load.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-cache_logged_in" name="demo_settings[cache_logged_in]" value="1"><label for="demo-cache_logged_in">Cache for logged-in users</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-cache_logged_in" name="demo_settings[cache_logged_in]" value="1"><label for="demo-cache_logged_in">Cache for logged-in users</label></div></td>
           </tr>
 
           <tr>
             <th><label for="demo-enable_analytics">Enable analytics tracking</label><p class="description">Add tracking scripts to frontend pages.</p></th>
-            <td><div class="ss-setting-wrapper"><input type="checkbox" id="demo-enable_analytics" name="demo_settings[enable_analytics]" value="1"><label for="demo-enable_analytics">Enable analytics tracking</label></div></td>
+            <td><div class="wp-polyfill-setting-wrapper"><input type="checkbox" id="demo-enable_analytics" name="demo_settings[enable_analytics]" value="1"><label for="demo-enable_analytics">Enable analytics tracking</label></div></td>
           </tr>
           <tr data-settings-show-if="#demo-enable_analytics">
             <th><label for="demo-analytics_id">Tracking ID</label><p class="description">Your analytics property ID (e.g. UA-XXXXXXX or G-XXXXXXX).</p></th>
@@ -179,10 +179,10 @@
       </table>
 
       <!-- Sticky Submit Bar -->
-      <div class="ss-submit-wrapper">
+      <div class="wp-polyfill-submit-wrapper">
         <button type="submit" name="save" class="button button-primary button-large">Save Settings</button>
-        <p class="ss-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>
-        <button type="button" name="reset" class="button button-secondary button-large ss-reset-button">Reset Settings</button>
+        <p class="wp-polyfill-settings-unsaved-message" role="status" aria-live="polite" hidden>Unsaved changes</p>
+        <button type="button" name="reset" class="button button-secondary button-large wp-polyfill-reset-button">Reset Settings</button>
       </div>
       <span class="spinner saving"></span>
 

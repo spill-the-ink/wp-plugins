@@ -1,0 +1,204 @@
+/**
+ * Labs-only WordPress admin styling.
+ *
+ * Replaces the previous hand-rolled subset of WP admin button styles with
+ * official color-scheme variables from @wordpress/base-styles, so labs track
+ * the real admin look (including admin-color-* scheme switching).
+ *
+ * Requires a body.admin-color-* class (e.g. admin-color-modern) to activate
+ * the --wp-admin-* custom properties defined by admin-schemes.css.
+ */
+
+/* Official WP admin color-scheme tokens (--wp-admin-theme-color etc.). */
+/* See node_modules/@wordpress/base-styles/build-style/admin-schemes.css */
+@import "@wordpress/base-styles/build-style/admin-schemes.css";
+
+/* WP admin form element resets (subset of wp-admin/css/common.css). */
+button, input, select, textarea { box-sizing: border-box; font-family: inherit; font-size: inherit; font-weight: inherit; }
+input, textarea { font-size: 14px; }
+textarea { overflow: auto; padding: 8px 12px; line-height: 1.42857143; resize: vertical; }
+input, select { margin: 0 1px; }
+.regular-text { width: 25em; }
+.small-text { width: 50px; padding: 2px 6px; }
+
+/* WP admin form controls (subset of wp-admin/css/forms.css). */
+input[type="color"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="datetime"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select,
+textarea {
+  box-shadow: 0 0 0 transparent;
+  border-radius: 2px;
+  border: 1px solid #949494;
+  background-color: #fff;
+  color: #1e1e1e;
+}
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="datetime"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="tel"] {
+  padding: 0 12px;
+  min-height: 40px;
+}
+select {
+  padding: 0 24px 0 12px;
+  line-height: 2.71428571;
+  min-height: 40px;
+}
+input[type="color"]:focus,
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+input[type="datetime"]:focus,
+input[type="email"]:focus,
+input[type="month"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="text"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="week"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--wp-admin-theme-color);
+  box-shadow: 0 0 0 var(--wp-admin-border-width-focus, 1.5px) var(--wp-admin-theme-color);
+  outline: 2px solid transparent;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  border: 1px solid #1e1e1e;
+  border-radius: 2px;
+  background: #fff;
+  color: #1e1e1e;
+  clear: none;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 0;
+  height: 1rem;
+  margin: -0.25rem 0.25rem 0 0;
+  outline: 0;
+  padding: 0 !important;
+  text-align: center;
+  vertical-align: middle;
+  width: 1rem;
+  min-width: 1rem;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: 0.05s border-color ease-in-out;
+}
+input[type="radio"] { border-radius: 50%; margin-right: 0.25rem; line-height: 0.71428571; }
+input[type="checkbox"]:checked::before,
+input[type="radio"]:checked::before {
+  float: left;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1rem;
+  font-family: dashicons;
+  speak: never;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+input[type="checkbox"]:checked::before {
+  content: "\f147";
+  margin: -0.1875rem 0 0 -0.25rem;
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+}
+input[type="radio"]:checked::before {
+  content: "";
+  margin: 0.1875rem;
+  border-radius: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #fff;
+  line-height: 0.71428571;
+}
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background: #2271b1;
+  border-color: #2271b1;
+}
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  border-color: #1e1e1e;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--wp-admin-theme-color);
+  outline: 2px solid transparent;
+}
+input[type="checkbox"]:disabled,
+input[type="radio"]:disabled,
+select:disabled,
+input[type="text"]:disabled,
+textarea:disabled {
+  background: #f0f0f1;
+}
+input[type="checkbox"]:disabled:checked,
+input[type="radio"]:disabled:checked {
+  background: #c3c4c7;
+}
+
+/* WP admin button styles (subset; WordPress ships the full .wp-core-ui set). */
+.button {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 26px;
+  min-height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: 1px solid var(--wp-admin-theme-color);
+  border-radius: 3px;
+  color: var(--wp-admin-theme-color);
+  background: #f6f7f7;
+  text-align: center;
+}
+.button:hover {
+  background: #f0f0f1;
+  border-color: var(--wp-admin-theme-color-darker-10, #135e96);
+  color: var(--wp-admin-theme-color-darker-10, #135e96);
+}
+.button-primary {
+  background: var(--wp-admin-theme-color);
+  border-color: var(--wp-admin-theme-color);
+  color: #fff;
+}
+.button-primary:hover {
+  background: var(--wp-admin-theme-color-darker-10, #135e96);
+  border-color: var(--wp-admin-theme-color-darker-10, #135e96);
+}
+.button-secondary {
+  color: #d63638;
+  border-color: #d63638;
+}
+.button-secondary:hover {
+  background: #d63638;
+  color: #fff;
+}
+.button-large {
+  font-size: 14px;
+  line-height: 32px;
+  min-height: 36px;
+  padding: 0 12px;
+}

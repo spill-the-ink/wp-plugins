@@ -9,41 +9,50 @@
  * Every color/radius the shared components reference is defined here. Tailwind
  * v4 turns these `--color-*` / `--radius-*` values into the corresponding
  * `bg-*`, `text-*`, `border-*`, `ring-*`, `rounded-*`, … utilities.
+ *
+ * Colors track the WordPress admin look: the primary/accent, focus ring and
+ * destructive colors resolve against the active admin color scheme via
+ * `--wp-admin-theme-color` (provided by WP on admin screens and by
+ * `labs-wp-admin.css` in the labs), and the borders/text/backgrounds use the
+ * WordPress design-system tokens (`--wpds-*`) shipped by `@wordpress/theme`.
+ * Every reference has a static fallback so components still render when the
+ * token source is unavailable.
  */
 
 @import "tailwindcss";
+@import "@wordpress/theme/design-tokens.css";
 
 /* Scan the shared components so their utility classes are generated. */
 @source "../**/*.{tsx,ts}";
 
 @theme {
   --color-background: #ffffff;
-  --color-foreground: #1e1e1e;
+  --color-foreground: var(--wpds-color-foreground-content-neutral, #1e1e1e);
 
   --color-card: #ffffff;
-  --color-card-foreground: #1e1e1e;
+  --color-card-foreground: var(--wpds-color-foreground-content-neutral, #1e1e1e);
 
   --color-popover: #ffffff;
-  --color-popover-foreground: #1e1e1e;
+  --color-popover-foreground: var(--wpds-color-foreground-content-neutral, #1e1e1e);
 
-  --color-primary: #1e1e1e;
+  --color-primary: var(--wp-admin-theme-color, #1e1e1e);
   --color-primary-foreground: #ffffff;
 
-  --color-secondary: #f3f4f6;
-  --color-secondary-foreground: #1e1e1e;
+  --color-secondary: var(--wpds-color-background-surface-neutral-weak, #f3f4f6);
+  --color-secondary-foreground: var(--wpds-color-foreground-content-neutral, #1e1e1e);
 
-  --color-muted: #f3f4f6;
-  --color-muted-foreground: #6b7280;
+  --color-muted: var(--wpds-color-background-surface-neutral-weak, #f3f4f6);
+  --color-muted-foreground: var(--wpds-color-foreground-content-neutral-weak, #6b7280);
 
-  --color-accent: #f3f4f6;
-  --color-accent-foreground: #1e1e1e;
+  --color-accent: var(--wpds-color-background-surface-neutral-weak, #f3f4f6);
+  --color-accent-foreground: var(--wpds-color-foreground-content-neutral, #1e1e1e);
 
-  --color-destructive: #9f1239;
+  --color-destructive: var(--wpds-color-foreground-interactive-error, #9f1239);
   --color-destructive-foreground: #ffffff;
 
-  --color-border: #d9d9d9;
-  --color-input: #d9d9d9;
-  --color-ring: #1e1e1e;
+  --color-border: var(--wpds-color-stroke-interactive-neutral, #8d8d8d);
+  --color-input: var(--wpds-color-stroke-interactive-neutral, #8d8d8d);
+  --color-ring: var(--wp-admin-theme-color, #1e1e1e);
 
   --radius-sm: 0.25rem;
   --radius-md: 0.625rem;

@@ -38,7 +38,12 @@ for (const plugin of pluginList) {
   if (fs.existsSync(srcShared)) {
     const sharedDest = path.join(pluginDir, 'includes/shared/shared-settings');
     fs.ensureDirSync(sharedDest);
-    fs.copySync(srcShared, sharedDest, { overwrite: true });
+    fs.copySync(srcShared, sharedDest, {
+      overwrite: true,
+      // labs-* files are dev/labs helpers (e.g. labs-wp-admin.css with a
+      // node_modules @import) and must not ship inside plugins.
+      filter: (src) => !path.basename(src).startsWith('labs-'),
+    });
     console.log(`Copied shared settings assets → plugins/${dir}/includes/shared/shared-settings/`);
   }
 }
