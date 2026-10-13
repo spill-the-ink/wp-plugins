@@ -450,38 +450,47 @@
 
   // ── 6. MEDIA PICKER ──────────────────────────────
 
-  var mediaButtons = form.querySelectorAll('.wp-polyfill-pick-media');
-  for (var i = 0; i < mediaButtons.length; i++) {
-    mediaButtons[i].addEventListener('click', function (e) {
-      e.preventDefault();
-      var targetId = e.currentTarget.getAttribute('data-target');
-      var targetInput = document.getElementById(targetId);
-      if (!targetInput) return;
+  // Reusable (repeater rows are added after page load).
+  function bindMediaPickers(scope) {
+    var mediaButtons = scope.querySelectorAll('.wp-polyfill-pick-media');
+    for (var i = 0; i < mediaButtons.length; i++) {
+      var button = mediaButtons[i];
+      if (button.getAttribute('data-bound') === '1') continue;
+      button.setAttribute('data-bound', '1');
 
-      if (typeof wp !== 'undefined' && wp.media) {
-        var frame = wp.media({
-          title: 'Select Media',
-          button: { text: 'Use this' },
-          multiple: false,
-        });
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+        var targetId = e.currentTarget.getAttribute('data-target');
+        var targetInput = document.getElementById(targetId);
+        if (!targetInput) return;
 
-        frame.on('select', function () {
-          var attachment = frame.state().get('selection').first().toJSON();
-          targetInput.value = attachment.id;
-          updateMediaPreview(targetInput, attachment);
-        });
+        if (typeof wp !== 'undefined' && wp.media) {
+          var frame = wp.media({
+            title: 'Select Media',
+            button: { text: 'Use this' },
+            multiple: false,
+          });
 
-        frame.open();
-      } else {
-        // Fallback: prompt for attachment ID
-        var id = prompt('Enter attachment ID:');
-        if (id) {
-          targetInput.value = id;
-          updateMediaPreview(targetInput, { id: id });
+          frame.on('select', function () {
+            var attachment = frame.state().get('selection').first().toJSON();
+            targetInput.value = attachment.id;
+            updateMediaPreview(targetInput, attachment);
+          });
+
+          frame.open();
+        } else {
+          // Fallback: prompt for attachment ID
+          var id = prompt('Enter attachment ID:');
+          if (id) {
+            targetInput.value = id;
+            updateMediaPreview(targetInput, { id: id });
+          }
         }
-      }
-    });
+      });
+    }
   }
+
+  bindMediaPickers(form);
 
   function updateMediaPreview(input, attachment) {
     var container = input.parentElement.querySelector('.wp-polyfill-media-preview');
@@ -495,6 +504,281 @@
       container.innerHTML = '<span class="description">Attachment #' + attachment.id + '</span>';
     }
   }
+
+  // ── 7. REPEATER ROWS + CONTEXT COMBOBOX ──────────
+
+  // Fire the form-level 'input'/'change' listeners (unsaved detection,
+  // dependency sync) after a repeater/combobox mutation.
+  function notifyFormChanged() {
+    var inputEvent  = new Event('input', { bubbles: true });
+    var changeEvent = new Event('change', { bubbles: true });
+    form.dispatchEvent(inputEvent);
+    form.dispatchEvent(changeEvent);
+  }
+
+  // Rewrite a row's __INDEX__ tokens in names/ids to a concrete index.
+  function renumberRow(row, index) {
+    row.setAttribute('data-index', index);
+    var token = '__INDEX__';
+    var els = row.querySelectorAll('[name], [id], [data-name], [data-target]');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      ['name', 'id', 'data-name', 'data-target'].forEach(function (attr) {
+        var value = el.getAttribute(attr);
+        if (value && value.indexOf(token) !== -1) {
+          el.setAttribute(attr, value.split(token).join(String(index)));
+        }
+      });
+    }
+  }
+
+  function renumberAll(repeater) {
+    var rowsContainer = repeater.querySelector('[data-repeater-rows]');
+    if (!rowsContainer) return;
+    var rows = rowsContainer.querySelectorAll('[data-repeater-row]');
+    for (var i = 0; i < rows.length; i++) {
+      renumberRow(rows[i], i);
+    }
+  }
+
+  function initRepeaterRow(row) {
+    bindMediaPickers(row);
+
+    var comboboxes = row.querySelectorAll('[data-context-combobox]');
+    for (var i = 0; i < comboboxes.length; i++) {
+      initContextCombobox(comboboxes[i]);
+    }
+
+    var removes = row.querySelectorAll('[data-repeater-remove]');
+    for (var j = 0; j < removes.length; j++) {
+      if (removes[j].getAttribute('data-bound') === '1') continue;
+      removes[j].setAttribute('data-bound', '1');
+      removes[j].addEventListener('click', function () {
+        var rowEl = this.closest('[data-repeater-row]');
+        var rowsContainer = rowEl.closest('[data-repeater-rows]');
+        var repeater = rowsContainer.closest('[data-repeater]');
+        rowEl.parentNode.removeChild(rowEl);
+        renumberAll(repeater);
+        notifyFormChanged();
+      });
+    }
+  }
+
+  function initRepeaters() {
+    var repeaters = form.querySelectorAll('[data-repeater]');
+    for (var i = 0; i < repeaters.length; i++) {
+      var repeater = repeaters[i];
+      var rowsContainer = repeater.querySelector('[data-repeater-rows]');
+      var template = repeater.querySelector('template[data-repeater-template]');
+      var addButton = repeater.querySelector('[data-repeater-add]');
+
+      // Bind the rows the server already rendered.
+      if (rowsContainer) {
+        var rows = rowsContainer.querySelectorAll('[data-repeater-row]');
+        for (var r = 0; r < rows.length; r++) {
+          initRepeaterRow(rows[r]);
+        }
+      }
+
+      if (!template || !addButton || addButton.getAttribute('data-bound') === '1') continue;
+      addButton.setAttribute('data-bound', '1');
+
+      addButton.addEventListener('click', function () {
+        var existing = rowsContainer.querySelectorAll('[data-repeater-row]');
+        var index = existing.length;
+        var fragment = template.content.cloneNode(true);
+        var newRow = fragment.querySelector('[data-repeater-row]');
+        if (!newRow) return;
+        renumberRow(newRow, index);
+        initRepeaterRow(newRow);
+        rowsContainer.appendChild(fragment);
+        notifyFormChanged();
+      });
+    }
+  }
+
+  // Multi-select context combobox (chips + typed filter + grouped list).
+  function initContextCombobox(combobox) {
+    if (combobox.getAttribute('data-bound') === '1') return;
+    combobox.setAttribute('data-bound', '1');
+
+    var options = config.contextOptions || [];
+    var valuesBox = combobox.querySelector('.wp-polyfill-combobox__values');
+    var chipList = combobox.querySelector('.wp-polyfill-combobox__chip-list');
+    var search = combobox.querySelector('.wp-polyfill-combobox__search');
+    var menu = combobox.querySelector('.wp-polyfill-combobox__menu');
+
+    if (!valuesBox || !chipList || !search || !menu) return;
+
+    function selectedValues() {
+      var out = [];
+      var checks = valuesBox.querySelectorAll('input[type="checkbox"]');
+      for (var i = 0; i < checks.length; i++) {
+        out.push(checks[i].value);
+      }
+      return out;
+    }
+
+    function optionByValue(value) {
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].value === value) return options[i];
+      }
+      return null;
+    }
+
+    function toggleValue(value, selected) {
+      var checks = valuesBox.querySelectorAll('input[type="checkbox"]');
+      var existing = null;
+      for (var i = 0; i < checks.length; i++) {
+        if (checks[i].value === value) { existing = checks[i]; break; }
+      }
+
+      if (selected && !existing) {
+        existing = document.createElement('input');
+        existing.type = 'checkbox';
+        existing.value = value;
+        existing.name = valuesBox.getAttribute('data-name') || '';
+        existing.checked = true;
+        valuesBox.appendChild(existing);
+      } else if (existing) {
+        if (selected) {
+          existing.checked = true;
+        } else {
+          existing.parentNode.removeChild(existing);
+        }
+      }
+
+      renderChips();
+      notifyFormChanged();
+    }
+
+    function renderChips() {
+      chipList.innerHTML = '';
+      var values = selectedValues();
+
+      for (var i = 0; i < values.length; i++) {
+        var opt = optionByValue(values[i]);
+        var labelText = opt ? opt.label : values[i];
+
+        (function (value, label) {
+          var li = document.createElement('li');
+          li.className = 'wp-polyfill-combobox__chip';
+
+          var labelEl = document.createElement('span');
+          labelEl.className = 'wp-polyfill-combobox__chip-label';
+          labelEl.textContent = label;
+
+          var remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'wp-polyfill-combobox__chip-remove';
+          remove.setAttribute('aria-label', 'Remove ' + label);
+          remove.innerHTML = '&times;';
+          remove.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleValue(value, false);
+            search.focus();
+          });
+
+          li.appendChild(labelEl);
+          li.appendChild(remove);
+          chipList.appendChild(li);
+        })(values[i], labelText);
+      }
+    }
+
+    function renderMenu() {
+      menu.innerHTML = '';
+      var query = search.value.trim().toLowerCase();
+      var selected = selectedValues();
+      var groups = [];
+      var currentGroup = null;
+
+      for (var i = 0; i < options.length; i++) {
+        var opt = options[i];
+        if (selected.indexOf(opt.value) !== -1) continue;
+        if (query && String(opt.label).toLowerCase().indexOf(query) === -1) continue;
+
+        if (opt.group !== currentGroup) {
+          currentGroup = opt.group || '';
+          groups.push({ name: currentGroup, items: [] });
+        }
+        groups[groups.length - 1].items.push(opt);
+      }
+
+      for (var g = 0; g < groups.length; g++) {
+        var groupEl = document.createElement('div');
+        groupEl.className = 'wp-polyfill-combobox__group';
+
+        if (groups[g].name) {
+          var groupLabel = document.createElement('span');
+          groupLabel.className = 'wp-polyfill-combobox__group-label';
+          groupLabel.textContent = groups[g].name;
+          groupEl.appendChild(groupLabel);
+        }
+
+        for (var j = 0; j < groups[g].items.length; j++) {
+          (function (opt) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'wp-polyfill-combobox__option';
+            btn.textContent = opt.label;
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              toggleValue(opt.value, true);
+              search.value = '';
+              renderMenu();
+              search.focus();
+            });
+            groupEl.appendChild(btn);
+          })(groups[g].items[j]);
+        }
+
+        menu.appendChild(groupEl);
+      }
+
+      if (!groups.length) {
+        var empty = document.createElement('p');
+        empty.className = 'wp-polyfill-combobox__empty';
+        empty.textContent = 'No matching contexts.';
+        menu.appendChild(empty);
+      }
+
+      menu.hidden = false;
+    }
+
+    search.addEventListener('click', function (e) {
+      e.stopPropagation();
+      renderMenu();
+    });
+
+    search.addEventListener('focus', renderMenu);
+    search.addEventListener('input', renderMenu);
+
+    search.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !search.value) {
+        var values = selectedValues();
+        if (values.length) toggleValue(values[values.length - 1], false);
+      } else if (e.key === 'Escape') {
+        menu.hidden = true;
+      }
+    });
+
+    renderChips();
+  }
+
+  // Close any combobox menu when clicking elsewhere.
+  document.addEventListener('click', function (e) {
+    var menus = form.querySelectorAll('.wp-polyfill-combobox__menu');
+    for (var i = 0; i < menus.length; i++) {
+      var combobox = menus[i].closest('[data-context-combobox]');
+      if (!combobox || !combobox.contains(e.target)) {
+        menus[i].hidden = true;
+      }
+    }
+  });
+
+  initRepeaters();
 
   // ── 7. URL HASH DEEP LINK ────────────────────────
 

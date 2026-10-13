@@ -248,6 +248,7 @@ class Settings_Page {
    			'heading_tag'      => $args['heading_tag'] ?? 'h3',
    			'options_layout'   => $args['options_layout'] ?? 'vertical',
    			'context'          => $args['context'] ?? [],
+   			'repeater'         => $args['repeater'] ?? [],
    		];
 	}
 

@@ -193,6 +193,96 @@
         return cOut;
       }
 
+      case 'repeater': {
+        // Dynamic repeater rows mirroring Form_Fields::repeater() — a stored
+        // row per entry plus a `<template>` row using the __INDEX__ token that
+        // shared-settings.js rewrites when the user adds a row.
+        var rSchema = field.repeater || {};
+        var rRows = Array.isArray(fieldValue(field)) ? fieldValue(field) : [];
+
+        function repeatId(namePath) {
+          return formId + '-' + String(namePath).replace(/[^a-z0-9_-]+/gi, '-');
+        }
+
+        function repeaterRowMarkup(index, row) {
+          var nop = String(index);
+          row = row || {};
+          var rOut = '<div class="wp-polyfill-repeater__row" data-repeater-row data-index="' + escAttr(nop) + '">';
+          rOut += '<div class="wp-polyfill-repeater__row-head">';
+          rOut += '<span class="wp-polyfill-repeater__row-title">' + escHtml(rSchema.row_label || 'Context override') + '</span>';
+          rOut += '<button type="button" class="button-link wp-polyfill-repeater__remove" data-repeater-remove aria-label="Remove row">&times;</button>';
+          rOut += '</div>';
+          rOut += '<div class="wp-polyfill-repeater__row-body">';
+
+          (rSchema.fields || []).forEach(function (control) {
+            var cType = control.type || 'text';
+            var cName = control.name;
+            if (!cName) return;
+
+            var rNamePath = field.id + '[' + nop + '][' + cName + ']';
+            var rName = fieldName(optionName, { namePath: rNamePath });
+            var rId = repeatId(rNamePath);
+
+            rOut += '<div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--' + escAttr(cType) + '">';
+            if (control.label && cType !== 'checkbox') {
+              rOut += '<span class="wp-polyfill-repeater__field-label">' + escHtml(control.label) + '</span>';
+            }
+
+            if (cType === 'contexts') {
+              var selected = Array.isArray(row[cName]) ? row[cName] : [];
+              rOut += '<div class="wp-polyfill-combobox" data-context-combobox>';
+              rOut += '<div class="wp-polyfill-combobox__chips">';
+              rOut += '<ul class="wp-polyfill-combobox__chip-list"></ul>';
+              rOut += '<input type="text" class="wp-polyfill-combobox__search" placeholder="Type to add a context..." autocomplete="off" />';
+              rOut += '</div>';
+              rOut += '<div class="wp-polyfill-combobox__menu" hidden></div>';
+              rOut += '<div class="wp-polyfill-combobox__values" data-name="' + escAttr(rName + '[]') + '" hidden>';
+              (rSchema.context_options || []).forEach(function (opt) {
+                if (selected.indexOf(opt.value) !== -1) {
+                  rOut += '<input type="checkbox" name="' + escAttr(rName + '[]') + '" value="' + escAttr(opt.value) + '" checked />';
+                }
+              });
+              rOut += '</div>';
+              rOut += '</div>';
+            } else if (cType === 'checkbox') {
+              var cChecked = row[cName] ? ' checked' : '';
+              rOut += '<div class="wp-polyfill-setting-wrapper">' +
+                '<input type="checkbox" id="' + escAttr(rId) + '" name="' + escAttr(rName) + '" value="1"' + cChecked + ' />' +
+                '<label for="' + escAttr(rId) + '">' + escHtml(control.label) + '</label>' +
+                '</div>';
+            } else if (cType === 'media') {
+              var rMediaVal = (+row[cName]) || 0;
+              rOut += '<input type="hidden" id="' + escAttr(rId) + '" name="' + escAttr(rName) + '" value="' + rMediaVal + '" />' +
+                '<div class="wp-polyfill-media-preview" data-target="' + escAttr(rId) + '"></div>' +
+                '<button type="button" class="button wp-polyfill-pick-media" data-target="' + escAttr(rId) + '">Select media</button>';
+            } else if (cType === 'textarea') {
+              var rTaVal = row[cName] == null ? '' : row[cName];
+              rOut += '<textarea id="' + escAttr(rId) + '" name="' + escAttr(rName) + '" rows="' + (+(control.rows || 2)) + '" class="large-text" placeholder="' + escAttr(control.placeholder || '') + '">' + escHtml(rTaVal) + '</textarea>';
+            } else {
+              var rTextVal = row[cName] == null ? '' : row[cName];
+              rOut += '<input type="text" id="' + escAttr(rId) + '" name="' + escAttr(rName) + '" value="' + escAttr(rTextVal) + '" class="regular-text" placeholder="' + escAttr(control.placeholder || '') + '" />';
+            }
+
+            rOut += '</div>';
+          });
+
+          rOut += '</div>';
+          rOut += '</div>';
+          return rOut;
+        }
+
+        var rOut = '<div class="wp-polyfill-repeater" data-repeater>';
+        rOut += '<div class="wp-polyfill-repeater__rows" data-repeater-rows>';
+        rRows.forEach(function (row, i) {
+          rOut += repeaterRowMarkup(i, row);
+        });
+        rOut += '</div>';
+        rOut += '<template data-repeater-template>' + repeaterRowMarkup('__INDEX__', null) + '</template>';
+        rOut += '<button type="button" class="button wp-polyfill-repeater__add" data-repeater-add>' + escHtml(rSchema.add_button || 'Add row') + '</button>';
+        rOut += '</div>';
+        return rOut;
+      }
+
       case 'html': {
         return '<tr class="wp-polyfill-panel-row"><td colspan="2"><div class="wp-polyfill-settings-panel">' + (field.html || '') + '</div></td></tr>';
       }

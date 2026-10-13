@@ -276,7 +276,7 @@
       <table id="meta" class="wp-polyfill-settings-table" role="presentation">
         <tbody>
           <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Default"><span>Default</span></th>
+            <th class="screen-reader-text" colspan="2" aria-label="All other pages"><span>All other pages</span></th>
           </tr>
           <tr>
             <th>
@@ -304,180 +304,148 @@
           </tr>
 
           <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Homepage and blog index"><span>Homepage &amp; blog index</span></th>
+            <th class="screen-reader-text" colspan="2" aria-label="Context overrides"><span>Context overrides</span></th>
           </tr>
           <tr>
             <th>
-              <label for="wpm-settings-home_title">Homepage</label>
-              <p class="description">Templates for the front page and posts index. When a static page is the front page, this row wins there over the Pages row.</p>
+              <label for="wpm-settings-meta_contexts">Context overrides</label>
+              <p class="description">Add rows to override the fallback values for specific contexts. Rows apply from top to bottom; the first matching context wins. Noindex hides the matched contexts from search engines.</p>
             </th>
             <td>
-              <div class="wp-polyfill-context-fields">
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Title template</span>
-                  <input type="text" id="wpm-settings-home_title" name="wp_manifest_settings[home_title]" value="{{ site.name }} {{ sep }} {{ site.description }}" class="regular-text">
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Description template</span>
-                  <textarea id="wpm-settings-home_description" name="wp_manifest_settings[home_description]" rows="2" class="large-text">{{ site.description }}</textarea>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
-                  <input type="hidden" id="wpm-settings-home_og_image" name="wp_manifest_settings[home_og_image]" value="0">
-                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-home_og_image"></div>
-                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-home_og_image">Select media</button>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Post types"><span>Post types</span></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-post_type_title-post">Posts</label>
-              <p class="description">Singular pages and archives per post type. Noindex applies to both.</p>
-            </th>
-            <td>
-              <div class="wp-polyfill-context-fields">
-                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
-                  <input type="checkbox" id="wpm-settings-post_type_noindex-post" name="wp_manifest_settings[post_type_noindex][post]" value="1" checked>
-                  <label for="wpm-settings-post_type_noindex-post">Noindex</label>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Title template</span>
-                  <input type="text" id="wpm-settings-post_type_title-post" name="wp_manifest_settings[post_type_title][post]" value="{{ post.title }} {{ sep }} {{ site.name }}" class="regular-text">
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Description template</span>
-                  <textarea id="wpm-settings-post_type_description-post" name="wp_manifest_settings[post_type_description][post]" rows="2" class="large-text"></textarea>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
-                  <input type="hidden" id="wpm-settings-post_type_og_image-post" name="wp_manifest_settings[post_type_og_image][post]" value="0">
-                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-post_type_og_image-post"></div>
-                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-post_type_og_image-post">Select media</button>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-post_type_title-page">Pages</label>
-              <p class="description">Singular pages. A static front page uses the Homepage row instead.</p>
-            </th>
-            <td>
-              <div class="wp-polyfill-context-fields">
-                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
-                  <input type="checkbox" id="wpm-settings-post_type_noindex-page" name="wp_manifest_settings[post_type_noindex][page]" value="1">
-                  <label for="wpm-settings-post_type_noindex-page">Noindex</label>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Title template</span>
-                  <input type="text" id="wpm-settings-post_type_title-page" name="wp_manifest_settings[post_type_title][page]" value="{{ post.title }} {{ sep }} {{ site.name }}" class="regular-text">
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Description template</span>
-                  <textarea id="wpm-settings-post_type_description-page" name="wp_manifest_settings[post_type_description][page]" rows="2" class="large-text"></textarea>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
-                  <input type="hidden" id="wpm-settings-post_type_og_image-page" name="wp_manifest_settings[post_type_og_image][page]" value="0">
-                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-post_type_og_image-page"></div>
-                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-post_type_og_image-page">Select media</button>
-                </div>
-              </div>
-            </td>
-          </tr>
+              <div class="wp-polyfill-repeater" data-repeater>
+                <div class="wp-polyfill-repeater__rows" data-repeater-rows>
 
-          <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Taxonomies"><span>Taxonomies</span></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-taxonomy_title-category">Categories</label>
-              <p class="description">Term archives. Tokens: {{ term.name }}, {{ term.description }}.</p>
-            </th>
-            <td>
-              <div class="wp-polyfill-context-fields">
-                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
-                  <input type="checkbox" id="wpm-settings-taxonomy_noindex-category" name="wp_manifest_settings[taxonomy_noindex][category]" value="1" checked>
-                  <label for="wpm-settings-taxonomy_noindex-category">Noindex</label>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Title template</span>
-                  <input type="text" id="wpm-settings-taxonomy_title-category" name="wp_manifest_settings[taxonomy_title][category]" value="{{ term.name }} {{ sep }} {{ site.name }}" class="regular-text">
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Description template</span>
-                  <textarea id="wpm-settings-taxonomy_description-category" name="wp_manifest_settings[taxonomy_description][category]" rows="2" class="large-text"></textarea>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
-                  <input type="hidden" id="wpm-settings-taxonomy_og_image-category" name="wp_manifest_settings[taxonomy_og_image][category]" value="0">
-                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-taxonomy_og_image-category"></div>
-                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-taxonomy_og_image-category">Select media</button>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-taxonomy_title-post_tag">Tags</label>
-              <p class="description">Term archives.</p>
-            </th>
-            <td>
-              <div class="wp-polyfill-context-fields">
-                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
-                  <input type="checkbox" id="wpm-settings-taxonomy_noindex-post_tag" name="wp_manifest_settings[taxonomy_noindex][post_tag]" value="1" checked>
-                  <label for="wpm-settings-taxonomy_noindex-post_tag">Noindex</label>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Title template</span>
-                  <input type="text" id="wpm-settings-taxonomy_title-post_tag" name="wp_manifest_settings[taxonomy_title][post_tag]" value="{{ term.name }} {{ sep }} {{ site.name }}" class="regular-text">
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Description template</span>
-                  <textarea id="wpm-settings-taxonomy_description-post_tag" name="wp_manifest_settings[taxonomy_description][post_tag]" rows="2" class="large-text"></textarea>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
-                  <input type="hidden" id="wpm-settings-taxonomy_og_image-post_tag" name="wp_manifest_settings[taxonomy_og_image][post_tag]" value="0">
-                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-taxonomy_og_image-post_tag"></div>
-                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-taxonomy_og_image-post_tag">Select media</button>
-                </div>
-              </div>
-            </td>
-          </tr>
+                  <div class="wp-polyfill-repeater__row" data-repeater-row data-index="0">
+                    <div class="wp-polyfill-repeater__row-head">
+                      <span class="wp-polyfill-repeater__row-title">Context override</span>
+                      <button type="button" class="button-link wp-polyfill-repeater__remove" data-repeater-remove aria-label="Remove row">&times;</button>
+                    </div>
+                    <div class="wp-polyfill-repeater__row-body">
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--contexts">
+                        <span class="wp-polyfill-repeater__field-label">Contexts</span>
+                        <div class="wp-polyfill-combobox" data-context-combobox>
+                          <div class="wp-polyfill-combobox__chips">
+                            <ul class="wp-polyfill-combobox__chip-list"></ul>
+                            <input type="text" class="wp-polyfill-combobox__search" placeholder="Type to add a context..." autocomplete="off">
+                          </div>
+                          <div class="wp-polyfill-combobox__menu" hidden></div>
+                          <div class="wp-polyfill-combobox__values" data-name="wp_manifest_settings[meta_contexts][0][contexts][]" hidden>
+                            <input type="checkbox" name="wp_manifest_settings[meta_contexts][0][contexts][]" value="home" checked>
+                            <input type="checkbox" name="wp_manifest_settings[meta_contexts][0][contexts][]" value="post_type:post" checked>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--checkbox">
+                        <div class="wp-polyfill-setting-wrapper">
+                          <input type="checkbox" id="wpm-settings-meta_contexts-0-noindex" name="wp_manifest_settings[meta_contexts][0][noindex]" value="1">
+                          <label for="wpm-settings-meta_contexts-0-noindex">Noindex</label>
+                        </div>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--text">
+                        <span class="wp-polyfill-repeater__field-label">Title template</span>
+                        <input type="text" id="wpm-settings-meta_contexts-0-title" name="wp_manifest_settings[meta_contexts][0][title]" value="{{ site.name }} {{ sep }} {{ site.description }}" class="regular-text">
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--textarea">
+                        <span class="wp-polyfill-repeater__field-label">Description template</span>
+                        <textarea id="wpm-settings-meta_contexts-0-description" name="wp_manifest_settings[meta_contexts][0][description]" rows="2" class="large-text">{{ site.description }}</textarea>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--media">
+                        <span class="wp-polyfill-repeater__field-label">Open Graph image</span>
+                        <input type="hidden" id="wpm-settings-meta_contexts-0-og_image" name="wp_manifest_settings[meta_contexts][0][og_image]" value="0">
+                        <div class="wp-polyfill-media-preview" data-target="wpm-settings-meta_contexts-0-og_image"></div>
+                        <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-meta_contexts-0-og_image">Select media</button>
+                      </div>
+                    </div>
+                  </div>
 
-          <tr class="wp-polyfill-settings-section-row">
-            <th class="screen-reader-text" colspan="2" aria-label="Author archives"><span>Author archives</span></th>
-          </tr>
-          <tr>
-            <th>
-              <label for="wpm-settings-author_title">Author archives</label>
-              <p class="description">Tokens: {{ author.name }}, {{ author.bio }}.</p>
-            </th>
-            <td>
-              <div class="wp-polyfill-context-fields">
-                <div class="wp-polyfill-context-control wp-polyfill-context-control--inline">
-                  <input type="checkbox" id="wpm-settings-noindex_authors" name="wp_manifest_settings[noindex_authors]" value="1" checked>
-                  <label for="wpm-settings-noindex_authors">Noindex</label>
+                  <div class="wp-polyfill-repeater__row" data-repeater-row data-index="1">
+                    <div class="wp-polyfill-repeater__row-head">
+                      <span class="wp-polyfill-repeater__row-title">Context override</span>
+                      <button type="button" class="button-link wp-polyfill-repeater__remove" data-repeater-remove aria-label="Remove row">&times;</button>
+                    </div>
+                    <div class="wp-polyfill-repeater__row-body">
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--contexts">
+                        <span class="wp-polyfill-repeater__field-label">Contexts</span>
+                        <div class="wp-polyfill-combobox" data-context-combobox>
+                          <div class="wp-polyfill-combobox__chips">
+                            <ul class="wp-polyfill-combobox__chip-list"></ul>
+                            <input type="text" class="wp-polyfill-combobox__search" placeholder="Type to add a context..." autocomplete="off">
+                          </div>
+                          <div class="wp-polyfill-combobox__menu" hidden></div>
+                          <div class="wp-polyfill-combobox__values" data-name="wp_manifest_settings[meta_contexts][1][contexts][]" hidden>
+                            <input type="checkbox" name="wp_manifest_settings[meta_contexts][1][contexts][]" value="taxonomy:category" checked>
+                            <input type="checkbox" name="wp_manifest_settings[meta_contexts][1][contexts][]" value="taxonomy:post_tag" checked>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--checkbox">
+                        <div class="wp-polyfill-setting-wrapper">
+                          <input type="checkbox" id="wpm-settings-meta_contexts-1-noindex" name="wp_manifest_settings[meta_contexts][1][noindex]" value="1" checked>
+                          <label for="wpm-settings-meta_contexts-1-noindex">Noindex</label>
+                        </div>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--text">
+                        <span class="wp-polyfill-repeater__field-label">Title template</span>
+                        <input type="text" id="wpm-settings-meta_contexts-1-title" name="wp_manifest_settings[meta_contexts][1][title]" value="{{ term.name }} {{ sep }} {{ site.name }}" class="regular-text">
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--textarea">
+                        <span class="wp-polyfill-repeater__field-label">Description template</span>
+                        <textarea id="wpm-settings-meta_contexts-1-description" name="wp_manifest_settings[meta_contexts][1][description]" rows="2" class="large-text"></textarea>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--media">
+                        <span class="wp-polyfill-repeater__field-label">Open Graph image</span>
+                        <input type="hidden" id="wpm-settings-meta_contexts-1-og_image" name="wp_manifest_settings[meta_contexts][1][og_image]" value="0">
+                        <div class="wp-polyfill-media-preview" data-target="wpm-settings-meta_contexts-1-og_image"></div>
+                        <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-meta_contexts-1-og_image">Select media</button>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Title template</span>
-                  <input type="text" id="wpm-settings-author_title" name="wp_manifest_settings[author_title]" value="{{ author.name }} {{ sep }} {{ site.name }}" class="regular-text">
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Description template</span>
-                  <textarea id="wpm-settings-author_description" name="wp_manifest_settings[author_description]" rows="2" class="large-text"></textarea>
-                </div>
-                <div class="wp-polyfill-context-control">
-                  <span class="wp-polyfill-context-control__label">Open Graph image</span>
-                  <input type="hidden" id="wpm-settings-author_og_image" name="wp_manifest_settings[author_og_image]" value="0">
-                  <div class="wp-polyfill-media-preview" data-target="wpm-settings-author_og_image"></div>
-                  <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-author_og_image">Select media</button>
-                </div>
+
+                <template data-repeater-template>
+                  <div class="wp-polyfill-repeater__row" data-repeater-row data-index="__INDEX__">
+                    <div class="wp-polyfill-repeater__row-head">
+                      <span class="wp-polyfill-repeater__row-title">Context override</span>
+                      <button type="button" class="button-link wp-polyfill-repeater__remove" data-repeater-remove aria-label="Remove row">&times;</button>
+                    </div>
+                    <div class="wp-polyfill-repeater__row-body">
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--contexts">
+                        <span class="wp-polyfill-repeater__field-label">Contexts</span>
+                        <div class="wp-polyfill-combobox" data-context-combobox>
+                          <div class="wp-polyfill-combobox__chips">
+                            <ul class="wp-polyfill-combobox__chip-list"></ul>
+                            <input type="text" class="wp-polyfill-combobox__search" placeholder="Type to add a context..." autocomplete="off">
+                          </div>
+                          <div class="wp-polyfill-combobox__menu" hidden></div>
+                          <div class="wp-polyfill-combobox__values" data-name="wp_manifest_settings[meta_contexts][__INDEX__][contexts][]" hidden></div>
+                        </div>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--checkbox">
+                        <div class="wp-polyfill-setting-wrapper">
+                          <input type="checkbox" id="wpm-settings-meta_contexts-__INDEX__-noindex" name="wp_manifest_settings[meta_contexts][__INDEX__][noindex]" value="1">
+                          <label for="wpm-settings-meta_contexts-__INDEX__-noindex">Noindex</label>
+                        </div>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--text">
+                        <span class="wp-polyfill-repeater__field-label">Title template</span>
+                        <input type="text" id="wpm-settings-meta_contexts-__INDEX__-title" name="wp_manifest_settings[meta_contexts][__INDEX__][title]" value="" class="regular-text">
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--textarea">
+                        <span class="wp-polyfill-repeater__field-label">Description template</span>
+                        <textarea id="wpm-settings-meta_contexts-__INDEX__-description" name="wp_manifest_settings[meta_contexts][__INDEX__][description]" rows="2" class="large-text"></textarea>
+                      </div>
+                      <div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--media">
+                        <span class="wp-polyfill-repeater__field-label">Open Graph image</span>
+                        <input type="hidden" id="wpm-settings-meta_contexts-__INDEX__-og_image" name="wp_manifest_settings[meta_contexts][__INDEX__][og_image]" value="0">
+                        <div class="wp-polyfill-media-preview" data-target="wpm-settings-meta_contexts-__INDEX__-og_image"></div>
+                        <button type="button" class="button wp-polyfill-pick-media" data-target="wpm-settings-meta_contexts-__INDEX__-og_image">Select media</button>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <button type="button" class="button wp-polyfill-repeater__add" data-repeater-add>Add row</button>
               </div>
             </td>
           </tr>
@@ -623,6 +591,19 @@
           };
         }
       };
+    };
+  </script>
+  <script>
+    // Localized settings config (normally emitted by PHP `wp_localize_script`).
+    window.SharedSettingsConfig = {
+      contextOptions: [
+        { value: 'home', label: 'Homepage & blog index', group: 'Core' },
+        { value: 'author', label: 'Author archives', group: 'Authors' },
+        { value: 'post_type:post', label: 'Posts (post)', group: 'Post types' },
+        { value: 'post_type:page', label: 'Pages (page)', group: 'Post types' },
+        { value: 'taxonomy:category', label: 'Categories (category)', group: 'Taxonomies' },
+        { value: 'taxonomy:post_tag', label: 'Tags (post_tag)', group: 'Taxonomies' }
+      ]
     };
   </script>
   <script src="shared-settings.js"></script>

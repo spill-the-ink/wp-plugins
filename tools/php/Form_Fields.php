@@ -52,6 +52,9 @@ class Form_Fields {
 			case 'context':
 				self::context( $field, $store, $form_id );
 				break;
+			case 'repeater':
+				self::repeater( $field, $store, $form_id );
+				break;
 			default:
 				do_action( 'wp_polyfill_render_field_' . $type, $field, $store, $form_id );
 				break;
@@ -76,6 +79,10 @@ class Form_Fields {
 	 * Build a stable, unique input id for a field.
 	 */
 	public static function field_id( array $field, string $form_id ): string {
+		if ( ! empty( $field['compute_id'] ) ) {
+			return $form_id . '-' . $field['id'];
+		}
+
 		$key = ! empty( $field['name_path'] ) ? $field['name_path'] : ( $field['id'] ?? '' );
 
 		return $form_id . '-' . preg_replace( '/[^a-z0-9_-]+/i', '-', $key );
@@ -404,6 +411,172 @@ class Form_Fields {
 			'option_name' => $field['option_name'] ?? '',
 			'rows'        => $field['rows'] ?? 2,
 		);
+	}
+
+	/**
+	 * Render a dynamic repeater: zero or more rows the user can add to and
+	 * remove from. Each row renders the controls described by `$field['repeater']`
+	 * under the option path `{field_id}[{index}][{control_name}]`. A blank row
+	 * is emitted as a `<template>` and cloned client-side on "add".
+	 *
+	 * @param array $field Field config:
+	 *   'repeater' => array(
+	 *     'add_button'      => string
+	 *     'row_label'       => string
+	 *     'context_options' => list of { value, label, group }
+	 *     'fields'          => list of { name, type, label, rows?, placeholder? }
+	 *                        (the array key may carry the name when not given)
+	 *   )
+	 *   Field types: 'contexts' (multi-select combobox), 'text', 'textarea',
+	 *   'checkbox', 'media'.
+	 */
+	public static function repeater( array $field, Settings_Store $store, string $form_id ): void {
+		$schema = $field['repeater'] ?? array();
+		$rows   = self::field_value( $field, $store, array() );
+
+		if ( ! is_array( $rows ) ) {
+			$rows = array();
+		}
+
+		echo '<div class="wp-polyfill-repeater" data-repeater>';
+		echo '<div class="wp-polyfill-repeater__rows" data-repeater-rows>';
+
+		foreach ( array_values( $rows ) as $index => $row ) {
+			self::render_repeater_row( $field, $store, $form_id, (int) $index, is_array( $row ) ? $row : array(), $schema );
+		}
+
+		echo '</div>';
+
+		// Blank row template for the JS "add" button.
+		echo '<template data-repeater-template>';
+		self::render_repeater_row( $field, $store, $form_id, '__INDEX__', array(), $schema );
+		echo '</template>';
+
+		printf(
+			'<button type="button" class="button wp-polyfill-repeater__add" data-repeater-add>%s</button>',
+			esc_html( $schema['add_button'] ?? __( 'Add override', 'shared-settings' ) )
+		);
+
+		echo '</div>';
+	}
+
+	/**
+	 * Render a single repeater row (used for both stored rows and templates).
+	 */
+	private static function render_repeater_row( array $field, Settings_Store $store, string $form_id, $index, array $row, array $schema ): void {
+		echo '<div class="wp-polyfill-repeater__row" data-repeater-row data-index="' . esc_attr( (string) $index ) . '">';
+		echo '<div class="wp-polyfill-repeater__row-head">';
+		printf(
+			'<span class="wp-polyfill-repeater__row-title">%s</span>',
+			esc_html( $schema['row_label'] ?? __( 'Override', 'shared-settings' ) )
+		);
+		printf(
+			'<button type="button" class="button-link wp-polyfill-repeater__remove" data-repeater-remove aria-label="%s">&times;</button>',
+			esc_attr__( 'Remove this override', 'shared-settings' )
+		);
+		echo '</div>';
+		echo '<div class="wp-polyfill-repeater__row-body">';
+
+		foreach ( ( $schema['fields'] ?? array() ) as $name => $control ) {
+			if ( ! is_array( $control ) ) {
+				continue;
+			}
+
+			if ( '' === ( $control['name'] ?? '' ) && is_string( $name ) ) {
+				$control['name'] = $name;
+			}
+
+			self::render_repeater_control( $field, $store, $form_id, $index, $row, $control, $schema );
+		}
+
+		echo '</div>';
+		echo '</div>';
+	}
+
+	/**
+	 * Render one control of a repeater row.
+	 */
+	private static function render_repeater_control( array $field, Settings_Store $store, string $form_id, $index, array $row, array $control, array $schema ): void {
+		$type   = $control['type'] ?? 'text';
+		$name   = (string) ( $control['name'] ?? '' );
+
+		if ( '' === $name ) {
+			return;
+		}
+
+		$sub = array(
+			'id'          => ( $field['id'] ?? '' ) . '-' . $index . '-' . $name,
+			'name_path'   => ( $field['id'] ?? '' ) . '[' . $index . '][' . $name . ']',
+			'option_name' => $field['option_name'] ?? '',
+			'label'       => $control['label'] ?? '',
+			'rows'        => $control['rows'] ?? 2,
+			'placeholder' => $control['placeholder'] ?? '',
+			// field_id() prefers name_path (a bracketed path yields a trailing
+			// dash); force the clean explicit id we constructed above instead.
+			'compute_id'  => true,
+		);
+
+		echo '<div class="wp-polyfill-repeater__field wp-polyfill-repeater__field--' . esc_attr( $type ) . '">';
+
+		if ( ! empty( $control['label'] ) && 'checkbox' !== $type ) {
+			printf(
+				'<span class="wp-polyfill-repeater__field-label">%s</span>',
+				esc_html( $control['label'] )
+			);
+		}
+
+		switch ( $type ) {
+			case 'contexts':
+				self::contexts_control( $sub, $row['contexts'] ?? array(), $schema['context_options'] ?? array() );
+				break;
+			case 'checkbox':
+				self::checkbox( $sub, $store, $form_id );
+				break;
+			case 'media':
+				self::media( $sub, $store, $form_id );
+				break;
+			case 'textarea':
+				self::textarea( $sub, $store, $form_id );
+				break;
+			default:
+				self::text( $sub, $store, $form_id );
+				break;
+		}
+
+		echo '</div>';
+	}
+
+	/**
+	 * Render the multi-select context combobox for a repeater row.
+	 *
+	 * The visible chips + dropdown are enhanced by shared-settings.js. State
+	 * lives in hidden checkboxes named `{option_name}[{field}][{index}][contexts][]`
+	 * so the existing FormData serializer and sanitize round-trip unchanged.
+	 */
+	private static function contexts_control( array $sub, $selected, array $options ): void {
+		$selected = is_array( $selected ) ? $selected : array();
+		$base_name = self::field_name( $sub ) . '[]';
+
+		echo '<div class="wp-polyfill-combobox" data-context-combobox>';
+		echo '<div class="wp-polyfill-combobox__chips">';
+		echo '<ul class="wp-polyfill-combobox__chip-list"></ul>';
+		echo '<input type="text" class="wp-polyfill-combobox__search" placeholder="' . esc_attr__( 'Type to add a context…', 'shared-settings' ) . '" autocomplete="off" />';
+		echo '</div>';
+		echo '<div class="wp-polyfill-combobox__menu" hidden></div>';
+		echo '<div class="wp-polyfill-combobox__values" data-name="' . esc_attr( $base_name ) . '" hidden>';
+
+		foreach ( $options as $opt ) {
+			if ( in_array( (string) $opt['value'], $selected, true ) ) {
+				printf(
+					'<input type="checkbox" name="%1$s" value="%2$s" checked />',
+					esc_attr( $base_name ),
+					esc_attr( (string) $opt['value'] )
+				);
+			}
+		}
+
+		echo '</div>';
+		echo '</div>';
 	}
 
 	/**
