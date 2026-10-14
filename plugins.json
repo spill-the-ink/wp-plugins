@@ -23,6 +23,19 @@
 				"assets",
 				"includes"
 			]
+		},
+		{
+			"dir": "wp-favorites",
+			"slug": "wp-favorites",
+			"usesSharedPhp": false,
+			"include": [
+				"wp-favorites.php",
+				"uninstall.php",
+				"README.md",
+				"includes",
+				"assets",
+				"languages"
+			]
 		}
 	]
 }
