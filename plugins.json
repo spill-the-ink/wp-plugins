@@ -36,6 +36,17 @@
 				"assets",
 				"languages"
 			]
+		},
+		{
+			"dir": "wp-inline-css-optimizer",
+			"slug": "wp-inline-css-optimizer",
+			"usesSharedPhp": true,
+			"include": [
+				"wp-inline-css-optimizer.php",
+				"uninstall.php",
+				"readme.txt",
+				"includes"
+			]
 		}
 	]
 }
